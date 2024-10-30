@@ -14,6 +14,7 @@ import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.ImageRequest
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.data.model.Post
 import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.presentation.UiState
@@ -40,7 +41,10 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     val currentUserBlockedUsers : LiveData<MutableList<String>?> get() = _currentUserBlockedUsers
 
     private val _selectedMonthMatchdays = MutableLiveData<MutableList<String>>()
-    var selectedMonthMatchdays : LiveData<MutableList<String>> get() = _selectedMonthMatchdays
+    val selectedMonthMatchdays : LiveData<MutableList<String>> get() = _selectedMonthMatchdays
+
+    private var _selectedDayMatches = MutableLiveData<MutableList<Match>>()
+    val selectedDayMatches : LiveData<MutableList<Match>> get() = _selectedDayMatches
 
     private val _bitmapBeforeSave = MutableLiveData<Bitmap>()
     val bitmapBeforeSave : LiveData<Bitmap> get() = _bitmapBeforeSave
@@ -181,7 +185,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun getSelectedMonthMatchdays(_email: String, selectedYear: String, selectedMonth: String) {
+    fun getSelectedMonthMatchdays(_email: String, selectedSport: String, selectedYear: String, selectedMonth: String) {
         viewModelScope.launch {
             runCatching {
                 val userRef = db.collection("user").document(_email)
@@ -189,7 +193,8 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                     val snapshot = transaction.get(userRef)
                     val currentUser = snapshot.toObject(User::class.java)
                     val matches = currentUser?.watchedmatches ?: emptyList()
-                    val selectedMonthMatches = matches.filter { it.year == selectedYear && it.month == selectedMonth }
+                    val selectedMonthMatches = matches.filter {
+                        it.sport == selectedSport && it.year == selectedYear && it.month == selectedMonth }
                     val matchdays = mutableListOf<String>()
                     selectedMonthMatches.forEach{
                         if (it.date !in matchdays) {
@@ -208,6 +213,31 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
+    fun getSelectedDateMatches(_email: String, selectedSport: String, selectedYear: String, selectedMonth: String, selectedDate: String) {
+        viewModelScope.launch {
+            runCatching {
+                val userRef = db.collection("user").document(_email)
+                db.runTransaction { transaction ->
+                    val snapshot = transaction.get(userRef)
+                    val currentUser = snapshot.toObject(User::class.java)
+                    val matches = currentUser?.watchedmatches ?: emptyList()
+                    val selectedDayMatches = matches.filter {
+                        it.sport == selectedSport &&it.year == selectedYear && it.month == selectedMonth && it.date == selectedDate
+                    }.toMutableList()
+                    _selectedDayMatches.value = selectedDayMatches
+                }.addOnSuccessListener {
+                    println("Succeeded to get Selected Date's Matches")
+                }.addOnFailureListener { exception ->
+                    println("Failed to get Selected Date's Matches: $exception")
+                }
+            }.onFailure {
+                Log.e(TAG, "getSelectedDateMatches() failed! : ${it.message}")
+                handleException(it)
+            }
+        }
+    }
+
 
     fun getBlockedUsers(){
         db.collection("user")

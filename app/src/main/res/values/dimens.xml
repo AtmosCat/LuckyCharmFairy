@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="calendar_item_spacing">4dp</dimen> <!-- 세로 간격 -->
+    <dimen name="calendar_horizontal_spacing">8dp</dimen> <!-- 가로 간격 -->
+</resources>

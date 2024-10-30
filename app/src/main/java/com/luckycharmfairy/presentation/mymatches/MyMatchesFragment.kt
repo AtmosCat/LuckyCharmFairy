@@ -1,5 +1,6 @@
 package com.luckycharmfairy.presentation.mymatches
 
+import android.graphics.Rect
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,13 +12,15 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.luckycharmfairy.R
 import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.presentation.EventDecorator
+import com.luckycharmfairy.presentation.mymatches.addmatches.ViewPagerAdapter
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
-import java.text.SimpleDateFormat
 import java.util.Calendar
 
 
@@ -26,10 +29,12 @@ class MyMatchesFragment : Fragment() {
     private var _binding: FragmentMyMatchesBinding? = null
     private val binding get() = _binding!!
 
+    private var currentUserEmail: String = ""
+
     private var selectedSport = ""
-    private var selectedYear = ""
-    private var selectedMonth = ""
-    private var selectedDate = ""
+    private var selectedYear = CalendarDay.from(Calendar.getInstance()).year.toString()
+    private var selectedMonth = CalendarDay.from(Calendar.getInstance()).month.toString()
+    private var selectedDate = CalendarDay.from(Calendar.getInstance()).date.toString()
 
     private var selectedMonthMatchdays: Int = -1
 
@@ -56,6 +61,8 @@ class MyMatchesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        currentUserEmail = userViewModel.currentUser.value!!.email
+
         binding.recyclerviewMatchRecords.adapter = myMatchesAdapter
         binding.recyclerviewMatchRecords.layoutManager = LinearLayoutManager(requireContext())
 
@@ -73,6 +80,10 @@ class MyMatchesFragment : Fragment() {
                 id: Long
             ) {
                 selectedSport = spinnerItems[position]
+                userViewModel.getSelectedDateMatches(currentUserEmail, selectedSport, selectedYear, selectedMonth, selectedDate)
+                userViewModel.selectedDayMatches.observe(viewLifecycleOwner) { data ->
+                    myMatchesAdapter.submitList(data)
+                }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 selectedSport = "전체 종목"
@@ -90,30 +101,67 @@ class MyMatchesFragment : Fragment() {
 //        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일 (E)", Locale("ko", "KR"))
 //        val today = dateFormat.format(Calendar.getInstance())
 //        selectedDate = today
-        binding.calendarMonthlyMatches.setSelectedDate(CalendarDay.from(Calendar.getInstance())) // 오늘 날짜 선택
+        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.calendar_item_spacing)
+        val recyclerView = binding.calendarMonthlyMatches.getChildAt(0) as RecyclerView
+        recyclerView.addItemDecoration(VerticalSpacingItemDecoration(spacingInPixels))
+
+        binding.calendarMonthlyMatches.setSelectedDate(CalendarDay.from(Calendar.getInstance()))
         binding.calendarMonthlyMatches.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
             if (selected) {
                 selectedYear = date.year.toString()
                 selectedMonth = date.month.toString()
                 selectedDate = date.date.toString()
             }
+
+            // 직관한 날짜 작은 점 표시
+            val eventDays = mutableListOf<CalendarDay>()
+            userViewModel.getSelectedMonthMatchdays(currentUserEmail, selectedSport, selectedYear, selectedMonth)
+            val selectedMonthMatchdays = userViewModel.selectedMonthMatchdays.value
+            selectedMonthMatchdays!!.forEach {
+                eventDays.add(CalendarDay.from(selectedYear.toInt(), selectedMonth.toInt(), it.toInt()))
+            }
+            binding.tvMonthlyMatches.text = "${selectedYear}년 $${selectedMonth}월에 ${selectedSport} 경기를 ${selectedMonthMatchdays.size}일 직관했어요!"
+            val eventDecorator = EventDecorator(eventDays)
+            binding.calendarMonthlyMatches.addDecorators(eventDecorator)
+
+            userViewModel.getSelectedDateMatches(currentUserEmail, selectedSport, selectedYear, selectedMonth, selectedDate)
+            userViewModel.selectedDayMatches.observe(viewLifecycleOwner) { data ->
+                myMatchesAdapter.submitList(data)
+            }
+
+//            val addMatchRecordFragment = requireActivity().supportFragmentManager.findFragmentByTag("AddMatchRecordFragment")
+//            binding.btnAddMatchRecord.setOnClickListener{
+//                requireActivity().supportFragmentManager.beginTransaction().apply {
+//                    if (addMatchRecordFragment == null) {
+//                        add(R.id.main_frame, AddMatchRecordFragment(), "AddMatchRecordFragment")
+//                    } else {
+//                        show(addMatchRecordFragment)
+//                    }
+//                    addToBackStack(null)
+//                    commit()
+//                }
+//            }
+            val viewPager: ViewPager2 = binding.viewpagerAddMyMatch
+            viewPager.visibility = View.GONE
+            val viewPagerAdapter = ViewPagerAdapter(requireActivity())
+            viewPager.adapter = viewPagerAdapter
+            binding.btnAddMatchRecord.setOnClickListener{
+                viewPager.currentItem = 0
+                viewPager.visibility = View.VISIBLE
+            }
+
+
         })
 
-        // 직관한 날짜 작은 점 표시
-        val eventDays = mutableListOf<CalendarDay>()
-        userViewModel.getSelectedMonthMatchdays(userViewModel.currentUser.value?.email!!, selectedYear, selectedMonth)
-        val selectedMonthMatchdays = userViewModel.selectedMonthMatchdays.value
-        selectedMonthMatchdays!!.forEach {
-            eventDays.add(CalendarDay.from(selectedYear.toInt(), selectedMonth.toInt(), it.toInt()))
+
+
+
+
+
+    }
+    class VerticalSpacingItemDecoration(private val spacing: Int) : RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+            outRect.bottom = spacing // 아래쪽 간격 설정
         }
-        binding.tvMonthlyMatches.text = "${selectedYear}년 $${selectedMonth}월에 ${selectedSport} 경기를 ${selectedMonthMatchdays.size}일 직관했어요!"
-
-        val eventDecorator = EventDecorator(eventDays)
-        binding.calendarMonthlyMatches.addDecorators(eventDecorator)
-
-
-
-
-
     }
 }

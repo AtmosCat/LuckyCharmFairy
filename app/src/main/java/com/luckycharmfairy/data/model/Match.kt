@@ -10,10 +10,12 @@ data class Match (
     var location: String = "",
     var weather: String = "",
     var feeling: String = "",
+    var sport: String = "",
     var home: String = "",
     var away: String = "",
     var homescore: Int = 0,
     var awayscore: Int = 0,
+    var result: String = "", // WIN, LOSE, TIE, CANCEL, NONE
     var myteam: String = "",
     var mvp: String = "",
     var photos: MutableList<String> = mutableListOf(),

@@ -66,6 +66,7 @@ class MyMatchesAdapter(private val userViewModel: UserViewModel) :
             awayteam.text = item.away
             homescore.text = item.homescore.toString()
             awayscore.text = item.awayscore.toString()
+            result.text = item.result
             if (item.myteam == item.home) {
                 homestar.visibility = View.VISIBLE
                 awaystar.visibility = View.GONE
@@ -73,25 +74,6 @@ class MyMatchesAdapter(private val userViewModel: UserViewModel) :
                 awaystar.visibility = View.VISIBLE
                 homestar.visibility = View.GONE
             }
-            if (item.myteam == item.home) {
-                if (item.homescore > item.awayscore) {
-                    result.text = "WIN"
-                } else if (item.homescore < item.awayscore) {
-                    result.text = "LOSE"
-                } else {
-                    result.text = "TIE"
-                }
-            }
-            if (item.myteam == item.away) {
-                if (item.homescore > item.awayscore) {
-                    result.text = "LOSE"
-                } else if (item.homescore < item.awayscore) {
-                    result.text = "WIN"
-                } else {
-                    result.text = "TIE"
-                }
-            }
-
         }
     }
 }
