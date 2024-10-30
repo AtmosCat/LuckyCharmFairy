@@ -6,17 +6,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.mymatches.addmatches.AddMyMatchOneFragment">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="1dp"
-        android:background="#000000"
-        android:alpha="0.7"
-        />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="350dp"
-        android:layout_height="wrap_content"
+        android:layout_height="500dp"
         android:background="@drawable/bg_round_border_medium"
         android:backgroundTint="@color/white"
         android:elevation="1dp"
@@ -36,15 +28,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <View
+            android:id="@+id/line1"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/main_dark_gray"
+            android:layout_marginTop="19dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            />
+
         <TextView
             android:id="@+id/tv_sports"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="종목"
             style="@style/textStyle_subheading"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            app:layout_constraintTop_toBottomOf="@+id/line1"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="20dp"
             android:layout_marginStart="15dp"
             />
 
@@ -523,13 +524,11 @@
         <View
             android:layout_width="8dp"
             android:layout_height="8dp"
-            android:layout_marginTop="20dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="15dp"
             android:background="@drawable/bg_round_border_big"
             android:backgroundTint="@color/main_medium_gray"
             app:layout_constraintEnd_toStartOf="@id/guideline_0.5"
-            app:layout_constraintTop_toBottomOf="@+id/spinner_mvp"
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <View
@@ -537,10 +536,8 @@
             android:layout_height="8dp"
             android:background="@drawable/bg_round_border_big"
             android:backgroundTint="@color/main_gray"
-            android:layout_marginTop="20dp"
             android:layout_marginStart="5dp"
             android:layout_marginBottom="15dp"
-            app:layout_constraintTop_toBottomOf="@+id/spinner_mvp"
             app:layout_constraintStart_toEndOf="@id/guideline_0.5"
             app:layout_constraintBottom_toBottomOf="parent"
             />
