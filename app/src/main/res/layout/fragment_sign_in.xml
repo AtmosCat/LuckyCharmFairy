@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sign_in_activity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context="com.luckycharmfairy.presentation.main.MainActivity"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="3dp">
+
+    <ImageView
+        android:id="@+id/ic_app_icon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="120dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.35"
+        app:srcCompat="@drawable/app_icon" />
+
+    <TextView
+        android:id="@+id/tv_app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="직관요정"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/nanum_square_ac_extrabold"
+        android:gravity="center"
+        android:textSize="26sp"
+        app:layout_constraintEnd_toEndOf="@+id/ic_app_icon"
+        app:layout_constraintStart_toStartOf="@+id/ic_app_icon"
+        app:layout_constraintTop_toBottomOf="@+id/ic_app_icon" />
+
+
+    <EditText
+        android:id="@+id/et_signin_email"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/bg_round_border_small"
+        android:backgroundTint="@color/white"
+        android:hint="이메일을 입력하세요."
+        android:inputType="text"
+        android:paddingLeft="15dp"
+        style="@style/textStyle_subheading"
+        app:layout_constraintEnd_toEndOf="@+id/ic_app_icon"
+        app:layout_constraintHeight_percent="0.06"
+        app:layout_constraintStart_toStartOf="@+id/ic_app_icon"
+        app:layout_constraintTop_toBottomOf="@+id/ic_app_icon"
+        app:layout_constraintWidth_percent="0.7" />
+
+
+    <EditText
+        android:id="@+id/et_signin_pw"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_round_border_small"
+        android:backgroundTint="@color/white"
+        android:hint="비밀번호를 입력하세요."
+        android:inputType="textPassword"
+        android:paddingLeft="15dp"
+        style="@style/textStyle_subheading"
+        app:layout_constraintHeight_percent="0.06"
+        app:layout_constraintStart_toStartOf="@+id/et_signin_email"
+        app:layout_constraintTop_toBottomOf="@+id/et_signin_email"
+        app:layout_constraintWidth_percent="0.7" />
+
+
+    <Button
+        android:id="@+id/btn_signin"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_round_border_small"
+        android:backgroundTint="@color/main_mint"
+        android:text="로그인"
+        android:textColor="@color/white"
+        style="@style/textStyle_subtitle"
+        android:layout_marginTop="40dp"
+        app:layout_constraintHeight_percent="0.06"
+        app:layout_constraintWidth_percent="0.7"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_signin_pw"/>
+
+    <Button
+        android:id="@+id/btn_signup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_round_border_small"
+        android:backgroundTint="@color/main_gray"
+        android:text="회원가입"
+        android:textColor="@color/white"
+        style="@style/textStyle_subtitle"
+        android:layout_marginTop="10dp"
+        app:layout_constraintHeight_percent="0.06"
+        app:layout_constraintStart_toStartOf="@+id/btn_signin"
+        app:layout_constraintTop_toBottomOf="@+id/btn_signin"
+        app:layout_constraintWidth_percent="0.7" />
+
+        <TextView
+            android:id="@+id/btn_signin_find_id_pw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이메일/비밀번호 찾기"
+            style="@style/textStyle_subheading"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@+id/btn_signup"
+            app:layout_constraintRight_toRightOf="@+id/btn_signup"
+            />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_0.5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardview_google"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="50dp"
+            app:cardCornerRadius="50dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_0.5"
+            app:layout_constraintTop_toBottomOf="@+id/btn_signup"
+            >
+            <ImageView
+                android:id="@+id/btn_google_signin"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:elevation="2dp"
+                app:srcCompat="@drawable/google"
+                android:layout_gravity="center"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardview_kakao"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="50dp"
+        android:backgroundTint="#FEE500"
+        app:cardCornerRadius="50dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@+id/guideline_0.5"
+        app:layout_constraintTop_toBottomOf="@+id/btn_signup"
+        >
+        <ImageView
+            android:id="@+id/btn_kakao_signin"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:elevation="2dp"
+            app:srcCompat="@drawable/kakao"
+            android:layout_gravity="center"
+            />
+
+    </androidx.cardview.widget.CardView>
+
+    <!--    <TextView-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="구글\n로그인"-->
+    <!--        style="@style/textStyle_detail"-->
+    <!--        android:gravity="center"-->
+    <!--        android:layout_marginTop="15dp"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/cardview_google"-->
+    <!--        app:layout_constraintEnd_toEndOf="@+id/cardview_google"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/cardview_google"-->
+    <!--        />-->
+
+
+
+    <!--      <ImageView-->
+    <!--          android:id="@+id/iv_kakao_signin"-->
+    <!--          android:layout_width="0dp"-->
+    <!--          android:layout_height="0dp"-->
+    <!--          app:srcCompat="@drawable/kakao"-->
+    <!--          app:layout_constraintHeight_percent="0.05"-->
+    <!--          app:layout_constraintWidth_percent="0.06"-->
+    <!--          android:elevation="2dp"-->
+    <!--          tools:layout_editor_absoluteX="22dp"-->
+    <!--          tools:layout_editor_absoluteY="830dp"-->
+    <!--          android:layout_marginStart="55dp"-->
+    <!--          app:layout_constraintTop_toTopOf="@+id/btn_kakao_signin"-->
+    <!--          app:layout_constraintBottom_toBottomOf="@+id/btn_kakao_signin"-->
+    <!--          app:layout_constraintStart_toStartOf="@+id/btn_kakao_signin"/>-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
