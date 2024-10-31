@@ -35,6 +35,7 @@ class MyMatchesFragment : Fragment() {
     private var selectedYear = CalendarDay.from(Calendar.getInstance()).year.toString()
     private var selectedMonth = CalendarDay.from(Calendar.getInstance()).month.toString()
     private var selectedDate = CalendarDay.from(Calendar.getInstance()).date.toString()
+    private var selectedDay = CalendarDay.from(Calendar.getInstance()).day.toString()
 
     private var selectedMonthMatchdays: Int = -1
 
@@ -111,6 +112,7 @@ class MyMatchesFragment : Fragment() {
                 selectedYear = date.year.toString()
                 selectedMonth = date.month.toString()
                 selectedDate = date.date.toString()
+                selectedDay = date.day.toString()
             }
 
             // 직관한 날짜 작은 점 표시
@@ -129,18 +131,6 @@ class MyMatchesFragment : Fragment() {
                 myMatchesAdapter.submitList(data)
             }
 
-//            val addMatchRecordFragment = requireActivity().supportFragmentManager.findFragmentByTag("AddMatchRecordFragment")
-//            binding.btnAddMatchRecord.setOnClickListener{
-//                requireActivity().supportFragmentManager.beginTransaction().apply {
-//                    if (addMatchRecordFragment == null) {
-//                        add(R.id.main_frame, AddMatchRecordFragment(), "AddMatchRecordFragment")
-//                    } else {
-//                        show(addMatchRecordFragment)
-//                    }
-//                    addToBackStack(null)
-//                    commit()
-//                }
-//            }
             val viewPager: ViewPager2 = binding.viewpagerAddMyMatch
             viewPager.visibility = View.GONE
             val viewPagerAdapter = ViewPagerAdapter(requireActivity())
@@ -149,7 +139,6 @@ class MyMatchesFragment : Fragment() {
                 viewPager.currentItem = 0
                 viewPager.visibility = View.VISIBLE
             }
-
 
         })
 

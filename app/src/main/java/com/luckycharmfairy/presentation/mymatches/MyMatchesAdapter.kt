@@ -61,7 +61,7 @@ class MyMatchesAdapter(private val userViewModel: UserViewModel) :
         val awaystar = binding.ivAwayStar
 
         fun bind(item: Match) {
-            timeAndLocation.text = "${item.date} ${item.time} - ${item.location}"
+            timeAndLocation.text = "${item.year}년 ${item.month}월 ${item.date}일 (${item.day}) - ${item.location}"
             hometeam.text = item.home
             awayteam.text = item.away
             homescore.text = item.homescore.toString()

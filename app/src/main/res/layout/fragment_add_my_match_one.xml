@@ -51,13 +51,30 @@
 
         <Spinner
             android:id="@+id/spinner_sports"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             style="@style/textStyle_subheading"
             app:layout_constraintTop_toTopOf="@+id/tv_sports"
             app:layout_constraintBottom_toBottomOf="@+id/tv_sports"
             app:layout_constraintStart_toEndOf="@+id/tv_sports"
+            app:layout_constraintEnd_toEndOf="@id/guideline_0.5"
             android:layout_marginStart="15dp"
+            />
+
+        <TextView
+            android:id="@+id/btn_add_sports"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text="종목 추가"
+            android:background="@drawable/bg_round_border_big"
+            android:backgroundTint="@color/main_light_gray"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="8dp"
+            style="@style/textStyle_subheading"
+            app:layout_constraintBottom_toBottomOf="@+id/spinner_sports"
+            app:layout_constraintStart_toEndOf="@+id/spinner_sports"
+            app:layout_constraintTop_toTopOf="@+id/spinner_sports"
             />
 
         <TextView
@@ -85,6 +102,21 @@
             app:layout_constraintBottom_toBottomOf="@+id/tv_date"
             app:layout_constraintStart_toEndOf="@+id/tv_date"
             app:layout_constraintTop_toTopOf="@+id/tv_date"
+            />
+
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+            android:id="@+id/calendar_matchday_selector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            app:mcv_selectionColor="@color/main_mint"
+            android:elevation="4dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/bg_round_border_medium"
+            android:backgroundTint="@color/main_light_gray"
+            app:mcv_showOtherMonths = "all"
+            android:visibility="gone"
             />
 
         <TextView
@@ -134,8 +166,22 @@
             app:layout_constraintTop_toTopOf="@+id/tv_location"
             app:layout_constraintBottom_toBottomOf="@+id/tv_location"
             app:layout_constraintStart_toEndOf="@+id/tv_location"
+            app:layout_constraintEnd_toEndOf="@id/guideline_0.5"
             android:layout_marginStart="15dp"
             />
+
+        <EditText
+            android:id="@+id/et_location"
+            style="@style/textStyle_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:maxLines="2"
+            android:hint="장소를 입력해주세요."
+            app:layout_constraintBottom_toBottomOf="@+id/spinner_location"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/spinner_location"
+            app:layout_constraintTop_toTopOf="@+id/spinner_location" />
 
         <TextView
             android:id="@+id/tv_weather"
@@ -164,7 +210,7 @@
             android:id="@+id/btn_sunny"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:elevation="1dp"
+            android:elevation="2dp"
             android:src="@drawable/weather_sunny"
             app:layout_constraintTop_toTopOf="@+id/view_sunny_background"
             app:layout_constraintBottom_toBottomOf="@+id/view_sunny_background"
@@ -187,7 +233,7 @@
             android:id="@+id/btn_sunny_cloudy"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:elevation="1dp"
+            android:elevation="2dp"
             android:src="@drawable/weather_sunny_cloudy"
             app:layout_constraintTop_toTopOf="@+id/view_sunny_cloudy_background"
             app:layout_constraintBottom_toBottomOf="@+id/view_sunny_cloudy_background"
@@ -210,7 +256,7 @@
             android:id="@+id/btn_cloudy"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:elevation="1dp"
+            android:elevation="2dp"
             android:src="@drawable/weather_cloudy"
             app:layout_constraintTop_toTopOf="@+id/view_cloudy_background"
             app:layout_constraintBottom_toBottomOf="@+id/view_cloudy_background"
@@ -233,7 +279,7 @@
             android:id="@+id/btn_rainy"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:elevation="1dp"
+            android:elevation="2dp"
             android:src="@drawable/weather_rainy"
             app:layout_constraintTop_toTopOf="@+id/view_rainy_background"
             app:layout_constraintBottom_toBottomOf="@+id/view_rainy_background"
@@ -256,7 +302,7 @@
             android:id="@+id/btn_snowy"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:elevation="1dp"
+            android:elevation="2dp"
             android:src="@drawable/weather_snowy"
             app:layout_constraintTop_toTopOf="@+id/view_snowy_background"
             app:layout_constraintBottom_toBottomOf="@+id/view_snowy_background"
@@ -407,11 +453,10 @@
             android:id="@+id/spinner_myteam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@+id/tv_myteam"
+            android:layout_marginStart="15dp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_myteam"
             app:layout_constraintStart_toEndOf="@+id/tv_myteam"
-            android:layout_marginStart="15dp"
-            />
+            app:layout_constraintTop_toTopOf="@+id/tv_myteam" />
 
         <TextView
             android:id="@+id/tv_teams"

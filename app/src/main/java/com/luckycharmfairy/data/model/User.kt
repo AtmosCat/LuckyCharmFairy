@@ -7,6 +7,7 @@ data class User(val email: String = "",
                 var nickname: String = "익명의 팬"+UUID.randomUUID().toString(),
                 var photo: String = "", // 프로필사진
                 var membership: String = "", // 멤버십
+                var mysports: MutableList<String> = mutableListOf(), // 나의 종목
                 var myteams : MutableList<String> = mutableListOf(), // 마이팀 - Team
                 var myplayers : MutableList<String> = mutableListOf(), // 마이선수 - Player
                 var watchedmatches : MutableList<Match> = mutableListOf(), // 직관 경기 기록 - Match
