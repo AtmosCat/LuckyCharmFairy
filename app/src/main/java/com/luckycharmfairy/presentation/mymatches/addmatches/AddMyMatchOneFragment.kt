@@ -13,13 +13,19 @@ import android.widget.ImageView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.luckycharmfairy.R
 import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.data.model.baseballLocations
+import com.luckycharmfairy.data.model.baseballTeams
 import com.luckycharmfairy.data.model.menBasketballLocations
+import com.luckycharmfairy.data.model.menBasketballTeams
 import com.luckycharmfairy.data.model.menFootballLocations
+import com.luckycharmfairy.data.model.menFootballTeams
 import com.luckycharmfairy.data.model.menVolleyballLocations
+import com.luckycharmfairy.data.model.menVolleyballTeams
 import com.luckycharmfairy.data.model.womenVolleyballLocations
+import com.luckycharmfairy.data.model.womenVolleyballTeams
 import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.databinding.FragmentAddMyMatchOneBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
@@ -33,6 +39,7 @@ class AddMyMatchOneFragment : Fragment() {
 
     private var currentUser: User = User()
     private var selectedSport = ""
+    private var selectedSportTeams = listOf<String>()
     private var selectedYear = CalendarDay.from(Calendar.getInstance()).year.toString()
     private var selectedMonth = CalendarDay.from(Calendar.getInstance()).month.toString()
     private var selectedDate = CalendarDay.from(Calendar.getInstance()).date.toString()
@@ -41,6 +48,9 @@ class AddMyMatchOneFragment : Fragment() {
     private var selectedLocation = ""
     private var selectedWeather = ""
     private var selectedFeeling = ""
+    private var selectedMyteam = ""
+    private var selectedHomeTeam = ""
+    private var selectedAwayTeam = ""
 
     private var weatherList = listOf(
         "R.drawable.weather_sunny",
@@ -86,6 +96,8 @@ class AddMyMatchOneFragment : Fragment() {
     private lateinit var feelingButton5Background: View
     private lateinit var feelingButtonBackgroundList : List<View>
 
+    private val teamSelectionAdapter by lazy { TeamSelectionAdapter() }
+
     private val userViewModel: UserViewModel by activityViewModels {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
     }
@@ -123,6 +135,14 @@ class AddMyMatchOneFragment : Fragment() {
         binding.spinnerSports.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 selectedSport = spinnerSports[position]
+                when (selectedSport) {
+                    "야구" -> selectedSportTeams = baseballTeams
+                    "남자축구" -> selectedSportTeams = menFootballTeams
+                    "남자농구" -> selectedSportTeams = menBasketballTeams
+                    "남자배구" -> selectedSportTeams = menVolleyballTeams
+                    "여자배구" -> selectedSportTeams = womenVolleyballTeams
+                    else -> selectedSportTeams = listOf("직접 입력")
+                }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 selectedSport = ""
@@ -214,6 +234,46 @@ class AddMyMatchOneFragment : Fragment() {
         feelingButtonBackgroundList.forEach{ it.visibility = View.GONE }
 
         feelingButtonList.forEach{ feelingClicker(it, feelingButtonList, feelingButtonBackgroundList) }
+
+        val spinnerHomeAway = listOf("홈 팀", "어웨이 팀")
+        val spinnerMyteamAdapter =
+            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerHomeAway)
+        spinnerMyteamAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
+        binding.spinnerLocation.adapter = spinnerLocationAdapter
+        binding.spinnerLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                selectedMyteam = spinnerHomeAway[position]
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                selectedMyteam = spinnerHomeAway[0]
+            }
+        }
+
+        binding.recyclerviewTeams.adapter = teamSelectionAdapter
+        binding.recyclerviewTeams.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.btnHometeam.setOnClickListener{
+            binding.recyclerviewTeams.visibility = View.VISIBLE
+            teamSelectionAdapter.submitList(selectedSportTeams)
+            teamSelectionAdapter.itemClick = object : TeamSelectionAdapter.ItemClick {
+                override fun onClick(view: View, position: Int) {
+                    binding.btnHometeam.setText(selectedHomeTeam)
+                    if (selectedHomeTeam == "직접 입력") {
+                        binding.btnHometeam.visibility = View.GONE
+                        binding.etHomeTeam.visibility = View.VISIBLE
+                        // 창닫기
+                    } else {
+                        selectedHomeTeam = selectedSportTeams[position]
+                        binding.btnHometeam.visibility = View.VISIBLE
+                        binding.etHomeTeam.visibility = View.GONE
+                        // 창닫기
+                    }
+                }
+            }
+
+        }
+
+
 
 
     }

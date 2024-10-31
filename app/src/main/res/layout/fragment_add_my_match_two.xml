@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout"
         android:layout_width="350dp"
-        android:layout_height="500dp"
+        android:layout_height="600dp"
         android:background="@drawable/bg_round_border_medium"
         android:backgroundTint="@color/white"
         android:elevation="1dp"

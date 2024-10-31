@@ -28,7 +28,7 @@ public val baseballTeams = listOf(
     "직접 입력"
     )
 
-public val footballTeams = listOf(
+public val menFootballTeams = listOf(
     "강원 FC",
     "광주 FC",
     "김천 상무 FC",
@@ -44,7 +44,7 @@ public val footballTeams = listOf(
     "직접 입력"
 )
 
-public val basketballTeams = listOf(
+public val menBasketballTeams = listOf(
     "고양 소노",
     "대구 한국가스공사",
     "서울 SK",
