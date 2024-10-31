@@ -60,7 +60,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_title"
             app:layout_constraintBottom_toTopOf="@+id/tab_circle1"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="25dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             >
@@ -134,8 +134,23 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/main_dark_gray"
-            android:layout_marginBottom="9dp"
+            android:layout_marginBottom="24.5dp"
             app:layout_constraintBottom_toTopOf="@+id/tab_circle1"
+            />
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:background="@drawable/bg_round_border_small"
+            android:backgroundTint="@color/main_gray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_margin="10dp"
+            android:text="이전"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:fontFamily="@font/nanum_square_ac_regular"
             />
 
         <View

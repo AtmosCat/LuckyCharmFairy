@@ -46,6 +46,9 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private var _selectedDayMatches = MutableLiveData<MutableList<Match>>()
     val selectedDayMatches : LiveData<MutableList<Match>> get() = _selectedDayMatches
 
+    private val _temporaryMatchData = MutableLiveData<Match?>()
+    val temporaryMatchData : LiveData<Match?> get() = _temporaryMatchData
+
     private val _bitmapBeforeSave = MutableLiveData<Bitmap>()
     val bitmapBeforeSave : LiveData<Bitmap> get() = _bitmapBeforeSave
 
@@ -236,6 +239,10 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 handleException(it)
             }
         }
+    }
+
+    fun saveTemporaryMatchData(matchData: Match) {
+        _temporaryMatchData.value = matchData
     }
 
 

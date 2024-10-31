@@ -110,9 +110,18 @@ class MyMatchesFragment : Fragment() {
         binding.calendarMonthlyMatches.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
             if (selected) {
                 selectedYear = date.year.toString()
-                selectedMonth = date.month.toString()
-                selectedDate = date.date.toString()
-                selectedDay = date.day.toString()
+                selectedMonth = String.format("%02d", date.month + 1)
+                selectedDate = String.format("%02d", date.date)
+                selectedDay = when (date.day) {
+                    1 -> "일"
+                    2 -> "월"
+                    3 -> "화"
+                    4 -> "수"
+                    5 -> "목"
+                    6 -> "금"
+                    7 -> "토"
+                    else -> ""
+                }
             }
 
             // 직관한 날짜 작은 점 표시
@@ -131,17 +140,16 @@ class MyMatchesFragment : Fragment() {
                 myMatchesAdapter.submitList(data)
             }
 
-            val viewPager: ViewPager2 = binding.viewpagerAddMyMatch
-            viewPager.visibility = View.GONE
-            val viewPagerAdapter = ViewPagerAdapter(requireActivity())
-            viewPager.adapter = viewPagerAdapter
-            binding.btnAddMatchRecord.setOnClickListener{
-                viewPager.currentItem = 0
-                viewPager.visibility = View.VISIBLE
-            }
-
         })
 
+        val viewPager: ViewPager2 = binding.viewpagerAddMyMatch
+        viewPager.visibility = View.GONE
+        val viewPagerAdapter = ViewPagerAdapter(requireActivity())
+        viewPager.adapter = viewPagerAdapter
+        binding.btnAddMatchRecord.setOnClickListener{
+            viewPager.currentItem = 0
+            viewPager.visibility = View.VISIBLE
+        }
 
 
 

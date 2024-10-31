@@ -15,6 +15,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.luckycharmfairy.R
+import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.data.model.baseballLocations
 import com.luckycharmfairy.data.model.baseballTeams
@@ -31,6 +32,7 @@ import com.luckycharmfairy.databinding.FragmentAddMyMatchOneBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import java.util.Calendar
+import kotlin.random.Random
 
 class AddMyMatchOneFragment : Fragment() {
 
@@ -51,6 +53,8 @@ class AddMyMatchOneFragment : Fragment() {
     private var selectedMyteam = ""
     private var selectedHomeTeam = ""
     private var selectedAwayTeam = ""
+    private var selectedResult = ""
+    private var selectedMvp = ""
 
     private var weatherList = listOf(
         "R.drawable.weather_sunny",
@@ -190,6 +194,7 @@ class AddMyMatchOneFragment : Fragment() {
                     binding.etLocation.visibility = View.VISIBLE
                 } else {
                     binding.etLocation.visibility = View.GONE
+                    binding.etLocation.setText("")
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -235,12 +240,12 @@ class AddMyMatchOneFragment : Fragment() {
 
         feelingButtonList.forEach{ feelingClicker(it, feelingButtonList, feelingButtonBackgroundList) }
 
-        val spinnerHomeAway = listOf("홈 팀", "어웨이 팀")
+        val spinnerHomeAway = listOf("홈 팀", "어웨이 팀", "없음")
         val spinnerMyteamAdapter =
             ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerHomeAway)
         spinnerMyteamAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
-        binding.spinnerLocation.adapter = spinnerLocationAdapter
-        binding.spinnerLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.spinnerMyteam.adapter = spinnerMyteamAdapter
+        binding.spinnerMyteam.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 selectedMyteam = spinnerHomeAway[position]
             }
@@ -257,22 +262,111 @@ class AddMyMatchOneFragment : Fragment() {
             teamSelectionAdapter.submitList(selectedSportTeams)
             teamSelectionAdapter.itemClick = object : TeamSelectionAdapter.ItemClick {
                 override fun onClick(view: View, position: Int) {
-                    binding.btnHometeam.setText(selectedHomeTeam)
+                    binding.recyclerviewTeams.visibility = View.GONE
                     if (selectedHomeTeam == "직접 입력") {
                         binding.btnHometeam.visibility = View.GONE
                         binding.etHomeTeam.visibility = View.VISIBLE
-                        // 창닫기
                     } else {
                         selectedHomeTeam = selectedSportTeams[position]
                         binding.btnHometeam.visibility = View.VISIBLE
+                        binding.btnHometeam.setText(selectedHomeTeam)
                         binding.etHomeTeam.visibility = View.GONE
-                        // 창닫기
+                        binding.etHomeTeam.setText("")
                     }
                 }
             }
-
+        }
+        binding.btnAwayteam.setOnClickListener{
+            binding.recyclerviewTeams.visibility = View.VISIBLE
+            teamSelectionAdapter.submitList(selectedSportTeams)
+            teamSelectionAdapter.itemClick = object : TeamSelectionAdapter.ItemClick {
+                override fun onClick(view: View, position: Int) {
+                    binding.recyclerviewTeams.visibility = View.GONE
+                    if (selectedAwayTeam == "직접 입력") {
+                        binding.btnAwayteam.visibility = View.GONE
+                        binding.etAwayTeam.visibility = View.VISIBLE
+                    } else {
+                        selectedAwayTeam = selectedSportTeams[position]
+                        binding.btnAwayteam.visibility = View.VISIBLE
+                        binding.btnAwayteam.setText(selectedHomeTeam)
+                        binding.etAwayTeam.visibility = View.GONE
+                        binding.etAwayTeam.setText("")
+                    }
+                }
+            }
         }
 
+        val spinnerResult = listOf("승리", "패배", "무승부", "경기 취소", "타 팀 직관")
+        val spinnerResultAdapter =
+            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerResult)
+        spinnerResultAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
+        binding.spinnerResult.adapter = spinnerResultAdapter
+        binding.spinnerResult.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                selectedResult = spinnerResult[position]
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                selectedResult = spinnerResult[0]
+            }
+        }
+
+        val spinnerMvp = listOf("류현진", "문동주", "김서현", "노시환", "페라자", "직접 입력")
+        val spinnerMvpAdapter =
+            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerMvp)
+        spinnerMvpAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
+        binding.spinnerMvp.adapter = spinnerMvpAdapter
+        binding.spinnerMvp.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                selectedMvp = spinnerMvp[position]
+                if (selectedMvp == "직접 입력") {
+                    binding.etMvp.visibility = View.VISIBLE
+                } else {
+                    binding.etMvp.visibility = View.GONE
+                    binding.etMvp.setText("")
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                selectedResult = spinnerResult[0]
+            }
+        }
+
+        binding.btnNext.setOnClickListener{
+            if (selectedLocation == "직접 입력") {
+                selectedLocation = binding.etLocation.text.toString()
+            }
+            if (selectedHomeTeam == "직접 입력") {
+                selectedHomeTeam = binding.etHomeTeam.text.toString()
+            }
+            if (selectedAwayTeam == "직접 입력") {
+                selectedAwayTeam = binding.etAwayTeam.text.toString()
+            }
+            if (selectedMvp == "직접 입력") {
+                selectedMvp = binding.etMvp.text.toString()
+            }
+            val temporaryMatchData = Match(
+            id = "${currentUser.email}-${selectedYear}${selectedMonth}${selectedDate}-${Random.nextInt(100000, 1000000)}",
+            writerEmail = currentUser.email,
+            year = selectedYear,
+            month = selectedMonth,
+            date = selectedDate,
+            day = selectedDay,
+            time = selectedTime,
+            location = selectedLocation,
+            weather = selectedWeather,
+            feeling = selectedFeeling,
+            sport = selectedSport,
+            home = selectedHomeTeam,
+            away = selectedAwayTeam,
+            homescore = binding.etHomeScore.text.toString().toInt(),
+            awayscore = binding.etAwayScore.text.toString().toInt(),
+            result = selectedResult,
+            myteam = selectedMyteam,
+            mvp = selectedMvp,
+            photos = mutableListOf(),
+            content = ""
+            )
+            userViewModel.saveTemporaryMatchData(temporaryMatchData)
+        }
 
 
 

@@ -547,32 +547,43 @@
         <EditText
             android:id="@+id/et_home_score"
             style="@style/textStyle_subheading"
-            android:layout_width="0dp"
+            android:layout_width="100dp"
             android:layout_height="25dp"
             android:background="@drawable/bg_round_border_big"
             android:backgroundTint="@color/main_light_gray"
             android:gravity="center"
+            android:inputType="number"
             android:hint="홈"
             android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="@+id/tv_score"
-            app:layout_constraintEnd_toEndOf="@+id/btn_hometeam"
             app:layout_constraintStart_toStartOf="@+id/btn_hometeam"
             app:layout_constraintTop_toTopOf="@+id/tv_score" />
 
+        <TextView
+            android:id="@+id/tv_colone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  :  "
+            style="@style/textStyle_subheading"
+            app:layout_constraintTop_toTopOf="@+id/et_home_score"
+            app:layout_constraintBottom_toBottomOf="@+id/et_home_score"
+            app:layout_constraintStart_toEndOf="@+id/et_home_score"
+            />
+
         <EditText
             android:id="@+id/et_away_score"
-            android:layout_width="0dp"
+            android:layout_width="100dp"
             android:maxLines="1"
             android:layout_height="25dp"
             android:hint="어웨이"
             android:gravity="center"
+            android:inputType="number"
             style="@style/textStyle_subheading"
             android:background="@drawable/bg_round_border_big"
             android:backgroundTint="@color/main_light_gray"
-            app:layout_constraintTop_toBottomOf="@+id/et_home_score"
-            app:layout_constraintEnd_toEndOf="@+id/et_home_score"
-            app:layout_constraintStart_toStartOf="@+id/et_home_score"
-            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toTopOf="@+id/tv_colone"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_colone"
+            app:layout_constraintStart_toEndOf="@+id/tv_colone"
             />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -589,13 +600,35 @@
             />
 
         <TextView
+            android:id="@+id/tv_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="결과"
+            style="@style/textStyle_subheading"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_score"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toStartOf="@id/guideline_75dp"
+            />
+
+        <Spinner
+            android:id="@+id/spinner_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/tv_result"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_result"
+            app:layout_constraintStart_toEndOf="@+id/guideline_75dp"
+            android:layout_marginStart="10dp"
+            />
+
+        <TextView
             android:id="@+id/tv_mvp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="MVP"
             android:gravity="center"
             style="@style/textStyle_subheading"
-            app:layout_constraintTop_toBottomOf="@+id/et_away_score"
+            app:layout_constraintTop_toBottomOf="@+id/tv_result"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="20dp"
             app:layout_constraintEnd_toStartOf="@id/guideline_75dp"
@@ -603,13 +636,27 @@
 
         <Spinner
             android:id="@+id/spinner_mvp"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@+id/tv_mvp"
             app:layout_constraintBottom_toBottomOf="@+id/tv_mvp"
             app:layout_constraintStart_toEndOf="@+id/guideline_75dp"
+            app:layout_constraintEnd_toEndOf="@id/guideline_0.5"
             android:layout_marginStart="10dp"
             />
+
+        <EditText
+            android:id="@+id/et_mvp"
+            style="@style/textStyle_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:maxLines="1"
+            android:hint="MVP를 입력하세요."
+            app:layout_constraintBottom_toBottomOf="@+id/spinner_mvp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/spinner_mvp"
+            app:layout_constraintTop_toTopOf="@+id/spinner_mvp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_0.5"
@@ -628,6 +675,31 @@
             />
 
         <View
+            android:id="@+id/line3"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/main_dark_gray"
+            android:layout_marginBottom="24.5dp"
+            app:layout_constraintBottom_toTopOf="@+id/tab_circle1"
+            />
+
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:background="@drawable/bg_round_border_small"
+            android:backgroundTint="@color/main_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_margin="10dp"
+            android:text="다음"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:fontFamily="@font/nanum_square_ac_regular"
+            />
+
+        <View
+            android:id="@+id/tab_circle1"
             android:layout_width="8dp"
             android:layout_height="8dp"
             android:layout_marginEnd="5dp"
@@ -638,6 +710,7 @@
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <View
+            android:id="@+id/tab_circle2"
             android:layout_width="8dp"
             android:layout_height="8dp"
             android:background="@drawable/bg_round_border_big"
