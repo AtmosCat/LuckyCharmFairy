@@ -1,17 +1,41 @@
 package com.luckycharmfairy.presentation.mymatches.addmatches
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.viewpager2.adapter.FragmentStateAdapter
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
+import com.luckycharmfairy.R
+import coil.load
 
-class ViewPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
-    override fun getItemCount(): Int = 2
-    override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> AddMyMatchOneFragment()
-            1 -> AddMyMatchTwoFragment()
-            else -> throw IllegalStateException("Unexpected position: $position")
+class ViewPagerAdapter(private val imageUrls: List<String>) : RecyclerView.Adapter<ViewPagerAdapter.ImageViewHolder>() {
+
+    class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val imageView: ImageView = itemView.findViewById(R.id.imageView)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_image, parent, false)
+        return ImageViewHolder(view)
+    }
+
+    interface ItemClick {
+        fun onClick(view: View, position: Int)
+    }
+
+    var itemClick : ItemClick? = null
+
+    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
+        val imageUrl = imageUrls[position]
+        holder.itemView.setOnLongClickListener {
+            itemClick?.onClick(it, position)
+            true
+        }
+        holder.imageView.load(imageUrl) {
+            placeholder(R.drawable.placeholder)
+            error(R.drawable.error_image)
         }
     }
 
+    override fun getItemCount(): Int = imageUrls.size
 }

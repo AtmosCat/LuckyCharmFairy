@@ -51,6 +51,8 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _bitmapBeforeSave = MutableLiveData<Bitmap>()
     val bitmapBeforeSave : LiveData<Bitmap> get() = _bitmapBeforeSave
+    private val _temporaryImageUrls = MutableLiveData<List<String>>()
+    val temporaryImageUrls : LiveData<List<String>> get() = _temporaryImageUrls
 
     fun addUser(user: User) {
         viewModelScope.launch {
@@ -245,6 +247,16 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         _temporaryMatchData.value = matchData
     }
 
+    fun saveTemporaryImageUrl(imageUrl: String) {
+        viewModelScope.launch {
+            runCatching {
+                _temporaryImageUrls.value = _temporaryImageUrls.value?.plus(imageUrl)
+            }.onFailure {
+                Log.e(TAG, "saveTemporaryImageUrl() failed! : ${it.message}")
+                handleException(it)
+            }
+        }
+    }
 
     fun getBlockedUsers(){
         db.collection("user")

@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-android")
     id("kotlin-parcelize")
-    id("com.google.gms.google-services") version "4.3.10"
+//    id("com.google.gms.google-services") version "4.3.10"
 }
 
 android {
@@ -77,4 +77,6 @@ dependencies {
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.firebase.storage.ktx)
     implementation (libs.material.calendarview)
+    implementation (libs.coil.kt.coil)
+    implementation (platform(libs.google.firebase.bom))
 }

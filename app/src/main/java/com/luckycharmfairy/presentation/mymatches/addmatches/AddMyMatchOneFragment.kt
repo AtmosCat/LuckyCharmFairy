@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.replace
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -123,6 +124,10 @@ class AddMyMatchOneFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         currentUser = userViewModel.currentUser.value!!
+
+        binding.btnClose.setOnClickListener{
+            requireActivity().supportFragmentManager.popBackStack()
+        }
 
         val spinnerSports = currentUser.mysports
 //        if (spinnerSports.isEmpty()) {
@@ -348,7 +353,7 @@ class AddMyMatchOneFragment : Fragment() {
             writerEmail = currentUser.email,
             year = selectedYear,
             month = selectedMonth,
-            date = selectedDate,
+            date = selectedDate,    
             day = selectedDay,
             time = selectedTime,
             location = selectedLocation,
@@ -366,6 +371,17 @@ class AddMyMatchOneFragment : Fragment() {
             content = ""
             )
             userViewModel.saveTemporaryMatchData(temporaryMatchData)
+            requireActivity().supportFragmentManager.beginTransaction().apply {
+                setCustomAnimations(
+                    R.anim.slide_in_left,
+                    R.anim.slide_in_right,
+                    R.anim.slide_out_left,
+                    R.anim.slide_out_right
+                )
+                replace(R.id.main_frame, AddMyMatchTwoFragment())
+                addToBackStack(null)
+                commit()
+            }
         }
 
 

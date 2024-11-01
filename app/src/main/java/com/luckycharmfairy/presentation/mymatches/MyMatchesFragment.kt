@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.replace
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +19,7 @@ import com.luckycharmfairy.R
 import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.presentation.EventDecorator
+import com.luckycharmfairy.presentation.mymatches.addmatches.AddMyMatchOneFragment
 import com.luckycharmfairy.presentation.mymatches.addmatches.ViewPagerAdapter
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
@@ -142,13 +144,17 @@ class MyMatchesFragment : Fragment() {
 
         })
 
-        val viewPager: ViewPager2 = binding.viewpagerAddMyMatch
-        viewPager.visibility = View.GONE
-        val viewPagerAdapter = ViewPagerAdapter(requireActivity())
-        viewPager.adapter = viewPagerAdapter
         binding.btnAddMatchRecord.setOnClickListener{
-            viewPager.currentItem = 0
-            viewPager.visibility = View.VISIBLE
+            val addMyMatchOneFragment = requireActivity().supportFragmentManager.findFragmentByTag("AddMyMatchOneFragment")
+            requireActivity().supportFragmentManager.beginTransaction().apply {
+                if (addMyMatchOneFragment == null) {
+                    add(R.id.main_frame, AddMyMatchOneFragment(), "AddMyMatchOneFragment")
+                } else {
+                    show(addMyMatchOneFragment)
+                }
+                addToBackStack(null)
+                commit()
+            }
         }
 
 
