@@ -14,11 +14,13 @@ import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.ImageRequest
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.data.model.Post
 import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.presentation.UiState
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 
@@ -51,8 +53,8 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _bitmapBeforeSave = MutableLiveData<Bitmap>()
     val bitmapBeforeSave : LiveData<Bitmap> get() = _bitmapBeforeSave
-    private val _temporaryImageUrls = MutableLiveData<List<String>>()
-    val temporaryImageUrls : LiveData<List<String>> get() = _temporaryImageUrls
+    private val _temporaryImageUrls = MutableLiveData<MutableList<String>>()
+    val temporaryImageUrls : LiveData<MutableList<String>> get() = _temporaryImageUrls
 
     fun addUser(user: User) {
         viewModelScope.launch {
@@ -197,7 +199,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 db.runTransaction { transaction ->
                     val snapshot = transaction.get(userRef)
                     val currentUser = snapshot.toObject(User::class.java)
-                    val matches = currentUser?.watchedmatches ?: emptyList()
+                    val matches = currentUser?.matches ?: emptyList()
                     val selectedMonthMatches = matches.filter {
                         it.sport == selectedSport && it.year == selectedYear && it.month == selectedMonth }
                     val matchdays = mutableListOf<String>()
@@ -226,7 +228,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 db.runTransaction { transaction ->
                     val snapshot = transaction.get(userRef)
                     val currentUser = snapshot.toObject(User::class.java)
-                    val matches = currentUser?.watchedmatches ?: emptyList()
+                    val matches = currentUser?.matches ?: emptyList()
                     val selectedDayMatches = matches.filter {
                         it.sport == selectedSport &&it.year == selectedYear && it.month == selectedMonth && it.date == selectedDate
                     }.toMutableList()
@@ -250,9 +252,31 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     fun saveTemporaryImageUrl(imageUrl: String) {
         viewModelScope.launch {
             runCatching {
-                _temporaryImageUrls.value = _temporaryImageUrls.value?.plus(imageUrl)
+                _temporaryImageUrls.value?.add(imageUrl)
             }.onFailure {
                 Log.e(TAG, "saveTemporaryImageUrl() failed! : ${it.message}")
+                handleException(it)
+            }
+        }
+    }
+
+    fun addNewMatch(content: String) {
+        viewModelScope.launch {
+            runCatching {
+                _temporaryMatchData.value?.photos = _temporaryImageUrls.value!!
+                _temporaryMatchData.value?.content = content
+                val newMatch = _temporaryMatchData.value
+                db.collection("user")
+                    .document(currentUser.value!!.email)
+                    .update("matches", FieldValue.arrayUnion(newMatch))
+                    .addOnSuccessListener {
+                        println("${newMatch!!.id} 직관 기록 추가 성공")
+                    }
+                    .addOnFailureListener { exception ->
+                        println("${newMatch!!.id} 직관 기록 추가 실패")
+                    }
+            }.onFailure {
+                Log.e(TAG, "addNewMatch() failed! : ${it.message}")
                 handleException(it)
             }
         }

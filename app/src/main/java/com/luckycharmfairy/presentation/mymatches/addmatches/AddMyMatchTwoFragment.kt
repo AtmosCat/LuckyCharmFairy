@@ -22,7 +22,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.firebase.storage.FirebaseStorage
 import com.luckycharmfairy.R
 import com.luckycharmfairy.data.viewmodel.UserViewModel
-import com.luckycharmfairy.databinding.FragmentAddMyMatchOneBinding
 import com.luckycharmfairy.databinding.FragmentAddMyMatchTwoBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,6 +34,8 @@ class AddMyMatchTwoFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var currentUserEmail: String = ""
+
+    private var matchContent: String = ""
 
     private val userViewModel: UserViewModel by activityViewModels {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
@@ -99,6 +100,16 @@ class AddMyMatchTwoFragment : Fragment() {
             }
         })
 
+        binding.btnSave.setOnClickListener {
+            userViewModel.addNewMatch(matchContent)
+            Toast.makeText(requireContext(), "직관 기록이 저장되었습니다.", Toast.LENGTH_SHORT).show()
+            requireActivity().supportFragmentManager.beginTransaction().apply {
+                remove(this@AddMyMatchTwoFragment)
+                addToBackStack(null)
+                commit()
+            }
+        }
+
 
     }
     // 1. 갤러리에서 복수 이미지 선택할 수 있는 인텐트 생성 및 팝업
@@ -120,7 +131,7 @@ class AddMyMatchTwoFragment : Fragment() {
                         userViewModel.saveTemporaryImageUrl(url)
                         // 모든 이미지가 처리된 후에 ViewPager를 업데이트
                         if (uris.indexOf(uri) == uris.size - 1) {
-                            val photoAdapter = ViewPagerAdapter(imageResources)
+                            val photoAdapter = ViewPagerAdapter(imageResources, userViewModel)
                             binding.viewPagerContentPhoto.adapter = photoAdapter
                         }
                         if (imageResources.size == 0) {

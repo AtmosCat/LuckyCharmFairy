@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.androidx.benchmark.common)
     implementation(libs.play.services.ads.lite)
     implementation(libs.volley)
+    implementation(libs.firebase.crashlytics.buildtools)
     testImplementation(libs.junit)
     implementation(libs.coil)
     androidTestImplementation(libs.androidx.junit)
@@ -79,4 +80,5 @@ dependencies {
     implementation (libs.material.calendarview)
     implementation (libs.coil.kt.coil)
     implementation (platform(libs.google.firebase.bom))
+    implementation (libs.retrofit2.retrofit)
 }

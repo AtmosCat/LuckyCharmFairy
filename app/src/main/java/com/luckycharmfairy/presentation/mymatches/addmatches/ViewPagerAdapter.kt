@@ -3,15 +3,18 @@ package com.luckycharmfairy.presentation.mymatches.addmatches
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.luckycharmfairy.R
 import coil.load
+import com.luckycharmfairy.data.viewmodel.UserViewModel
 
-class ViewPagerAdapter(private val imageUrls: List<String>) : RecyclerView.Adapter<ViewPagerAdapter.ImageViewHolder>() {
+class ViewPagerAdapter(private val imageUrls: MutableList<String>, private val userViewModel: UserViewModel) : RecyclerView.Adapter<ViewPagerAdapter.ImageViewHolder>() {
 
     class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
+        val btnClose: Button = itemView.findViewById(R.id.viewpager_btn_close) // 버튼 초기화
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
@@ -23,7 +26,7 @@ class ViewPagerAdapter(private val imageUrls: List<String>) : RecyclerView.Adapt
         fun onClick(view: View, position: Int)
     }
 
-    var itemClick : ItemClick? = null
+    var itemClick: ItemClick? = null
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val imageUrl = imageUrls[position]
@@ -31,9 +34,21 @@ class ViewPagerAdapter(private val imageUrls: List<String>) : RecyclerView.Adapt
             itemClick?.onClick(it, position)
             true
         }
+
         holder.imageView.load(imageUrl) {
             placeholder(R.drawable.placeholder)
             error(R.drawable.error_image)
+        }
+
+        // btnClose 클릭 리스너 설정
+        holder.btnClose.setOnClickListener {
+            val adapterPosition = holder.adapterPosition // 현재 어댑터에서의 위치 가져오기
+            if (adapterPosition != RecyclerView.NO_POSITION) { // 유효한 위치인지 확인
+                imageUrls.removeAt(adapterPosition)
+                userViewModel.temporaryImageUrls.value!!.removeAt(position)
+                notifyItemRemoved(adapterPosition)
+                notifyItemRangeChanged(adapterPosition, imageUrls.size) // 남은 아이템의 위치 업데이트
+            }
         }
     }
 
