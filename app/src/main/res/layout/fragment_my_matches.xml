@@ -101,8 +101,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_monthly_matches"
         app:layout_constraintWidth_percent="0.85"
-        android:paddingVertical="0dp"
-        app:mcv_showOtherMonths = "all" />
+        android:paddingVertical="0dp"/>
 
     <TextView
         android:id="@+id/tv_match_record_title"

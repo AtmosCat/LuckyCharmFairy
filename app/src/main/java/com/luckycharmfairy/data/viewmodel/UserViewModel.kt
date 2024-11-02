@@ -10,8 +10,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.android.volley.toolbox.ImageLoader
-import com.android.volley.toolbox.ImageRequest
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -88,61 +86,61 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun editMyPost(email: String, edittedPost: Post) {
-        viewModelScope.launch {
-            runCatching {
-                val userRef = db.collection("user").document(email)
-                db.runTransaction { transaction ->
-                    val userSnapshot = transaction.get(userRef)
-                    val user = userSnapshot.toObject(User::class.java)
-                    val myposts = user?.myposts ?: emptyList()
+//    fun editMyPost(email: String, edittedPost: Post) {
+//        viewModelScope.launch {
+//            runCatching {
+//                val userRef = db.collection("user").document(email)
+//                db.runTransaction { transaction ->
+//                    val userSnapshot = transaction.get(userRef)
+//                    val user = userSnapshot.toObject(User::class.java)
+//                    val myposts = user?.myposts ?: emptyList()
+//
+//                    val mypostIndex = myposts.indexOfFirst { it.id == edittedPost.id }
+//                    if (mypostIndex != -1) {
+//                        val updatedMyPosts = myposts.toMutableList()
+//                        updatedMyPosts[mypostIndex] = edittedPost
+//                        transaction.update(userRef, "mypost", updatedMyPosts)
+//                    }
+//                }.addOnSuccessListener {
+//                    println("CurrentUser의 MyPost에 ${edittedPost.id} 업데이트 성공")
+//                }
+//                    .addOnFailureListener { exception ->
+//                        println("CurrentUser의 MyPost에 ${edittedPost.id} 업데이트 실패 / $exception")
+//                    }
+//            }.onFailure {
+//                Log.e(TAG, "editMyPost() failed! : ${it.message}")
+//                handleException(it)
+//            }
+//        }
+//    }
 
-                    val mypostIndex = myposts.indexOfFirst { it.id == edittedPost.id }
-                    if (mypostIndex != -1) {
-                        val updatedMyPosts = myposts.toMutableList()
-                        updatedMyPosts[mypostIndex] = edittedPost
-                        transaction.update(userRef, "mypost", updatedMyPosts)
-                    }
-                }.addOnSuccessListener {
-                    println("CurrentUser의 MyPost에 ${edittedPost.id} 업데이트 성공")
-                }
-                    .addOnFailureListener { exception ->
-                        println("CurrentUser의 MyPost에 ${edittedPost.id} 업데이트 실패 / $exception")
-                    }
-            }.onFailure {
-                Log.e(TAG, "editMyPost() failed! : ${it.message}")
-                handleException(it)
-            }
-        }
-    }
-
-    fun deleteMyPost(email: String, post: Post) {
-        viewModelScope.launch {
-            runCatching {
-                val userRef = db.collection("user").document(email)
-                db.runTransaction { transaction ->
-                    val userSnapshot = transaction.get(userRef)
-                    val user = userSnapshot.toObject(User::class.java)
-                    val myposts = user?.myposts ?: emptyList()
-
-                    val mypostIndex = myposts.indexOfFirst { it.id == post.id }
-                    if (mypostIndex != -1) {
-                        val updatedMyPosts = myposts.toMutableList()
-                        updatedMyPosts.removeAt(mypostIndex)
-                        transaction.update(userRef, "mypost", updatedMyPosts)
-                    }
-                }.addOnSuccessListener {
-                    println("CurrentUser의 MyPost에서 ${post.id} 삭제 성공")
-                }
-                    .addOnFailureListener { exception ->
-                        println("CurrentUser의 MyPost에서 ${post.id} 삭제 실패 / $exception")
-                    }
-            }.onFailure {
-                Log.e(TAG, "deleteMyPost() failed! : ${it.message}")
-                handleException(it)
-            }
-        }
-    }
+//    fun deleteMyPost(email: String, post: Post) {
+//        viewModelScope.launch {
+//            runCatching {
+//                val userRef = db.collection("user").document(email)
+//                db.runTransaction { transaction ->
+//                    val userSnapshot = transaction.get(userRef)
+//                    val user = userSnapshot.toObject(User::class.java)
+//                    val myposts = user?.myposts ?: emptyList()
+//
+//                    val mypostIndex = myposts.indexOfFirst { it.id == post.id }
+//                    if (mypostIndex != -1) {
+//                        val updatedMyPosts = myposts.toMutableList()
+//                        updatedMyPosts.removeAt(mypostIndex)
+//                        transaction.update(userRef, "mypost", updatedMyPosts)
+//                    }
+//                }.addOnSuccessListener {
+//                    println("CurrentUser의 MyPost에서 ${post.id} 삭제 성공")
+//                }
+//                    .addOnFailureListener { exception ->
+//                        println("CurrentUser의 MyPost에서 ${post.id} 삭제 실패 / $exception")
+//                    }
+//            }.onFailure {
+//                Log.e(TAG, "deleteMyPost() failed! : ${it.message}")
+//                handleException(it)
+//            }
+//        }
+//    }
 
     fun findUser(_email: String) {
         viewModelScope.launch {
@@ -380,21 +378,21 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     // 갤러리로부터 이미지 값을 받아와서 Bitmap 으로 변환
-    suspend fun handleImage(uri: Uri) {
-        _bitmapBeforeSave.value = sampleBitmap
-        val imageLoader = ImageLoader(getApplication())
-        val request = ImageRequest.Builder(getApplication())
-            .data(uri)
-            .allowHardware(false) // Bitmap을 요청할 때는 false로 설정
-            .build()
-
-        val result = imageLoader.execute(request)
-        if (result is SuccessResult) {
-            _bitmapBeforeSave.value = result.drawable.toBitmap()
-        } else {
-            // 실패 처리
-        }
-    }
+//    suspend fun handleImage(uri: Uri) {
+//        _bitmapBeforeSave.value = sampleBitmap
+//        val imageLoader = ImageLoader(getApplication())
+//        val request = ImageRequest.Builder(getApplication())
+//            .data(uri)
+//            .allowHardware(false) // Bitmap을 요청할 때는 false로 설정
+//            .build()
+//
+//        val result = imageLoader.execute(request)
+//        if (result is SuccessResult) {
+//            _bitmapBeforeSave.value = result.drawable.toBitmap()
+//        } else {
+//            // 실패 처리
+//        }
+//    }
 
     // 임시 저장하는 Bitmap 파일을 String 타입의 다운로드 URL 값으로 변환
     fun uploadImageToFirebaseStorage(onSuccess: () -> Unit) {

@@ -48,37 +48,37 @@ android {
 
 dependencies {
     implementation(libs.kotlin.stdlib)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    implementation(libs.androidx.material3.v110)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.benchmark.common)
     implementation(libs.play.services.ads.lite)
-    implementation(libs.volley)
-    implementation(libs.firebase.crashlytics.buildtools)
+    implementation(libs.androidx.viewpager2)
+    implementation(libs.androidx.appcompat)
+    implementation (libs.androidx.cardview)
+
     testImplementation(libs.junit)
-    implementation(libs.coil)
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+
     implementation(libs.gson)
-    implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.retrofit2.converter.gson)
     implementation(libs.okhttp)
-    implementation(libs.lottie)
-    implementation(libs.firebase.bom)
+
+    // Firebase BOM을 통해 버전 관리
+    implementation(libs.google.firebase.bom) // BOM 버전 추가
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth.ktx)
     implementation(libs.play.services.auth)
-    implementation(libs.firebase.ui.auth)
     implementation(libs.google.firebase.firestore.ktx)
     implementation(libs.google.firebase.storage.ktx)
-    implementation(libs.firebase.firestore.ktx)
-    implementation(libs.firebase.storage.ktx)
-    implementation (libs.material.calendarview)
-    implementation (libs.coil.kt.coil)
-    implementation (platform(libs.google.firebase.bom))
-    implementation (libs.retrofit2.retrofit)
+
+    implementation(libs.material.calendarview)
+    implementation(libs.coil.kt.coil)
+    implementation(libs.retrofit2.retrofit)
+
+    // Firebase UI 관련 의존성
+    implementation(libs.firebaseui.firebase.ui.auth) // 버전 확인 필요
+    // implementation(libs.firebaseui.firebase.ui.database) // 필요시 추가
 }
+

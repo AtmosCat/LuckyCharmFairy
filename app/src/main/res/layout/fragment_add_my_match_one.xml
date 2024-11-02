@@ -134,7 +134,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:background="@drawable/bg_round_border_medium"
             android:backgroundTint="@color/main_light_gray"
-            app:mcv_showOtherMonths = "all"
             android:visibility="gone"
             />
 

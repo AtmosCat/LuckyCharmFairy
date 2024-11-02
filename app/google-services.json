@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "83424932445",
+    "project_id": "luckycharmfairy-c3974",
+    "storage_bucket": "luckycharmfairy-c3974.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83424932445:android:8f9ef7142740e9d40713b4",
+        "android_client_info": {
+          "package_name": "com.luckycharmfairy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6yEC8XkdMUrFU31KFhXlxyGER4-LDp6s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
