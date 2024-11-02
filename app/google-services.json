@@ -12,7 +12,20 @@
           "package_name": "com.luckycharmfairy"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "83424932445-2nei0ioplj2f27i6l14fkkt0mhctkd45.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.luckycharmfairy",
+            "certificate_hash": "ed6cc70c14c994f85c2afbc8c15bf4cceb8ba670"
+          }
+        },
+        {
+          "client_id": "83424932445-c7rvb46e703bjmuig9dg7dhd448re75o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyB6yEC8XkdMUrFU31KFhXlxyGER4-LDp6s"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "83424932445-c7rvb46e703bjmuig9dg7dhd448re75o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

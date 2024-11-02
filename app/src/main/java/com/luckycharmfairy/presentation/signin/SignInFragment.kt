@@ -1,6 +1,7 @@
 package com.luckycharmfairy.presentation.signin
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,15 +10,22 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.luckycharmfairy.R
 import com.luckycharmfairy.databinding.FragmentSignInBinding
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
 import com.luckycharmfairy.presentation.signup.SignUpFragment
+import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.FirebaseApp
 
 class SignInFragment : Fragment() {
 
@@ -32,21 +40,21 @@ class SignInFragment : Fragment() {
 
     // ActivityResultLauncher를 사용하여 구글 로그인 인텐트를 시작하고 결과를 처리
     // 결과가 성공적이면 handleSignInResult(data)를 호출하여 로그인 결과를 처리
-//    private val googleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-//            result ->
-//        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-//        Log.d("LOGIN--", task.toString())
-//        try {
-//            // Google 로그인이 성공하면, Firebase로 인증합니다.
-//            val account = task.getResult(ApiException::class.java)!!
-//            Log.d("LOGIN--22", account.idToken!!)
-//            firebaseAuthWithGoogle(account.idToken!!)
-//        } catch (e: ApiException) {
-//            // Google 로그인 실패
-//            Toast.makeText(requireContext(), "Google 로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
-//        }
-//
-//    }
+    private val googleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            result ->
+        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+        Log.d("LOGIN--", task.toString())
+        try {
+            // Google 로그인이 성공하면, Firebase로 인증합니다.
+            val account = task.getResult(ApiException::class.java)!!
+            Log.d("LOGIN--22", account.idToken!!)
+            firebaseAuthWithGoogle(account.idToken!!)
+        } catch (e: ApiException) {
+            // Google 로그인 실패
+            Toast.makeText(requireContext(), "Google 로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
+        }
+
+    }
 
     private val binding get() = _binding!!
 
@@ -59,12 +67,12 @@ class SignInFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
 
         // 사용자의 아이디 정보와 기본 프로필을 요청
-//        var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//            .requestIdToken(getString(R.string.default_web_client_id))
-////            .requestServerAuthCode(getString(R.string.google_login_client_id))
-//            .requestEmail()
-//            .build()
-//        googleSignInClient = GoogleSignIn.getClient(requireActivity(),gso)
+        var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+//            .requestServerAuthCode(getString(R.string.google_login_client_id))
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(),gso)
     }
 
     override fun onCreateView(
@@ -148,56 +156,56 @@ class SignInFragment : Fragment() {
 //        }
 
         binding.btnGoogleSignin.setOnClickListener{
-//            googleLogin()
+            googleLogin()
         }
     }
 
     // 구글 로그인 인텐트를 생성하고 googleSignInLauncher를 사용하여 인텐트를 실행
-//    private fun googleLogin() {
-//        val signInIntent = googleSignInClient.signInIntent
-//        signInIntent.let {
-//            googleSignInLauncher.launch(it)
-//        } ?: Toast.makeText(requireContext(), "구글 로그인 인텐트 생성 실패", Toast.LENGTH_SHORT).show()
-//    }
-//
-//    // 설명: 구글 로그인 계정으로부터 받은 토큰을 사용하여 Firebase 인증을 시도
-//    fun firebaseAuthWithGoogle(idToken: String){
-//        var credential = GoogleAuthProvider.getCredential(idToken,null)
-//        auth?.signInWithCredential(credential)
-//            ?.addOnCompleteListener{
-//                    task ->
-//                if(task.isSuccessful) {
-//                    val googleLoginUser = auth!!.currentUser
-//                    saveGoogleLoginToFireStore(googleLoginUser!!)
-//                    val homeFragment = requireActivity().supportFragmentManager.findFragmentByTag("HomeFragment")
-//                    val franchiseHomeFragment = requireActivity().supportFragmentManager.findFragmentByTag("FranchiseHomeFragment")
-//                    requireActivity().supportFragmentManager.beginTransaction().apply {
-//                        hide(this@SignInFragment)
-//                        if (franchiseHomeFragment == null) {
-//                            add(R.id.main_frame, MyGamesFragment(), "FranchiseHomeFragment")
-//                        } else {
-//                            show(franchiseHomeFragment)
-//                        }
-//                        addToBackStack(null)
-//                        commit()
-//                    }
-//                    Toast.makeText(requireContext(),"구글 계정으로 로그인합니다.",Toast.LENGTH_SHORT).show()
-//                }else{
-//                    // 틀렸을 때
-//                    Toast.makeText(requireContext(),task.exception?.message,Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//    }
-//
-//    fun saveGoogleLoginToFireStore(user: FirebaseUser) {
-//        val email = user.email
-//        userviewModel.findUser(email!!)
-//        userviewModel.signingInUser.observe(viewLifecycleOwner) { data ->
-//            if (data == null) {
-//                userviewModel.addUser(User(email = email.toString(), "unknown"))
-//            } else {
-//                userviewModel.setCurrentUser(email.toString())
-//            }
-//        }
-//    }
+    private fun googleLogin() {
+        val signInIntent = googleSignInClient.signInIntent
+        signInIntent.let {
+            googleSignInLauncher.launch(it)
+        } ?: Toast.makeText(requireContext(), "구글 로그인 인텐트 생성 실패", Toast.LENGTH_SHORT).show()
+    }
+
+    // 설명: 구글 로그인 계정으로부터 받은 토큰을 사용하여 Firebase 인증을 시도
+    fun firebaseAuthWithGoogle(idToken: String){
+        var credential = GoogleAuthProvider.getCredential(idToken,null)
+        auth?.signInWithCredential(credential)
+            ?.addOnCompleteListener{
+                    task ->
+                if(task.isSuccessful) {
+                    val googleLoginUser = auth!!.currentUser
+                    saveGoogleLoginToFireStore(googleLoginUser!!)
+                    val homeFragment = requireActivity().supportFragmentManager.findFragmentByTag("HomeFragment")
+                    val franchiseHomeFragment = requireActivity().supportFragmentManager.findFragmentByTag("FranchiseHomeFragment")
+                    requireActivity().supportFragmentManager.beginTransaction().apply {
+                        hide(this@SignInFragment)
+                        if (franchiseHomeFragment == null) {
+                            add(R.id.main_frame, MyMatchesFragment(), "FranchiseHomeFragment")
+                        } else {
+                            show(franchiseHomeFragment)
+                        }
+                        addToBackStack(null)
+                        commit()
+                    }
+                    Toast.makeText(requireContext(),"구글 계정으로 로그인합니다.",Toast.LENGTH_SHORT).show()
+                }else{
+                    // 틀렸을 때
+                    Toast.makeText(requireContext(),task.exception?.message,Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    fun saveGoogleLoginToFireStore(user: FirebaseUser) {
+        val email = user.email
+        userviewModel.findUser(email!!)
+        userviewModel.signingInUser.observe(viewLifecycleOwner) { data ->
+            if (data == null) {
+                userviewModel.addUser(User(email = email.toString(), "unknown"))
+            } else {
+                userviewModel.setCurrentUser(email.toString())
+            }
+        }
+    }
 }
