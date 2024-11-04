@@ -14,7 +14,7 @@ class ViewPagerAdapter(private val imageUrls: MutableList<String>, private val u
 
     class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
-        val btnClose: Button = itemView.findViewById(R.id.viewpager_btn_close) // 버튼 초기화
+        val btnClose: ImageView = itemView.findViewById(R.id.viewpager_btn_close) // 버튼 초기화
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {

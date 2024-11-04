@@ -207,7 +207,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                     val matchdays = mutableListOf<String>()
                     selectedMonthMatches.forEach{
                         if (it.date !in matchdays) {
-                            matchdays.add(it.date)
+                            matchdays.add(it.day)
                         }
                     }
                     _selectedMonthMatchdays.value = matchdays

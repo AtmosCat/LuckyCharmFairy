@@ -32,7 +32,7 @@ class MyMatchesFragment : Fragment() {
 
     private var selectedSport = ""
     private var selectedYear = CalendarDay.from(Calendar.getInstance()).year.toString()
-    private var selectedMonth = CalendarDay.from(Calendar.getInstance()).month.toString()
+    private var selectedMonth = String.format("%02d", CalendarDay.from(Calendar.getInstance()).month + 1)
     private var selectedDate = CalendarDay.from(Calendar.getInstance()).day.toString()
     private var selectedDay = when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
         0 -> "일"
@@ -141,10 +141,12 @@ class MyMatchesFragment : Fragment() {
             val eventDays = mutableListOf<CalendarDay>()
             userViewModel.getSelectedMonthMatchdays(currentUserEmail, selectedSport, selectedYear, selectedMonth)
             val selectedMonthMatchdays = userViewModel.selectedMonthMatchdays.value
-            selectedMonthMatchdays!!.forEach {
-                eventDays.add(CalendarDay.from(selectedYear.toInt(), selectedMonth.toInt(), it.toInt()))
+            if (selectedMonthMatchdays != null) {
+                selectedMonthMatchdays.forEach {
+                    eventDays.add(CalendarDay.from(selectedYear.toInt(), selectedMonth.toInt(), it.toInt()))
+                }
             }
-            binding.tvMonthlyMatches.text = "${selectedYear}년 $${selectedMonth}월에 ${selectedSport} 경기를 ${selectedMonthMatchdays.size}일 직관했어요!"
+            binding.tvMonthlyMatches.text = "${selectedYear}년 ${selectedMonth}월에 ${selectedSport} 경기를 ${selectedMonthMatchdays?.size}일 직관했어요!"
             val eventDecorator = EventDecorator(eventDays)
             binding.calendarMonthlyMatches.addDecorators(eventDecorator)
 
