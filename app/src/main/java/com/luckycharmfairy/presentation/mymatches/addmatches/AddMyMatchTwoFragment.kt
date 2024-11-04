@@ -102,12 +102,16 @@ class AddMyMatchTwoFragment : Fragment() {
             }
         })
 
+        val addMyMatchOneFragment = requireActivity().supportFragmentManager.findFragmentByTag("AddMyMatchOneFragment")
         val myMatchesFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyMatchesFragment")
         binding.btnSave.setOnClickListener {
             userViewModel.addNewMatch(matchContent)
             Toast.makeText(requireContext(), "직관 기록이 저장되었습니다.", Toast.LENGTH_SHORT).show()
             requireActivity().supportFragmentManager.beginTransaction().apply {
                 remove(this@AddMyMatchTwoFragment)
+                if (addMyMatchOneFragment != null) {
+                    remove(addMyMatchOneFragment)
+                }
                 if (myMatchesFragment != null) {
                     show(myMatchesFragment)
                 } else {
@@ -118,7 +122,6 @@ class AddMyMatchTwoFragment : Fragment() {
             }
         }
 
-        val addMyMatchOneFragment = requireActivity().supportFragmentManager.findFragmentByTag("AddMyMatchOneFragment")
         binding.btnBack.setOnClickListener{
             requireActivity().supportFragmentManager.beginTransaction().apply {
                 setCustomAnimations(
@@ -156,7 +159,7 @@ class AddMyMatchTwoFragment : Fragment() {
                 uploadImageToFirebaseStorage(it) { imageUrl ->
                     imageUrl?.let { url ->
                         imageResources.add(url)
-                        userViewModel.saveTemporaryImageUrl(url)
+//                        userViewModel.saveTemporaryImageUrl(url)
                         // 모든 이미지가 처리된 후에 ViewPager를 업데이트
                         if (uris.indexOf(uri) == uris.size - 1) {
                             val photoAdapter = ViewPagerAdapter(imageResources, userViewModel)
@@ -168,6 +171,7 @@ class AddMyMatchTwoFragment : Fragment() {
                             binding.btnAddPhoto.visibility = View.GONE
                         }
                     }
+                    userViewModel.saveTemporaryImageUrl(imageResources)
                 }
             }
         }

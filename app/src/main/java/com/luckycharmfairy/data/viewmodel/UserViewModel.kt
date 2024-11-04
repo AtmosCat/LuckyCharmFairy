@@ -251,10 +251,10 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         _temporaryMatchData.value = matchData
     }
 
-    fun saveTemporaryImageUrl(imageUrl: String) {
+    fun saveTemporaryImageUrl(imageUrls: MutableList<String>) {
         viewModelScope.launch {
             runCatching {
-                _temporaryImageUrls.value?.add(imageUrl)
+                _temporaryImageUrls.value = imageUrls
             }.onFailure {
                 Log.e(TAG, "saveTemporaryImageUrl() failed! : ${it.message}")
                 handleException(it)
