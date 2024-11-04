@@ -10,12 +10,12 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.replace
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.luckycharmfairy.R
 import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.data.model.baseballLocations
@@ -29,7 +29,8 @@ import com.luckycharmfairy.data.model.menVolleyballTeams
 import com.luckycharmfairy.data.model.womenVolleyballLocations
 import com.luckycharmfairy.data.model.womenVolleyballTeams
 import com.luckycharmfairy.data.viewmodel.UserViewModel
-import com.luckycharmfairy.databinding.FragmentAddMyMatchOneBinding
+import com.luckycharmfairy.luckycharmfairy.R
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentAddMyMatchOneBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import java.util.Calendar
@@ -43,10 +44,20 @@ class AddMyMatchOneFragment : Fragment() {
     private var currentUser: User = User()
     private var selectedSport = ""
     private var selectedSportTeams = listOf<String>()
+    private var spinnerLocations = listOf<String>()
     private var selectedYear = CalendarDay.from(Calendar.getInstance()).year.toString()
-    private var selectedMonth = CalendarDay.from(Calendar.getInstance()).month.toString()
-    private var selectedDate = CalendarDay.from(Calendar.getInstance()).date.toString()
-    private var selectedDay = CalendarDay.from(Calendar.getInstance()).day.toString()
+    private var selectedMonth = String.format("%02d", CalendarDay.from(Calendar.getInstance()).month + 1)
+    private var selectedDate = CalendarDay.from(Calendar.getInstance()).day.toString()
+    private var selectedDay = when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
+        0 -> "일"
+        1 -> "월"
+        2 -> "화"
+        3 -> "수"
+        4 -> "목"
+        5 -> "금"
+        6 -> "토"
+        else -> ""
+    }
     private var selectedTime = "00:00"
     private var selectedLocation = ""
     private var selectedWeather = ""
@@ -129,7 +140,8 @@ class AddMyMatchOneFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
         }
 
-        val spinnerSports = currentUser.mysports
+//        val spinnerSports = currentUser.mysports
+        val spinnerSports = mutableListOf("야구","남자축구","남자농구","남자배구","여자배구")
 //        if (spinnerSports.isEmpty()) {
 //            spinnerSports.add("종목을 추가해주세요")
 //        }
@@ -145,11 +157,26 @@ class AddMyMatchOneFragment : Fragment() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 selectedSport = spinnerSports[position]
                 when (selectedSport) {
-                    "야구" -> selectedSportTeams = baseballTeams
-                    "남자축구" -> selectedSportTeams = menFootballTeams
-                    "남자농구" -> selectedSportTeams = menBasketballTeams
-                    "남자배구" -> selectedSportTeams = menVolleyballTeams
-                    "여자배구" -> selectedSportTeams = womenVolleyballTeams
+                    "야구" -> {
+                        selectedSportTeams = baseballTeams
+                        spinnerLocations = baseballLocations
+                    }
+                    "남자축구" -> {
+                        selectedSportTeams = menFootballTeams
+                        spinnerLocations = menFootballLocations
+                    }
+                    "남자농구" -> {
+                        selectedSportTeams = menBasketballTeams
+                        spinnerLocations = menBasketballLocations
+                    }
+                    "남자배구" -> {
+                        selectedSportTeams = menVolleyballTeams
+                        spinnerLocations = menVolleyballLocations
+                    }
+                    "여자배구" -> {
+                        selectedSportTeams = womenVolleyballTeams
+                        spinnerLocations = womenVolleyballLocations
+                    }
                     else -> selectedSportTeams = listOf("직접 입력")
                 }
             }
@@ -160,15 +187,30 @@ class AddMyMatchOneFragment : Fragment() {
 
         binding.btnDate.setText("${selectedYear}년 ${selectedMonth}월 ${selectedDate}일 (${selectedDay})")
 
+        binding.calendarMatchdaySelector.setSelectedDate(CalendarDay.from(Calendar.getInstance())) // 기본 오늘 설정
         binding.btnDate.setOnClickListener{
             binding.calendarMatchdaySelector.visibility = View.VISIBLE
-            binding.calendarMatchdaySelector.setSelectedDate(CalendarDay.from(Calendar.getInstance())) // 기본 오늘 설정
             binding.calendarMatchdaySelector.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
                 if (selected) {
                     selectedYear = date.year.toString()
-                    selectedMonth = date.month.toString()
-                    selectedDate = date.date.toString()
-                    selectedDay = date.day.toString()
+                    selectedMonth = String.format("%02d", date.month + 1)
+                    selectedDate = date.day.toString()
+                    val calendar = Calendar.getInstance().apply {
+                        set(date.year, date.month, date.day) // 선택한 날짜로 설정
+                    }
+                    val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+
+                    // 요일을 문자열로 변환
+                    selectedDay = when (dayOfWeek) {
+                        Calendar.SUNDAY -> "일"
+                        Calendar.MONDAY -> "월"
+                        Calendar.TUESDAY -> "화"
+                        Calendar.WEDNESDAY -> "수"
+                        Calendar.THURSDAY -> "목"
+                        Calendar.FRIDAY -> "금"
+                        Calendar.SATURDAY -> "토"
+                        else -> ""
+                    }
                     binding.btnDate.setText("${selectedYear}년 ${selectedMonth}월 ${selectedDate}일 (${selectedDay})")
                     binding.calendarMatchdaySelector.visibility = View.GONE
                 }
@@ -179,15 +221,14 @@ class AddMyMatchOneFragment : Fragment() {
             showTimePickerDialog()
         }
 
-        var spinnerLocations = listOf<String>()
-        when (selectedSport) {
-            "야구" -> spinnerLocations = baseballLocations
-            "남자축구" -> spinnerLocations = menFootballLocations
-            "남자농구" -> spinnerLocations = menBasketballLocations
-            "남자배구" -> spinnerLocations = menVolleyballLocations
-            "여자배구" -> spinnerLocations = womenVolleyballLocations
-            else -> spinnerLocations = listOf("직접 입력")
-        }
+//        when (selectedSport) {
+//            "야구" -> spinnerLocations = baseballLocations
+//            "남자축구" -> spinnerLocations = menFootballLocations
+//            "남자농구" -> spinnerLocations = menBasketballLocations
+//            "남자배구" -> spinnerLocations = menVolleyballLocations
+//            "여자배구" -> spinnerLocations = womenVolleyballLocations
+//            else -> spinnerLocations = listOf("직접 입력")
+//        }
         val spinnerLocationAdapter =
             ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerLocations)
         spinnerLocationAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
@@ -222,7 +263,6 @@ class AddMyMatchOneFragment : Fragment() {
         weatherButton5Background = binding.viewSnowyBackground
         weatherButtonBackgroundList = listOf(weatherButton1Background, weatherButton2Background,
                 weatherButton3Background, weatherButton4Background, weatherButton5Background)
-        weatherButtonBackgroundList.forEach{ it.visibility = View.GONE }
 
         weatherButtonList.forEach{ weatherClicker(it, weatherButtonList, weatherButtonBackgroundList) }
 
@@ -241,7 +281,6 @@ class AddMyMatchOneFragment : Fragment() {
         feelingButton5Background = binding.viewAngryBackground
         feelingButtonBackgroundList = listOf(feelingButton1Background, feelingButton2Background, feelingButton3Background,
                 feelingButton4Background, feelingButton5Background)
-        feelingButtonBackgroundList.forEach{ it.visibility = View.GONE }
 
         feelingButtonList.forEach{ feelingClicker(it, feelingButtonList, feelingButtonBackgroundList) }
 
@@ -293,7 +332,7 @@ class AddMyMatchOneFragment : Fragment() {
                     } else {
                         selectedAwayTeam = selectedSportTeams[position]
                         binding.btnAwayteam.visibility = View.VISIBLE
-                        binding.btnAwayteam.setText(selectedHomeTeam)
+                        binding.btnAwayteam.setText(selectedAwayTeam)
                         binding.etAwayTeam.visibility = View.GONE
                         binding.etAwayTeam.setText("")
                     }
@@ -403,8 +442,8 @@ class AddMyMatchOneFragment : Fragment() {
     private fun weatherClicker(image: ImageView, imageList: List<ImageView>, backgroundList: List<View>) {
         image.setOnClickListener{
             val index = imageList.indexOf(image)
-            backgroundList.forEach { it.visibility = View.GONE}
-            backgroundList[index].visibility = View.VISIBLE
+            backgroundList.forEach { it.setBackgroundColor(ContextCompat.getColor(it.context, R.color.white))}
+            backgroundList[index].setBackgroundColor(ContextCompat.getColor(it.context, R.color.main_medium_gray))
             selectedWeather = weatherList[index]
         }
     }
@@ -412,8 +451,8 @@ class AddMyMatchOneFragment : Fragment() {
     private fun feelingClicker(image: ImageView, imageList: List<ImageView>, backgroundList: List<View>) {
         image.setOnClickListener{
             val index = imageList.indexOf(image)
-            backgroundList.forEach { it.visibility = View.GONE}
-            backgroundList[index].visibility = View.VISIBLE
+            backgroundList.forEach { it.setBackgroundColor(ContextCompat.getColor(it.context, R.color.white))}
+            backgroundList[index].setBackgroundColor(ContextCompat.getColor(it.context, R.color.main_medium_gray))
             selectedFeeling = feelingList[index]
         }
     }

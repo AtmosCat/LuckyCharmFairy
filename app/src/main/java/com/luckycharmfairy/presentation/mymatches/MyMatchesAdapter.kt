@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.data.viewmodel.UserViewModel
-import com.luckycharmfairy.databinding.RecyclerviewMatchesBinding
+import com.luckycharmfairy.luckycharmfairy.databinding.RecyclerviewMatchesBinding
 
 class MyMatchesAdapter(private val userViewModel: UserViewModel) :
     ListAdapter<Match, MyMatchesAdapter.HomeViewHolder>(object :

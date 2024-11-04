@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.luckycharmfairy.databinding.RecyclerviewTeamSelectionBinding
+import com.luckycharmfairy.luckycharmfairy.databinding.RecyclerviewTeamSelectionBinding
 
 class TeamSelectionAdapter : ListAdapter<String, TeamSelectionAdapter.ViewHolder>(object : DiffUtil.ItemCallback<String>() {
     override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {

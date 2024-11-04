@@ -12,6 +12,9 @@ firebaseBomVersion = "31.0.0"
 firebaseUiAuth = "7.2.0"
 firebaseUiDatabase = "7.2.0"
 fragmentKtx = "1.8.4"
+googleFirebaseBom = "32.1.0"
+googleGoogleServices = "4.3.10"
+googlePlayServicesAuth = "20.5.0"
 googleServices = "4.4.2"
 googleServicesVersion = "4.3.15"
 kotlin = "1.9.0"
@@ -32,6 +35,7 @@ playServicesAdsLite = "23.4.0"
 firebaseAuthKtx = "23.1.0"
 firebaseFirestoreKtx = "25.1.1"
 playServicesAuth = "21.2.0"
+playServicesAuthVersion = "17.0.0"
 retrofit = "2.9.0"
 supportCompat = "28.0.0"
 volley = "1.2.1"
@@ -53,6 +57,7 @@ appcompat = { module = "androidx.appcompat:appcompat" }
 benchmark-common = { module = "androidx.benchmark:benchmark-common", version.ref = "benchmarkCommon" }
 coil = { module = "io.coil-kt:coil" }
 coil-kt-coil = { module = "io.coil-kt:coil", version.ref = "coil" }
+com-google-firebase-firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
 com-google-firebase-firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx" }
 constraintlayout = { module = "androidx.constraintlayout:constraintlayout" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson" }
@@ -60,8 +65,10 @@ core-ktx = { module = "androidx.core:core-ktx" }
 espresso-core = { module = "androidx.test.espresso:espresso-core" }
 ext-junit = { module = "androidx.test.ext:junit" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-bom = { module = "com.google.firebase:firebase-bom" }
 firebase-bom-v3100 = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBomVersion" }
+firebase-bom-v3210 = { module = "com.google.firebase:firebase-bom", version.ref = "googleFirebaseBom" }
 firebase-storage-ktx = { module = "com.google.firebase:firebase-storage-ktx" }
 firebase-ui-auth = { module = "com.firebaseui:firebase-ui-auth" }
 firebase-ui-database = { module = "com.firebaseui:firebase-ui-database", version.ref = "firebaseUiDatabase" }
@@ -74,6 +81,7 @@ google-firebase-firestore-ktx = { module = "com.google.firebase:firebase-firesto
 google-firebase-storage-ktx = { module = "com.google.firebase:firebase-storage-ktx" }
 google-material = { module = "com.google.android.material:material" }
 google-services = { module = "com.google.gms:google-services", version.ref = "googleServices" }
+google-services-v4310 = { module = "com.google.gms:google-services", version.ref = "googleGoogleServices" }
 google-services-v4315 = { module = "com.google.gms:google-services", version.ref = "googleServicesVersion" }
 gson = { module = "com.google.code.gson:gson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -95,6 +103,8 @@ play-services-ads-lite = { group = "com.google.android.gms", name = "play-servic
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+play-services-auth-v1700 = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuthVersion" }
+play-services-auth-v2050 = { module = "com.google.android.gms:play-services-auth", version.ref = "googlePlayServicesAuth" }
 retrofit = { module = "com.squareup.retrofit2:retrofit" }
 retrofit2-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 retrofit2-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }

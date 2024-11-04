@@ -9,18 +9,15 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.replace
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
-import com.luckycharmfairy.R
 import com.luckycharmfairy.data.viewmodel.UserViewModel
-import com.luckycharmfairy.databinding.FragmentMyMatchesBinding
+import com.luckycharmfairy.luckycharmfairy.R
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.presentation.EventDecorator
 import com.luckycharmfairy.presentation.mymatches.addmatches.AddMyMatchOneFragment
-import com.luckycharmfairy.presentation.mymatches.addmatches.ViewPagerAdapter
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import java.util.Calendar
@@ -36,9 +33,17 @@ class MyMatchesFragment : Fragment() {
     private var selectedSport = ""
     private var selectedYear = CalendarDay.from(Calendar.getInstance()).year.toString()
     private var selectedMonth = CalendarDay.from(Calendar.getInstance()).month.toString()
-    private var selectedDate = CalendarDay.from(Calendar.getInstance()).date.toString()
-    private var selectedDay = CalendarDay.from(Calendar.getInstance()).day.toString()
-
+    private var selectedDate = CalendarDay.from(Calendar.getInstance()).day.toString()
+    private var selectedDay = when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
+        0 -> "일"
+        1 -> "월"
+        2 -> "화"
+        3 -> "수"
+        4 -> "목"
+        5 -> "금"
+        6 -> "토"
+        else -> ""
+    }
     private var selectedMonthMatchdays: Int = -1
 
 
@@ -104,24 +109,30 @@ class MyMatchesFragment : Fragment() {
 //        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일 (E)", Locale("ko", "KR"))
 //        val today = dateFormat.format(Calendar.getInstance())
 //        selectedDate = today
-        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.calendar_item_spacing)
-        val recyclerView = binding.calendarMonthlyMatches.getChildAt(0) as RecyclerView
-        recyclerView.addItemDecoration(VerticalSpacingItemDecoration(spacingInPixels))
+//        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.calendar_item_spacing)
+//        val recyclerView = binding.calendarMonthlyMatches.getChildAt(0) as RecyclerView
+//        recyclerView.addItemDecoration(VerticalSpacingItemDecoration(spacingInPixels))
 
         binding.calendarMonthlyMatches.setSelectedDate(CalendarDay.from(Calendar.getInstance()))
         binding.calendarMonthlyMatches.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
             if (selected) {
                 selectedYear = date.year.toString()
                 selectedMonth = String.format("%02d", date.month + 1)
-                selectedDate = String.format("%02d", date.date)
-                selectedDay = when (date.day) {
-                    1 -> "일"
-                    2 -> "월"
-                    3 -> "화"
-                    4 -> "수"
-                    5 -> "목"
-                    6 -> "금"
-                    7 -> "토"
+                selectedDate = date.day.toString()
+                val calendar = Calendar.getInstance().apply {
+                    set(date.year, date.month, date.day) // 선택한 날짜로 설정
+                }
+                val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+
+                // 요일을 문자열로 변환
+                selectedDay = when (dayOfWeek) {
+                    Calendar.SUNDAY -> "일"
+                    Calendar.MONDAY -> "월"
+                    Calendar.TUESDAY -> "화"
+                    Calendar.WEDNESDAY -> "수"
+                    Calendar.THURSDAY -> "목"
+                    Calendar.FRIDAY -> "금"
+                    Calendar.SATURDAY -> "토"
                     else -> ""
                 }
             }
@@ -147,6 +158,7 @@ class MyMatchesFragment : Fragment() {
         binding.btnAddMatchRecord.setOnClickListener{
             val addMyMatchOneFragment = requireActivity().supportFragmentManager.findFragmentByTag("AddMyMatchOneFragment")
             requireActivity().supportFragmentManager.beginTransaction().apply {
+                hide(this@MyMatchesFragment)
                 if (addMyMatchOneFragment == null) {
                     add(R.id.main_frame, AddMyMatchOneFragment(), "AddMyMatchOneFragment")
                 } else {

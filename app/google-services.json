@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:83424932445:android:8f9ef7142740e9d40713b4",
+        "mobilesdk_app_id": "1:83424932445:android:4e26a5710cbbbce50713b4",
         "android_client_info": {
-          "package_name": "com.luckycharmfairy"
+          "package_name": "com.luckycharmfairy.luckycharmfairy"
         }
       },
       "oauth_client": [
         {
-          "client_id": "83424932445-2nei0ioplj2f27i6l14fkkt0mhctkd45.apps.googleusercontent.com",
+          "client_id": "83424932445-ioq84ke9qroo2a5fpsv9dde4ajhsv1h1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.luckycharmfairy",
+            "package_name": "com.luckycharmfairy.luckycharmfairy",
             "certificate_hash": "ed6cc70c14c994f85c2afbc8c15bf4cceb8ba670"
           }
         },

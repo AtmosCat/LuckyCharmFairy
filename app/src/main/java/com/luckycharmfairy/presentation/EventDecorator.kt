@@ -1,6 +1,6 @@
 package com.luckycharmfairy.presentation
 
-import com.luckycharmfairy.R
+import com.luckycharmfairy.luckycharmfairy.R
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;

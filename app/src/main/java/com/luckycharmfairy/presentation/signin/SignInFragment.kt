@@ -11,8 +11,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.luckycharmfairy.R
-import com.luckycharmfairy.databinding.FragmentSignInBinding
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -26,6 +24,8 @@ import com.luckycharmfairy.presentation.signup.SignUpFragment
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.FirebaseApp
+import com.luckycharmfairy.luckycharmfairy.R
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentSignInBinding
 
 class SignInFragment : Fragment() {
 
@@ -45,7 +45,6 @@ class SignInFragment : Fragment() {
         val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
         Log.d("LOGIN--", task.toString())
         try {
-            // Google 로그인이 성공하면, Firebase로 인증합니다.
             val account = task.getResult(ApiException::class.java)!!
             Log.d("LOGIN--22", account.idToken!!)
             firebaseAuthWithGoogle(account.idToken!!)
@@ -113,7 +112,7 @@ class SignInFragment : Fragment() {
                             requireActivity().supportFragmentManager.beginTransaction().apply {
                                 hide(this@SignInFragment)
                                 if (franchiseHomeFragment == null) {
-                                    add(R.id.main_frame, MyMatchesFragment(), "FranchiseHomeFragment")
+                                    add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")
                                 } else {
                                     show(franchiseHomeFragment)
                                 }
@@ -177,18 +176,12 @@ class SignInFragment : Fragment() {
                 if(task.isSuccessful) {
                     val googleLoginUser = auth!!.currentUser
                     saveGoogleLoginToFireStore(googleLoginUser!!)
-                    val homeFragment = requireActivity().supportFragmentManager.findFragmentByTag("HomeFragment")
-                    val franchiseHomeFragment = requireActivity().supportFragmentManager.findFragmentByTag("FranchiseHomeFragment")
-                    requireActivity().supportFragmentManager.beginTransaction().apply {
-                        hide(this@SignInFragment)
-                        if (franchiseHomeFragment == null) {
-                            add(R.id.main_frame, MyMatchesFragment(), "FranchiseHomeFragment")
-                        } else {
-                            show(franchiseHomeFragment)
-                        }
-                        addToBackStack(null)
-                        commit()
-                    }
+//                    requireActivity().supportFragmentManager.beginTransaction().apply {
+//                        hide(this@SignInFragment)
+//                        add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")
+//                        addToBackStack(null)
+//                        commit()
+//                    }
                     Toast.makeText(requireContext(),"구글 계정으로 로그인합니다.",Toast.LENGTH_SHORT).show()
                 }else{
                     // 틀렸을 때
@@ -202,7 +195,8 @@ class SignInFragment : Fragment() {
         userviewModel.findUser(email!!)
         userviewModel.signingInUser.observe(viewLifecycleOwner) { data ->
             if (data == null) {
-                userviewModel.addUser(User(email = email.toString(), "unknown"))
+                userviewModel.addUser(User(email = email.toString()))
+                userviewModel.setCurrentUser(email.toString())
             } else {
                 userviewModel.setCurrentUser(email.toString())
             }

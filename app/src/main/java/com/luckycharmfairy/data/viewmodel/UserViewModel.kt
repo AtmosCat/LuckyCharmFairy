@@ -12,7 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
+//import com.google.firebase.storage.FirebaseStorage
 import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.data.model.Post
 import com.luckycharmfairy.data.model.User
@@ -395,23 +395,23 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 //    }
 
     // 임시 저장하는 Bitmap 파일을 String 타입의 다운로드 URL 값으로 변환
-    fun uploadImageToFirebaseStorage(onSuccess: () -> Unit) {
-        val storageRef = FirebaseStorage.getInstance().reference.child("images/${System.currentTimeMillis()}.png")
-        val baos = ByteArrayOutputStream()
-        bitmapBeforeSave.value?.compress(Bitmap.CompressFormat.PNG, 100, baos)
-        val data = baos.toByteArray()
-
-        val uploadTask = storageRef.putBytes(data)
-        uploadTask.addOnSuccessListener {
-            storageRef.downloadUrl.addOnSuccessListener { uri ->
-                saveUserPhotoUrl(uri.toString())
-                _currentUser.value?.photo = uri.toString()
-                onSuccess()
-            }
-        }.addOnFailureListener {
-            // 업로드 실패 처리
-        }
-    }
+//    fun uploadImageToFirebaseStorage(onSuccess: () -> Unit) {
+//        val storageRef = FirebaseStorage.getInstance().reference.child("images/${System.currentTimeMillis()}.png")
+//        val baos = ByteArrayOutputStream()
+//        bitmapBeforeSave.value?.compress(Bitmap.CompressFormat.PNG, 100, baos)
+//        val data = baos.toByteArray()
+//
+//        val uploadTask = storageRef.putBytes(data)
+//        uploadTask.addOnSuccessListener {
+//            storageRef.downloadUrl.addOnSuccessListener { uri ->
+//                saveUserPhotoUrl(uri.toString())
+//                _currentUser.value?.photo = uri.toString()
+//                onSuccess()
+//            }
+//        }.addOnFailureListener {
+//            // 업로드 실패 처리
+//        }
+//    }
 
     fun saveUserPhotoUrl(photoUrl: String) {
         db.collection("user").document(currentUser.value!!.email)

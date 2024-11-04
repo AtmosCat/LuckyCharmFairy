@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.luckycharmfairy"
+    namespace = "com.luckycharmfairy.luckycharmfairy"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.luckycharmfairy"
+        applicationId = "com.luckycharmfairy.luckycharmfairy"
         minSdk = 33
         targetSdk = 34
         versionCode = 1
@@ -66,12 +66,12 @@ dependencies {
     implementation(libs.okhttp)
 
     // Firebase BOM을 통해 버전 관리
-    implementation(libs.google.firebase.bom) // BOM 버전 추가
-    implementation(libs.firebase.analytics)
+    implementation(platform(libs.google.firebase.bom)) // BOM 버전 추가
+    implementation (libs.firebase.analytics.ktx)
     implementation(libs.firebase.auth.ktx)
     implementation(libs.play.services.auth)
     implementation(libs.google.firebase.firestore.ktx)
-    implementation(libs.google.firebase.storage.ktx)
+//    implementation(libs.google.firebase.storage.ktx)
 
     implementation(libs.material.calendarview)
     implementation(libs.coil.kt.coil)
@@ -80,5 +80,8 @@ dependencies {
     // Firebase UI 관련 의존성
     implementation(libs.firebaseui.firebase.ui.auth) // 버전 확인 필요
     // implementation(libs.firebaseui.firebase.ui.database) // 필요시 추가
+    implementation (libs.firebase.bom.v3210)
+    implementation (libs.com.google.firebase.firebase.auth.ktx)
+    implementation (libs.play.services.auth.v2050)
 }
 

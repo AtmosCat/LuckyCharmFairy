@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.luckycharmfairy.R
 import coil.load
 import com.luckycharmfairy.data.viewmodel.UserViewModel
+import com.luckycharmfairy.luckycharmfairy.R
 
 class ViewPagerAdapter(private val imageUrls: MutableList<String>, private val userViewModel: UserViewModel) : RecyclerView.Adapter<ViewPagerAdapter.ImageViewHolder>() {
 
