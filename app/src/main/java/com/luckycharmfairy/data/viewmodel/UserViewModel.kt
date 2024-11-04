@@ -10,12 +10,16 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import coil.ImageLoader
+import coil.request.ImageRequest
+import coil.request.SuccessResult
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-//import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.FirebaseStorage
 import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.data.model.Post
 import com.luckycharmfairy.data.model.User
+import com.luckycharmfairy.data.model.sampleBitmap
 import com.luckycharmfairy.presentation.UiState
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -378,40 +382,40 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     // 갤러리로부터 이미지 값을 받아와서 Bitmap 으로 변환
-//    suspend fun handleImage(uri: Uri) {
-//        _bitmapBeforeSave.value = sampleBitmap
-//        val imageLoader = ImageLoader(getApplication())
-//        val request = ImageRequest.Builder(getApplication())
-//            .data(uri)
-//            .allowHardware(false) // Bitmap을 요청할 때는 false로 설정
-//            .build()
-//
-//        val result = imageLoader.execute(request)
-//        if (result is SuccessResult) {
-//            _bitmapBeforeSave.value = result.drawable.toBitmap()
-//        } else {
-//            // 실패 처리
-//        }
-//    }
+    suspend fun handleImage(uri: Uri) {
+        _bitmapBeforeSave.value = sampleBitmap
+        val imageLoader = ImageLoader(getApplication())
+        val request = ImageRequest.Builder(getApplication())
+            .data(uri)
+            .allowHardware(false) // Bitmap을 요청할 때는 false로 설정
+            .build()
+
+        val result = imageLoader.execute(request)
+        if (result is SuccessResult) {
+            _bitmapBeforeSave.value = result.drawable.toBitmap()
+        } else {
+            // 실패 처리
+        }
+    }
 
     // 임시 저장하는 Bitmap 파일을 String 타입의 다운로드 URL 값으로 변환
-//    fun uploadImageToFirebaseStorage(onSuccess: () -> Unit) {
-//        val storageRef = FirebaseStorage.getInstance().reference.child("images/${System.currentTimeMillis()}.png")
-//        val baos = ByteArrayOutputStream()
-//        bitmapBeforeSave.value?.compress(Bitmap.CompressFormat.PNG, 100, baos)
-//        val data = baos.toByteArray()
-//
-//        val uploadTask = storageRef.putBytes(data)
-//        uploadTask.addOnSuccessListener {
-//            storageRef.downloadUrl.addOnSuccessListener { uri ->
-//                saveUserPhotoUrl(uri.toString())
-//                _currentUser.value?.photo = uri.toString()
-//                onSuccess()
-//            }
-//        }.addOnFailureListener {
-//            // 업로드 실패 처리
-//        }
-//    }
+    fun uploadImageToFirebaseStorage(onSuccess: () -> Unit) {
+        val storageRef = FirebaseStorage.getInstance().reference.child("images/${System.currentTimeMillis()}.png")
+        val baos = ByteArrayOutputStream()
+        bitmapBeforeSave.value?.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val data = baos.toByteArray()
+
+        val uploadTask = storageRef.putBytes(data)
+        uploadTask.addOnSuccessListener {
+            storageRef.downloadUrl.addOnSuccessListener { uri ->
+                saveUserPhotoUrl(uri.toString())
+                _currentUser.value?.photo = uri.toString()
+                onSuccess()
+            }
+        }.addOnFailureListener {
+            // 업로드 실패 처리
+        }
+    }
 
     fun saveUserPhotoUrl(photoUrl: String) {
         db.collection("user").document(currentUser.value!!.email)

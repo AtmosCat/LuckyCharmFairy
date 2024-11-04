@@ -20,7 +20,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.viewpager2.widget.ViewPager2
 import com.luckycharmfairy.data.model.Match
-//import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.FirebaseStorage
 import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentAddMyMatchTwoBinding
@@ -29,7 +29,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
-import kotlin.random.Random
 
 class AddMyMatchTwoFragment : Fragment() {
 
@@ -103,17 +102,23 @@ class AddMyMatchTwoFragment : Fragment() {
             }
         })
 
+        val myMatchesFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyMatchesFragment")
         binding.btnSave.setOnClickListener {
             userViewModel.addNewMatch(matchContent)
             Toast.makeText(requireContext(), "직관 기록이 저장되었습니다.", Toast.LENGTH_SHORT).show()
             requireActivity().supportFragmentManager.beginTransaction().apply {
                 remove(this@AddMyMatchTwoFragment)
-                show(MyMatchesFragment())
+                if (myMatchesFragment != null) {
+                    show(myMatchesFragment)
+                } else {
+                    add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")
+                }
                 addToBackStack(null)
                 commit()
             }
         }
 
+        val addMyMatchOneFragment = requireActivity().supportFragmentManager.findFragmentByTag("AddMyMatchOneFragment")
         binding.btnBack.setOnClickListener{
             requireActivity().supportFragmentManager.beginTransaction().apply {
                 setCustomAnimations(
@@ -122,7 +127,12 @@ class AddMyMatchTwoFragment : Fragment() {
                     R.anim.slide_out_left,
                     R.anim.slide_out_right
                 )
-                replace(R.id.main_frame, AddMyMatchOneFragment())
+                hide(this@AddMyMatchTwoFragment)
+                if (addMyMatchOneFragment != null) {
+                    show(addMyMatchOneFragment)
+                } else {
+                    add(R.id.main_frame, AddMyMatchOneFragment(), "AddMyMatchOneFragment")
+                }
                 addToBackStack(null)
                 commit()
             }
@@ -141,25 +151,25 @@ class AddMyMatchTwoFragment : Fragment() {
     // 선택한 이미지에서 URI를 추출해 저장
     suspend fun handleImages(uris: List<Uri>) {
         for (uri in uris) {
-//            val bitmap = uriToBitmap(uri)
-//            bitmap?.let {
-//                uploadImageToFirebaseStorage(it) { imageUrl ->
-//                    imageUrl?.let { url ->
-//                        imageResources.add(url)
-//                        userViewModel.saveTemporaryImageUrl(url)
-//                        // 모든 이미지가 처리된 후에 ViewPager를 업데이트
-//                        if (uris.indexOf(uri) == uris.size - 1) {
-//                            val photoAdapter = ViewPagerAdapter(imageResources, userViewModel)
-//                            binding.viewPagerContentPhoto.adapter = photoAdapter
-//                        }
-//                        if (imageResources.size == 0) {
-//                            binding.btnAddPhoto.visibility = View.VISIBLE
-//                        } else {
-//                            binding.btnAddPhoto.visibility = View.GONE
-//                        }
-//                    }
-//                }
-//            }
+            val bitmap = uriToBitmap(uri)
+            bitmap?.let {
+                uploadImageToFirebaseStorage(it) { imageUrl ->
+                    imageUrl?.let { url ->
+                        imageResources.add(url)
+                        userViewModel.saveTemporaryImageUrl(url)
+                        // 모든 이미지가 처리된 후에 ViewPager를 업데이트
+                        if (uris.indexOf(uri) == uris.size - 1) {
+                            val photoAdapter = ViewPagerAdapter(imageResources, userViewModel)
+                            binding.viewPagerContentPhoto.adapter = photoAdapter
+                        }
+                        if (imageResources.size == 0) {
+                            binding.btnAddPhoto.visibility = View.VISIBLE
+                        } else {
+                            binding.btnAddPhoto.visibility = View.GONE
+                        }
+                    }
+                }
+            }
         }
     }
     private suspend fun uriToBitmap(uri: Uri): Bitmap? {
@@ -170,23 +180,23 @@ class AddMyMatchTwoFragment : Fragment() {
         }
     }
     // Bitmap 파일을 Firebase Storage에 저장하고 다운로드 URL을 반환
-//    private fun uploadImageToFirebaseStorage(bitmap: Bitmap, callback: (String?) -> Unit){
-//        val storageRef = FirebaseStorage.getInstance().reference.child("images/${System.currentTimeMillis()}.png")
-//        val baos = ByteArrayOutputStream()
-//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
-//        val data = baos.toByteArray()
-//
-//        storageRef.putBytes(data)
-//            .addOnSuccessListener {
-//                storageRef.downloadUrl.addOnSuccessListener { uri ->
-//                    callback(uri.toString())
-//                }.addOnFailureListener {
-//                    callback(null)
-//                }
-//            }
-//            .addOnFailureListener {
-//                callback(null)
-//            }
-//    }
+    private fun uploadImageToFirebaseStorage(bitmap: Bitmap, callback: (String?) -> Unit){
+        val storageRef = FirebaseStorage.getInstance().reference.child("images/${System.currentTimeMillis()}.png")
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val data = baos.toByteArray()
+
+        storageRef.putBytes(data)
+            .addOnSuccessListener {
+                storageRef.downloadUrl.addOnSuccessListener { uri ->
+                    callback(uri.toString())
+                }.addOnFailureListener {
+                    callback(null)
+                }
+            }
+            .addOnFailureListener {
+                callback(null)
+            }
+    }
 
 }

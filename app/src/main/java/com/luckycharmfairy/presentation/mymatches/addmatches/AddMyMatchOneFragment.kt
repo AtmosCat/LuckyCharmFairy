@@ -45,6 +45,13 @@ class AddMyMatchOneFragment : Fragment() {
     private var selectedSport = ""
     private var selectedSportTeams = listOf<String>()
     private var spinnerLocations = listOf<String>()
+    private var locationsMap = mapOf(
+        "야구" to baseballLocations,
+        "남자축구" to menFootballLocations,
+        "남자농구" to menBasketballLocations,
+        "남자배구" to menVolleyballLocations,
+        "여자농구" to womenVolleyballLocations
+    )
     private var selectedYear = CalendarDay.from(Calendar.getInstance()).year.toString()
     private var selectedMonth = String.format("%02d", CalendarDay.from(Calendar.getInstance()).month + 1)
     private var selectedDate = CalendarDay.from(Calendar.getInstance()).day.toString()
@@ -65,6 +72,8 @@ class AddMyMatchOneFragment : Fragment() {
     private var selectedMyteam = ""
     private var selectedHomeTeam = ""
     private var selectedAwayTeam = ""
+    private var selectedHomescore = -1
+    private var selectedAwayscore = -1
     private var selectedResult = ""
     private var selectedMvp = ""
 
@@ -160,6 +169,7 @@ class AddMyMatchOneFragment : Fragment() {
                     "야구" -> {
                         selectedSportTeams = baseballTeams
                         spinnerLocations = baseballLocations
+
                     }
                     "남자축구" -> {
                         selectedSportTeams = menFootballTeams
@@ -230,7 +240,7 @@ class AddMyMatchOneFragment : Fragment() {
 //            else -> spinnerLocations = listOf("직접 입력")
 //        }
         val spinnerLocationAdapter =
-            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerLocations)
+            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, locationsMap[selectedSport] ?: emptyList())
         spinnerLocationAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
         binding.spinnerLocation.adapter = spinnerLocationAdapter
         binding.spinnerLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -375,6 +385,8 @@ class AddMyMatchOneFragment : Fragment() {
         }
 
         binding.btnNext.setOnClickListener{
+            selectedHomescore = binding.etHomeScore.text.toString().toInt()
+            selectedAwayscore = binding.etAwayScore.text.toString().toInt()
             if (selectedLocation == "직접 입력") {
                 selectedLocation = binding.etLocation.text.toString()
             }
@@ -401,8 +413,8 @@ class AddMyMatchOneFragment : Fragment() {
             sport = selectedSport,
             home = selectedHomeTeam,
             away = selectedAwayTeam,
-            homescore = binding.etHomeScore.text.toString().toInt(),
-            awayscore = binding.etAwayScore.text.toString().toInt(),
+            homescore = selectedHomescore,
+            awayscore = selectedAwayscore,
             result = selectedResult,
             myteam = selectedMyteam,
             mvp = selectedMvp,
@@ -417,7 +429,8 @@ class AddMyMatchOneFragment : Fragment() {
                     R.anim.slide_out_left,
                     R.anim.slide_out_right
                 )
-                replace(R.id.main_frame, AddMyMatchTwoFragment())
+                hide(this@AddMyMatchOneFragment)
+                add(R.id.main_frame, AddMyMatchTwoFragment(), "AddMatchTwoFragment")
                 addToBackStack(null)
                 commit()
             }
