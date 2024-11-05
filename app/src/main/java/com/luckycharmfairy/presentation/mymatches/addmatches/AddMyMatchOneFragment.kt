@@ -169,23 +169,42 @@ class AddMyMatchOneFragment : Fragment() {
                     "야구" -> {
                         selectedSportTeams = baseballTeams
                         spinnerLocations = baseballLocations
-
+                        val spinnerLocationAdapter =
+                            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, locationsMap[selectedSport] ?: emptyList())
+                        spinnerLocationAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
+                        binding.spinnerLocation.adapter = spinnerLocationAdapter
                     }
                     "남자축구" -> {
                         selectedSportTeams = menFootballTeams
                         spinnerLocations = menFootballLocations
+                        val spinnerLocationAdapter =
+                            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, locationsMap[selectedSport] ?: emptyList())
+                        spinnerLocationAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
+                        binding.spinnerLocation.adapter = spinnerLocationAdapter
                     }
                     "남자농구" -> {
                         selectedSportTeams = menBasketballTeams
                         spinnerLocations = menBasketballLocations
+                        val spinnerLocationAdapter =
+                            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, locationsMap[selectedSport] ?: emptyList())
+                        spinnerLocationAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
+                        binding.spinnerLocation.adapter = spinnerLocationAdapter
                     }
                     "남자배구" -> {
                         selectedSportTeams = menVolleyballTeams
                         spinnerLocations = menVolleyballLocations
+                        val spinnerLocationAdapter =
+                            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, locationsMap[selectedSport] ?: emptyList())
+                        spinnerLocationAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
+                        binding.spinnerLocation.adapter = spinnerLocationAdapter
                     }
                     "여자배구" -> {
                         selectedSportTeams = womenVolleyballTeams
                         spinnerLocations = womenVolleyballLocations
+                        val spinnerLocationAdapter =
+                            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, locationsMap[selectedSport] ?: emptyList())
+                        spinnerLocationAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
+                        binding.spinnerLocation.adapter = spinnerLocationAdapter
                     }
                     else -> selectedSportTeams = listOf("직접 입력")
                 }
@@ -239,10 +258,10 @@ class AddMyMatchOneFragment : Fragment() {
 //            "여자배구" -> spinnerLocations = womenVolleyballLocations
 //            else -> spinnerLocations = listOf("직접 입력")
 //        }
-        val spinnerLocationAdapter =
-            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, locationsMap[selectedSport] ?: emptyList())
-        spinnerLocationAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
-        binding.spinnerLocation.adapter = spinnerLocationAdapter
+//        val spinnerLocationAdapter =
+//            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, locationsMap[selectedSport] ?: emptyList())
+//        spinnerLocationAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
+//        binding.spinnerLocation.adapter = spinnerLocationAdapter
         binding.spinnerLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 selectedLocation = spinnerLocations[position]

@@ -207,7 +207,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                     val matchdays = mutableListOf<String>()
                     selectedMonthMatches.forEach{
                         if (it.date !in matchdays) {
-                            matchdays.add(it.day)
+                            matchdays.add(it.date)
                         }
                     }
                     _selectedMonthMatchdays.value = matchdays
@@ -234,7 +234,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                     val selectedDayMatches = matches.filter {
                         it.sport == selectedSport &&it.year == selectedYear && it.month == selectedMonth && it.date == selectedDate
                     }.toMutableList()
-                    _selectedDayMatches.value = selectedDayMatches
+                    _selectedDayMatches.postValue(selectedDayMatches)
                 }.addOnSuccessListener {
                     println("Succeeded to get Selected Date's Matches")
                 }.addOnFailureListener { exception ->

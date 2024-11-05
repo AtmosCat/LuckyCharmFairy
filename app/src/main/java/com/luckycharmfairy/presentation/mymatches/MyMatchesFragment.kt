@@ -135,24 +135,28 @@ class MyMatchesFragment : Fragment() {
                     Calendar.SATURDAY -> "토"
                     else -> ""
                 }
+                userViewModel.getSelectedDateMatches(currentUserEmail, selectedSport, selectedYear, selectedMonth, selectedDate)
+                userViewModel.selectedDayMatches.observe(viewLifecycleOwner) { data ->
+                    myMatchesAdapter.submitList(data)
+                }
             }
 
             // 직관한 날짜 작은 점 표시
             val eventDays = mutableListOf<CalendarDay>()
-            userViewModel.getSelectedMonthMatchdays(currentUserEmail, selectedSport, selectedYear, selectedMonth)
-            val selectedMonthMatchdays = userViewModel.selectedMonthMatchdays.value
-            if (selectedMonthMatchdays != null) {
-                selectedMonthMatchdays.forEach {
-                    eventDays.add(CalendarDay.from(selectedYear.toInt(), selectedMonth.toInt(), it.toInt()))
-                }
-            }
-            binding.tvMonthlyMatches.text = "${selectedYear}년 ${selectedMonth}월에 ${selectedSport} 경기를 ${selectedMonthMatchdays?.size}일 직관했어요!"
-            val eventDecorator = EventDecorator(eventDays)
-            binding.calendarMonthlyMatches.addDecorators(eventDecorator)
+            userViewModel.selectedMonthMatchdays.observe(viewLifecycleOwner) { data ->
+                userViewModel.getSelectedMonthMatchdays(currentUserEmail, selectedSport, selectedYear, selectedMonth)
+                val selectedMonthMatchdays = data
 
-            userViewModel.getSelectedDateMatches(currentUserEmail, selectedSport, selectedYear, selectedMonth, selectedDate)
-            userViewModel.selectedDayMatches.observe(viewLifecycleOwner) { data ->
-                myMatchesAdapter.submitList(data)
+                if (selectedMonthMatchdays != null && selectedMonthMatchdays.size != 0) {
+                    selectedMonthMatchdays.forEach {
+                        eventDays.add(CalendarDay.from(selectedYear.toInt(), selectedMonth.toInt(), it.toInt()))
+                    }
+                }
+                var matchdaysCount = selectedMonthMatchdays?.size
+                if (matchdaysCount == null) matchdaysCount == 0
+                binding.tvMonthlyMatches.text = "${selectedYear}년 ${selectedMonth}월에 ${selectedSport} 경기를 ${matchdaysCount}일 직관했어요!"
+                val eventDecorator = EventDecorator(eventDays)
+                binding.calendarMonthlyMatches.addDecorators(eventDecorator)
             }
 
         })
