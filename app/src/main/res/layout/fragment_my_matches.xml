@@ -77,15 +77,26 @@
         android:layout_marginStart="5dp"
         />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/btn_match_record"
+        app:layout_constraintBottom_toTopOf="@+id/view_tab_background"
+        >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
     <TextView
         android:id="@+id/tv_monthly_matches"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="이번 달에 OO경기를 O일 직관했어요!"
         style="@style/textStyle_subheading"
-        app:layout_constraintTop_toBottomOf="@+id/btn_match_record"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="@+id/calendar_monthly_matches"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         android:layout_marginStart="10dp"
         />
 
@@ -130,12 +141,13 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_match_records"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:layout_constraintTop_toBottomOf="@+id/tv_match_record_title"
         app:layout_constraintStart_toStartOf="@id/calendar_monthly_matches"
         app:layout_constraintEnd_toEndOf="@id/calendar_monthly_matches"
-        app:layout_constraintBottom_toTopOf="@+id/view_tab_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="30dp"
         />
 
     <TextView
@@ -150,6 +162,10 @@
         app:layout_constraintStart_toStartOf="@+id/recyclerview_match_records"
         app:layout_constraintTop_toTopOf="@+id/recyclerview_match_records" />
 
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
@@ -162,7 +178,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="@+id/btn_tab_my_matches"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_tab_my_matches"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/white"
         />
 
@@ -281,5 +297,4 @@
         app:layout_constraintBottom_toBottomOf="@+id/btn_tab_mypage"
         android:layout_marginBottom="8dp"
         />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,7 +30,7 @@ class MyMatchesFragment : Fragment() {
 
     private var currentUserEmail: String = ""
 
-    private var selectedSport = ""
+    private var selectedSport = "야구"
     private var selectedYear = CalendarDay.from(Calendar.getInstance()).year.toString()
     private var selectedMonth = String.format("%02d", CalendarDay.from(Calendar.getInstance()).month + 1)
     private var selectedDate = CalendarDay.from(Calendar.getInstance()).day.toString()
@@ -113,6 +113,24 @@ class MyMatchesFragment : Fragment() {
 //        val recyclerView = binding.calendarMonthlyMatches.getChildAt(0) as RecyclerView
 //        recyclerView.addItemDecoration(VerticalSpacingItemDecoration(spacingInPixels))
 
+        // 직관한 날짜 작은 점 표시
+        val eventDays = mutableListOf<CalendarDay>()
+        userViewModel.getSelectedMonthMatchdays(currentUserEmail, selectedSport, selectedYear, selectedMonth)
+        userViewModel.selectedMonthMatchdays.observe(viewLifecycleOwner) { data ->
+            val selectedMonthMatchdays = data
+
+            if (selectedMonthMatchdays != null && selectedMonthMatchdays.size != 0) {
+                selectedMonthMatchdays.forEach {
+                    eventDays.add(CalendarDay.from(selectedYear.toInt(), selectedMonth.toInt()-1, it.toInt()))
+                }
+            }
+            var matchdaysCount = selectedMonthMatchdays?.size
+            if (matchdaysCount == null) matchdaysCount == 0
+            binding.tvMonthlyMatches.text = "${selectedYear}년 ${selectedMonth}월에 ${selectedSport} 경기를 ${matchdaysCount}일 직관했어요!"
+            val eventDecorator = EventDecorator(eventDays)
+            binding.calendarMonthlyMatches.addDecorators(eventDecorator)
+        }
+
         binding.calendarMonthlyMatches.setSelectedDate(CalendarDay.from(Calendar.getInstance()))
         binding.calendarMonthlyMatches.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
             if (selected) {
@@ -140,25 +158,6 @@ class MyMatchesFragment : Fragment() {
                     myMatchesAdapter.submitList(data)
                 }
             }
-
-            // 직관한 날짜 작은 점 표시
-            val eventDays = mutableListOf<CalendarDay>()
-            userViewModel.selectedMonthMatchdays.observe(viewLifecycleOwner) { data ->
-                userViewModel.getSelectedMonthMatchdays(currentUserEmail, selectedSport, selectedYear, selectedMonth)
-                val selectedMonthMatchdays = data
-
-                if (selectedMonthMatchdays != null && selectedMonthMatchdays.size != 0) {
-                    selectedMonthMatchdays.forEach {
-                        eventDays.add(CalendarDay.from(selectedYear.toInt(), selectedMonth.toInt(), it.toInt()))
-                    }
-                }
-                var matchdaysCount = selectedMonthMatchdays?.size
-                if (matchdaysCount == null) matchdaysCount == 0
-                binding.tvMonthlyMatches.text = "${selectedYear}년 ${selectedMonth}월에 ${selectedSport} 경기를 ${matchdaysCount}일 직관했어요!"
-                val eventDecorator = EventDecorator(eventDays)
-                binding.calendarMonthlyMatches.addDecorators(eventDecorator)
-            }
-
         })
 
         binding.btnAddMatchRecord.setOnClickListener{

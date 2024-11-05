@@ -1,5 +1,6 @@
 package com.luckycharmfairy.presentation
 
+import android.graphics.Color
 import com.luckycharmfairy.luckycharmfairy.R
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
@@ -18,6 +19,6 @@ public class EventDecorator(dates: List<CalendarDay>) : DayViewDecorator {
     }
 
     override fun decorate(view: DayViewFacade) {
-        view.addSpan(DotSpan(5f, R.color.main_mint)) // 점 추가
+        view.addSpan(DotSpan(7f, Color.parseColor("#FF6F61"))) // 점 추가
     }
 }

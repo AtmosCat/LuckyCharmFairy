@@ -210,7 +210,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                             matchdays.add(it.date)
                         }
                     }
-                    _selectedMonthMatchdays.value = matchdays
+                    _selectedMonthMatchdays.postValue(matchdays)
                 }.addOnSuccessListener {
                     println("Succeeded to get Selected Month's Matchdays")
                 }.addOnFailureListener { exception ->
