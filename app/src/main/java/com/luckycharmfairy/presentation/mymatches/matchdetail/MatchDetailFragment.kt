@@ -16,13 +16,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.data.viewmodel.UserViewModel
+import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMatchDetailBinding
+import com.luckycharmfairy.presentation.mymatches.addmatches.ViewPagerAdapter
 
 private const val ARG_PARAM1 = "param1"
 class MatchDetailFragment : Fragment() {
     private var param1: String? = null
 
     private var _binding: FragmentMatchDetailBinding? = null
+
+    private var selectedDayMatches = mutableListOf<Match>()
+
+    private val imageResources = mutableListOf<String>()
+
     private val binding get() = _binding!!
 
     private var clickedMatch = Match()
@@ -60,23 +67,56 @@ class MatchDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val data = param1
-        sharedViewModel.filteredFoods.observe(viewLifecycleOwner) { filteredFoods ->
-            clickedItem = filteredFoods.find { it.prdlstReportNo == data }!!
+        selectedDayMatches = userViewModel.selectedDayMatches.value!!
+        clickedMatch = selectedDayMatches.find { it.id == data }!!
 
-            binding.btnBack.setOnClickListener {
-                requireActivity().supportFragmentManager.popBackStack()
+        val viewPager = view.findViewById<ViewPager2>(R.id.viewpager_match_detail)
+
+        val viewPagerAdapter = ViewPagerAdapter(clickedMatch.photos, userViewModel)
+        viewPager.adapter = viewPagerAdapter
+
+        viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                binding.tvPhotoNumber.text = "${position + 1} / ${clickedMatch.photos.size}"
             }
+        })
 
-            val viewPager = view.findViewById<ViewPager2>(R.id.viewPager)
-
-            val imageResources =
-                listOf(clickedItem?.imgurl1.toString(), clickedItem?.imgurl2.toString())
-
-            val viewPagerAdapter = ViewPagerAdapter(imageResources)
-            viewPager.adapter = viewPagerAdapter
-
-            sharedViewModel.getMarketDetail(clickedItem?.manufacture.toString(), clickedItem?.prdlstNm.toString())
+        binding.tvHometeam.text = clickedMatch.home
+        binding.tvAwayteam.text = clickedMatch.away
+        binding.tvHomescore.text = clickedMatch.homescore.toString()
+        binding.tvAwayscore.text = clickedMatch.awayscore.toString()
+        binding.tvResult.text = clickedMatch.result
+        when (clickedMatch.weather) {
+            "sunny" -> binding.ivWeather.setImageResource(R.drawable.weather_sunny)
+            "sunny_cloudy" -> binding.ivWeather.setImageResource(R.drawable.weather_sunny_cloudy)
+            "cloudy" -> binding.ivWeather.setImageResource(R.drawable.weather_cloudy)
+            "rainy" -> binding.ivWeather.setImageResource(R.drawable.weather_rainy)
+            "snowy" -> binding.ivWeather.setImageResource(R.drawable.weather_snowy)
+            else -> binding.ivWeather.setImageResource(R.drawable.bg_weather)
         }
+
+        when (clickedMatch.feeling) {
+            "happy" -> binding.ivWeather.setImageResource(R.drawable.feeling_happy)
+            "lovely" -> binding.ivWeather.setImageResource(R.drawable.feeling_lovely)
+            "soso" -> binding.ivWeather.setImageResource(R.drawable.feeling_soso)
+            "sad" -> binding.ivWeather.setImageResource(R.drawable.feeling_sad)
+            "angry" -> binding.ivWeather.setImageResource(R.drawable.feeling_angry)
+            else -> binding.ivWeather.setImageResource(R.drawable.bg_weather)
+        }
+
+        binding.tvDate.text = "${clickedMatch.year}년 ${clickedMatch.month}월 ${clickedMatch.date}}일(${clickedMatch.day})"
+        binding.tvTime.text = clickedMatch.time
+        if (clickedMatch.location.isNotBlank()) {
+            binding.tvLocation.text = clickedMatch.location
+        } else {
+            binding.tvLocation.text = "장소 : ?"
+        }
+
+        binding.tvMvpName.text = "MVP : ${clickedMatch.mvp}"
+        // 선수 백넘버 로직 추가
+        binding.tvContent.text = clickedMatch.content
+
     }
 
 

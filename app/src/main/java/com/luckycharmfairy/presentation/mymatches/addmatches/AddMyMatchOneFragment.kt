@@ -71,11 +71,11 @@ class AddMyMatchOneFragment : Fragment() {
     private var selectedMvp = ""
 
     private var weatherList = listOf(
-        "R.drawable.weather_sunny",
-        "R.drawable.weather_sunny_cloudy",
-        "R.drawable.weather_cloudy",
-        "R.drawable.weather_rainy",
-        "R.drawable.weather_snowy"
+        "sunny",
+        "sunny_cloudy",
+        "cloudy",
+        "rainy",
+        "snowy"
     )
 
     private lateinit var weatherButton1: ImageView
@@ -93,11 +93,11 @@ class AddMyMatchOneFragment : Fragment() {
     private lateinit var weatherButtonBackgroundList : List<View>
 
     private var feelingList = listOf(
-        "R.drawable.feeling_happy",
-        "R.drawable.feeling_lovely",
-        "R.drawable.feeling_soso",
-        "R.drawable.feeling_sad",
-        "R.drawable.feeling_angry"
+        "happy",
+        "lovely",
+        "soso",
+        "sad",
+        "angry"
     )
 
     private lateinit var feelingButton1: ImageView
