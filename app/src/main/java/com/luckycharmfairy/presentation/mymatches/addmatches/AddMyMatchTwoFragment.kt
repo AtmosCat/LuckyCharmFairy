@@ -76,9 +76,9 @@ class AddMyMatchTwoFragment : Fragment() {
         binding.btnClose.setOnClickListener{
             userViewModel.initializeTemporaryImageUrls()
             requireActivity().supportFragmentManager.beginTransaction().apply {
-            remove(this@AddMyMatchTwoFragment)
+            hide(this@AddMyMatchTwoFragment)
             if (addMyMatchOneFragment != null) {
-                remove(addMyMatchOneFragment)
+                hide(addMyMatchOneFragment)
             }
             if (myMatchesFragment != null) {
                 show(myMatchesFragment)

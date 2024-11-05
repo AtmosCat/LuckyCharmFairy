@@ -45,14 +45,6 @@ class AddMyMatchOneFragment : Fragment() {
     private var currentUser: User = User()
     private var selectedSport = ""
     private var selectedSportTeams = listOf<String>()
-    private var spinnerLocations = listOf<String>()
-    private var locationsMap = mapOf(
-        "야구" to baseballLocations,
-        "남자축구" to menFootballLocations,
-        "남자농구" to menBasketballLocations,
-        "남자배구" to menVolleyballLocations,
-        "여자농구" to womenVolleyballLocations
-    )
     private var selectedYear = CalendarDay.from(Calendar.getInstance()).year.toString()
     private var selectedMonth = String.format("%02d", CalendarDay.from(Calendar.getInstance()).month + 1)
     private var selectedDate = CalendarDay.from(Calendar.getInstance()).day.toString()
@@ -151,9 +143,9 @@ class AddMyMatchOneFragment : Fragment() {
         binding.btnClose.setOnClickListener{
             userViewModel.initializeTemporaryImageUrls()
             requireActivity().supportFragmentManager.beginTransaction().apply {
-                remove(this@AddMyMatchOneFragment)
+                hide(this@AddMyMatchOneFragment)
                 if (addMyMatchTwoFragment != null) {
-                    remove(addMyMatchTwoFragment)
+                    hide(addMyMatchTwoFragment)
                 }
                 if (myMatchesFragment != null) {
                     show(myMatchesFragment)
@@ -184,43 +176,18 @@ class AddMyMatchOneFragment : Fragment() {
                 when (selectedSport) {
                     "야구" -> {
                         selectedSportTeams = baseballTeams
-                        spinnerLocations = baseballLocations
-                        val spinnerLocationAdapter =
-                            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, locationsMap[selectedSport] ?: emptyList())
-                        spinnerLocationAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
-                        binding.spinnerLocation.adapter = spinnerLocationAdapter
                     }
                     "남자축구" -> {
                         selectedSportTeams = menFootballTeams
-                        spinnerLocations = menFootballLocations
-                        val spinnerLocationAdapter =
-                            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, locationsMap[selectedSport] ?: emptyList())
-                        spinnerLocationAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
-                        binding.spinnerLocation.adapter = spinnerLocationAdapter
                     }
                     "남자농구" -> {
                         selectedSportTeams = menBasketballTeams
-                        spinnerLocations = menBasketballLocations
-                        val spinnerLocationAdapter =
-                            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, locationsMap[selectedSport] ?: emptyList())
-                        spinnerLocationAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
-                        binding.spinnerLocation.adapter = spinnerLocationAdapter
                     }
                     "남자배구" -> {
                         selectedSportTeams = menVolleyballTeams
-                        spinnerLocations = menVolleyballLocations
-                        val spinnerLocationAdapter =
-                            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, locationsMap[selectedSport] ?: emptyList())
-                        spinnerLocationAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
-                        binding.spinnerLocation.adapter = spinnerLocationAdapter
                     }
                     "여자배구" -> {
                         selectedSportTeams = womenVolleyballTeams
-                        spinnerLocations = womenVolleyballLocations
-                        val spinnerLocationAdapter =
-                            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, locationsMap[selectedSport] ?: emptyList())
-                        spinnerLocationAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
-                        binding.spinnerLocation.adapter = spinnerLocationAdapter
                     }
                     else -> selectedSportTeams = listOf("직접 입력")
                 }
@@ -265,21 +232,6 @@ class AddMyMatchOneFragment : Fragment() {
         binding.btnTime.setOnClickListener{
             showTimePickerDialog()
         }
-
-//        binding.spinnerLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//                selectedLocation = spinnerLocations[position]
-//                if (selectedLocation == "직접 입력") {
-//                    binding.etLocation.visibility = View.VISIBLE
-//                } else {
-//                    binding.etLocation.visibility = View.GONE
-//                    binding.etLocation.setText("")
-//                }
-//            }
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//                selectedLocation = spinnerLocations[0]
-//            }
-//        }
 
         weatherButton1 = binding.btnSunny
         weatherButton2 = binding.btnSunnyCloudy
@@ -409,11 +361,19 @@ class AddMyMatchOneFragment : Fragment() {
 
         binding.btnNext.setOnClickListener{
             selectedLocation = binding.etLocation.text.toString()
-            selectedHomescore = binding.etHomeScore.text.toString().toInt() ?: 0
-            selectedAwayscore = binding.etAwayScore.text.toString().toInt() ?: 0
-//            if (selectedLocation == "직접 입력") {
-//                selectedLocation = binding.etLocation.text.toString()
-//            }
+
+            if (binding.etHomeScore.text.isNullOrEmpty()) {
+                selectedHomescore = 0
+            } else {
+                selectedHomescore = binding.etHomeScore.text.toString().toInt()
+            }
+
+            if (binding.etAwayScore.text.isNullOrEmpty()) {
+                selectedAwayscore = 0
+            } else {
+                selectedAwayscore = binding.etAwayScore.text.toString().toInt()
+            }
+
             if (selectedHomeTeam == "직접 입력") {
                 selectedHomeTeam = binding.etHomeTeam.text.toString()
             }
@@ -454,14 +414,11 @@ class AddMyMatchOneFragment : Fragment() {
                     R.anim.slide_out_right
                 )
                 hide(this@AddMyMatchOneFragment)
-                add(R.id.main_frame, AddMyMatchTwoFragment(), "AddMatchTwoFragment")
+                add(R.id.main_frame, AddMyMatchTwoFragment(), "AddMyMatchTwoFragment")
                 addToBackStack(null)
                 commit()
             }
         }
-
-
-
     }
 
     private fun showTimePickerDialog() {

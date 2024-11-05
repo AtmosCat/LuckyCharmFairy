@@ -179,19 +179,6 @@
             app:layout_constraintEnd_toStartOf="@id/guideline_75dp"
             />
 
-        <Spinner
-            android:id="@+id/spinner_location"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            style="@style/textStyle_subheading"
-            app:layout_constraintTop_toTopOf="@+id/tv_location"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_location"
-            app:layout_constraintStart_toEndOf="@+id/guideline_75dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="10dp"
-            android:visibility="gone"
-            />
-
         <EditText
             android:id="@+id/et_location"
             style="@style/textStyle_detail"
