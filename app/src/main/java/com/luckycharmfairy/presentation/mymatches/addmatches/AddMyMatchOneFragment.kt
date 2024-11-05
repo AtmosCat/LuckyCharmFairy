@@ -404,8 +404,8 @@ class AddMyMatchOneFragment : Fragment() {
         }
 
         binding.btnNext.setOnClickListener{
-            selectedHomescore = binding.etHomeScore.text.toString().toInt()
-            selectedAwayscore = binding.etAwayScore.text.toString().toInt()
+            selectedHomescore = binding.etHomeScore.text.toString().toInt() ?: 0
+            selectedAwayscore = binding.etAwayScore.text.toString().toInt() ?: 0
             if (selectedLocation == "직접 입력") {
                 selectedLocation = binding.etLocation.text.toString()
             }

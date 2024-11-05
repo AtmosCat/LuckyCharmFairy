@@ -172,10 +172,6 @@ class MyMatchesFragment : Fragment() {
             }
         }
 
-
-
-
-
     }
     class VerticalSpacingItemDecoration(private val spacing: Int) : RecyclerView.ItemDecoration() {
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {

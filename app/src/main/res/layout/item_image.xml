@@ -13,9 +13,9 @@
 
     <ImageView
         android:id="@+id/viewpager_btn_close"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:src="@drawable/close"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/close_two"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="20dp" />
