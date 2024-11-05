@@ -262,6 +262,17 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun initializeTemporaryImageUrls() {
+        viewModelScope.launch {
+            runCatching {
+                _temporaryImageUrls.value = mutableListOf()
+            }.onFailure {
+                Log.e(TAG, "initializeTemporaryImageUrls() failed! : ${it.message}")
+                handleException(it)
+            }
+        }
+    }
+
     fun addNewMatch(content: String) {
         viewModelScope.launch {
             runCatching {

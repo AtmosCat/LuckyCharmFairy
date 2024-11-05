@@ -166,6 +166,8 @@ class MyMatchesFragment : Fragment() {
                 hide(this@MyMatchesFragment)
                 if (addMyMatchOneFragment == null) {
                     add(R.id.main_frame, AddMyMatchOneFragment(), "AddMyMatchOneFragment")
+                } else {
+                    show(addMyMatchOneFragment)
                 }
                 addToBackStack(null)
                 commit()

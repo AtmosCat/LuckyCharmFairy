@@ -31,6 +31,7 @@ import com.luckycharmfairy.data.model.womenVolleyballTeams
 import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentAddMyMatchOneBinding
+import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import java.util.Calendar
@@ -145,8 +146,23 @@ class AddMyMatchOneFragment : Fragment() {
 
         currentUser = userViewModel.currentUser.value!!
 
+        val myMatchesFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyMatchesFragment")
+        val addMyMatchTwoFragment = requireActivity().supportFragmentManager.findFragmentByTag("AddMyMatchTwoFragment")
         binding.btnClose.setOnClickListener{
-            requireActivity().supportFragmentManager.popBackStack()
+            userViewModel.initializeTemporaryImageUrls()
+            requireActivity().supportFragmentManager.beginTransaction().apply {
+                remove(this@AddMyMatchOneFragment)
+                if (addMyMatchTwoFragment != null) {
+                    remove(addMyMatchTwoFragment)
+                }
+                if (myMatchesFragment != null) {
+                    show(myMatchesFragment)
+                } else {
+                    add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")
+                }
+                addToBackStack(null)
+                commit()
+            }
         }
 
 //        val spinnerSports = currentUser.mysports
@@ -250,32 +266,20 @@ class AddMyMatchOneFragment : Fragment() {
             showTimePickerDialog()
         }
 
-//        when (selectedSport) {
-//            "야구" -> spinnerLocations = baseballLocations
-//            "남자축구" -> spinnerLocations = menFootballLocations
-//            "남자농구" -> spinnerLocations = menBasketballLocations
-//            "남자배구" -> spinnerLocations = menVolleyballLocations
-//            "여자배구" -> spinnerLocations = womenVolleyballLocations
-//            else -> spinnerLocations = listOf("직접 입력")
+//        binding.spinnerLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+//                selectedLocation = spinnerLocations[position]
+//                if (selectedLocation == "직접 입력") {
+//                    binding.etLocation.visibility = View.VISIBLE
+//                } else {
+//                    binding.etLocation.visibility = View.GONE
+//                    binding.etLocation.setText("")
+//                }
+//            }
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//                selectedLocation = spinnerLocations[0]
+//            }
 //        }
-//        val spinnerLocationAdapter =
-//            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, locationsMap[selectedSport] ?: emptyList())
-//        spinnerLocationAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
-//        binding.spinnerLocation.adapter = spinnerLocationAdapter
-        binding.spinnerLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                selectedLocation = spinnerLocations[position]
-                if (selectedLocation == "직접 입력") {
-                    binding.etLocation.visibility = View.VISIBLE
-                } else {
-                    binding.etLocation.visibility = View.GONE
-                    binding.etLocation.setText("")
-                }
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                selectedLocation = spinnerLocations[0]
-            }
-        }
 
         weatherButton1 = binding.btnSunny
         weatherButton2 = binding.btnSunnyCloudy
@@ -404,11 +408,12 @@ class AddMyMatchOneFragment : Fragment() {
         }
 
         binding.btnNext.setOnClickListener{
+            selectedLocation = binding.etLocation.text.toString()
             selectedHomescore = binding.etHomeScore.text.toString().toInt() ?: 0
             selectedAwayscore = binding.etAwayScore.text.toString().toInt() ?: 0
-            if (selectedLocation == "직접 입력") {
-                selectedLocation = binding.etLocation.text.toString()
-            }
+//            if (selectedLocation == "직접 입력") {
+//                selectedLocation = binding.etLocation.text.toString()
+//            }
             if (selectedHomeTeam == "직접 입력") {
                 selectedHomeTeam = binding.etHomeTeam.text.toString()
             }

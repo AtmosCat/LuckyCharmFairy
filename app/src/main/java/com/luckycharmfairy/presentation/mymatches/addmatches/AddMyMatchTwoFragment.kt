@@ -18,6 +18,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.luckycharmfairy.data.model.Match
 import com.google.firebase.storage.FirebaseStorage
@@ -38,6 +39,8 @@ class AddMyMatchTwoFragment : Fragment() {
     private var currentUserEmail: String = ""
 
     private var matchContent: String = ""
+
+    private val photoAdapter by lazy { PhotoAdapter() }
 
     private val userViewModel: UserViewModel by activityViewModels {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
@@ -63,8 +66,28 @@ class AddMyMatchTwoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        binding.recyclerviewPhoto.adapter = photoAdapter
+        binding.recyclerviewPhoto.layoutManager = LinearLayoutManager(requireContext(),
+            LinearLayoutManager.HORIZONTAL, false)
+
+        val myMatchesFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyMatchesFragment")
+        val addMyMatchOneFragment = requireActivity().supportFragmentManager.findFragmentByTag("AddMyMatchOneFragment")
         binding.btnClose.setOnClickListener{
-            requireActivity().supportFragmentManager.popBackStack()
+            userViewModel.initializeTemporaryImageUrls()
+            requireActivity().supportFragmentManager.beginTransaction().apply {
+            remove(this@AddMyMatchTwoFragment)
+            if (addMyMatchOneFragment != null) {
+                remove(addMyMatchOneFragment)
+            }
+            if (myMatchesFragment != null) {
+                show(myMatchesFragment)
+            } else {
+                add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")
+            }
+            addToBackStack(null)
+            commit()
+            }
         }
 
         // 갤러리에서 이미지 선택
@@ -90,20 +113,25 @@ class AddMyMatchTwoFragment : Fragment() {
                 }
             }
 
-        binding.btnAddPhoto.setOnClickListener{
+        binding.btnAddNewPhoto.setOnClickListener{
             Toast.makeText(this.requireContext(), "올리실 사진을 선택해주세요.", Toast.LENGTH_SHORT).show()
             pickImages()
         }
 
-        binding.viewPagerContentPhoto.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                binding.tvPhotoCount.text = "${position + 1} / ${imageResources.size}"
+        photoAdapter.itemClick = object : PhotoAdapter.ItemClick {
+            override fun onClick(view: View, position: Int) {
+                imageResources.removeAt(position)
+                photoAdapter.updateData(imageResources)
             }
-        })
+        }
 
-        val addMyMatchOneFragment = requireActivity().supportFragmentManager.findFragmentByTag("AddMyMatchOneFragment")
-        val myMatchesFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyMatchesFragment")
+//        binding.viewPagerContentPhoto.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+//            override fun onPageSelected(position: Int) {
+//                super.onPageSelected(position)
+//                binding.tvPhotoCount.text = "${position + 1} / ${imageResources.size}"
+//            }
+//        })
+
         binding.btnSave.setOnClickListener {
             userViewModel.addNewMatch(matchContent)
             Toast.makeText(requireContext(), "직관 기록이 저장되었습니다.", Toast.LENGTH_SHORT).show()
@@ -162,13 +190,7 @@ class AddMyMatchTwoFragment : Fragment() {
 //                        userViewModel.saveTemporaryImageUrl(url)
                         // 모든 이미지가 처리된 후에 ViewPager를 업데이트
                         if (uris.indexOf(uri) == uris.size - 1) {
-                            val photoAdapter = ViewPagerAdapter(imageResources, userViewModel)
-                            binding.viewPagerContentPhoto.adapter = photoAdapter
-                        }
-                        if (imageResources.size == 0) {
-                            binding.btnAddPhoto.visibility = View.VISIBLE
-                        } else {
-                            binding.btnAddPhoto.visibility = View.GONE
+                            photoAdapter.updateData(imageResources)
                         }
                     }
                     userViewModel.saveTemporaryImageUrl(imageResources)
