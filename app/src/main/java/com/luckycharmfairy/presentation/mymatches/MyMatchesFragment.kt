@@ -13,6 +13,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.luckycharmfairy.presentation.mymatches.matchdetail.MatchDetailFragment
 import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
@@ -45,6 +46,7 @@ class MyMatchesFragment : Fragment() {
         else -> ""
     }
     private var selectedMonthMatchdays: Int = -1
+    private var todayMatches = mutableListOf<com.luckycharmfairy.data.model.Match>()
 
 
     private val userViewModel: UserViewModel by activityViewModels {
@@ -91,6 +93,7 @@ class MyMatchesFragment : Fragment() {
                 userViewModel.getSelectedDateMatches(currentUserEmail, selectedSport, selectedYear, selectedMonth, selectedDate)
                 userViewModel.selectedDayMatches.observe(viewLifecycleOwner) { data ->
                     myMatchesAdapter.submitList(data)
+                    todayMatches = data
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -156,9 +159,29 @@ class MyMatchesFragment : Fragment() {
                 userViewModel.getSelectedDateMatches(currentUserEmail, selectedSport, selectedYear, selectedMonth, selectedDate)
                 userViewModel.selectedDayMatches.observe(viewLifecycleOwner) { data ->
                     myMatchesAdapter.submitList(data)
+                    todayMatches = data
                 }
             }
         })
+
+        val matchDetailFragment = requireActivity().supportFragmentManager.findFragmentByTag("MatchDetailFragment")
+        myMatchesAdapter.itemClick = object : MyMatchesAdapter.ItemClick {
+            override fun onClick(view: View, position: Int) {
+                val clickedMatch = todayMatches[position]
+                val dataToSend = clickedMatch.id
+                val matchDetail = MatchDetailFragment.newInstance(dataToSend)
+                requireActivity().supportFragmentManager.beginTransaction().apply {
+                    hide(this@MyMatchesFragment)
+                    if (matchDetailFragment == null) {
+                        add(R.id.main_frame, matchDetail, "MatchDetailFragment")
+                    } else {
+                        show(matchDetail)
+                    }
+                    addToBackStack(null)
+                    commit()
+                }
+            }
+        }
 
         binding.btnAddMatchRecord.setOnClickListener{
             val addMyMatchOneFragment = requireActivity().supportFragmentManager.findFragmentByTag("AddMyMatchOneFragment")

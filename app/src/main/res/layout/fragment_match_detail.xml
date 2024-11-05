@@ -1,0 +1,143 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <ImageView
+        android:id="@+id/btn_back"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:src="@drawable/back"
+        app:layout_constraintTop_toTopOf="@+id/tv_title"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="20dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0000년 00월 00일(0) - 롯데 VS 기아"
+        style="@style/textStyle_title"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/main_dark_gray"
+        android:layout_marginTop="19dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/line1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewpager_match_detail"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="1:1"
+                android:background="@color/main_light_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_weather"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/weather_sunny"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/viewpager_match_detail"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                />
+
+            <ImageView
+                android:id="@+id/iv_feeling"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/feeling_happy"
+                app:layout_constraintStart_toEndOf="@+id/iv_weather"
+                app:layout_constraintTop_toTopOf="@+id/iv_weather"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_weather"
+                android:layout_marginStart="10dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_round_border_big"
+                android:text="2024년 10월 31일"
+                android:backgroundTint="@color/main_mint"
+                android:textColor="@color/white"
+                style="@style/textStyle_subheading"
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="10dp"
+                app:layout_constraintStart_toStartOf="@+id/iv_weather"
+                app:layout_constraintTop_toBottomOf="@+id/iv_weather"
+                android:layout_marginTop="10dp"
+                />
+            
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_round_border_big"
+                android:text="--:--"
+                android:backgroundTint="@color/main_mint"
+                android:textColor="@color/white"
+                style="@style/textStyle_subheading"
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="10dp"
+                app:layout_constraintStart_toEndOf="@+id/tv_date"
+                app:layout_constraintTop_toTopOf="@+id/tv_date"
+                app:layout_constraintTop_toBottomOf="@+id/viewpager_match_detail"
+                android:layout_marginStart="10dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_round_border_big"
+                android:text="대전한화생명이글스파크"
+                android:backgroundTint="@color/main_mint"
+                android:textColor="@color/white"
+                style="@style/textStyle_subheading"
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="10dp"
+                app:layout_constraintStart_toStartOf="@+id/tv_date"
+                app:layout_constraintTop_toBottomOf="@+id/tv_date"
+                android:layout_marginTop="10dp"
+                />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_0.5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
