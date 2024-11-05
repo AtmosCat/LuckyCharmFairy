@@ -199,63 +199,55 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_0.5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
 
-        <View
-            android:id="@+id/line3"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/main_dark_gray"
-            android:layout_marginBottom="24.5dp"
-            app:layout_constraintBottom_toTopOf="@+id/tab_circle1"
-            />
-
-        <Button
-            android:id="@+id/btn_back"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:background="@drawable/bg_round_border_small"
-            android:backgroundTint="@color/main_gray"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_margin="10dp"
-            android:text="이전"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:fontFamily="@font/nanum_square_ac_regular"
-            />
-
-        <View
-            android:id="@+id/tab_circle1"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="15dp"
-            android:elevation="2dp"
-            android:background="@drawable/bg_round_border_big"
-            android:backgroundTint="@color/main_gray"
-            app:layout_constraintEnd_toStartOf="@id/guideline_0.5"
-            app:layout_constraintBottom_toBottomOf="@+id/layout" />
-
-        <View
-            android:id="@+id/tab_circle2"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
-            android:background="@drawable/bg_round_border_big"
-            android:backgroundTint="@color/main_medium_gray"
-            android:layout_marginStart="5dp"
-            android:layout_marginBottom="15dp"
-            android:elevation="2dp"
-            app:layout_constraintStart_toEndOf="@id/guideline_0.5"
-            app:layout_constraintBottom_toBottomOf="@+id/layout"
-            />
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_0.5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
+
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:background="@drawable/bg_round_border_small"
+        android:backgroundTint="@color/main_gray"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="10dp"
+        android:text="이전"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:fontFamily="@font/nanum_square_ac_regular"
+        />
+
+    <View
+        android:id="@+id/tab_circle1"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="15dp"
+        android:elevation="2dp"
+        android:background="@drawable/bg_round_border_big"
+        android:backgroundTint="@color/main_gray"
+        app:layout_constraintEnd_toStartOf="@id/guideline_0.5"
+        app:layout_constraintBottom_toBottomOf="@+id/layout" />
+
+    <View
+        android:id="@+id/tab_circle2"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:background="@drawable/bg_round_border_big"
+        android:backgroundTint="@color/main_medium_gray"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="15dp"
+        android:elevation="2dp"
+        app:layout_constraintStart_toEndOf="@id/guideline_0.5"
+        app:layout_constraintBottom_toBottomOf="@+id/layout"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
