@@ -325,49 +325,62 @@
 
             <ImageView
                 android:id="@+id/iv_crown"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginEnd="60dp"
                 android:src="@drawable/crown"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/iv_weather" />
 
-            <ImageView
-                android:id="@+id/iv_uniform"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/uniform"
-                app:layout_constraintBottom_toTopOf="@+id/tv_mvp_name"
-                app:layout_constraintEnd_toEndOf="@+id/iv_crown"
-                app:layout_constraintStart_toStartOf="@+id/iv_crown"
-                app:layout_constraintTop_toBottomOf="@+id/iv_crown" />
+<!--            <ImageView-->
+<!--                android:id="@+id/iv_uniform"-->
+<!--                android:layout_width="60dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:src="@drawable/uniform"-->
+<!--                app:layout_constraintBottom_toTopOf="@+id/tv_mvp_name"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/iv_crown"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/iv_crown"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/iv_crown" />-->
 
-            <TextView
-                android:id="@+id/tv_uniform_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="1dp"
-                android:elevation="2dp"
-                android:fontFamily="@font/nanum_square_ac_bold"
-                android:gravity="center"
-                android:text="10"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_uniform"
-                app:layout_constraintEnd_toEndOf="@+id/iv_uniform"
-                app:layout_constraintStart_toStartOf="@+id/iv_uniform"
-                app:layout_constraintTop_toBottomOf="@+id/iv_crown" />
+<!--            <TextView-->
+<!--                android:id="@+id/tv_uniform_number"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginEnd="1dp"-->
+<!--                android:elevation="2dp"-->
+<!--                android:fontFamily="@font/nanum_square_ac_bold"-->
+<!--                android:gravity="center"-->
+<!--                android:text="10"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="20sp"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/iv_uniform"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/iv_uniform"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/iv_uniform"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/iv_crown" />-->
 
             <TextView
                 android:id="@+id/tv_mvp_name"
                 style="@style/textStyle_subtitle"
+                android:textSize="28sp"
+                android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MVP : 류현진"
+                android:text="류현진"
+                app:layout_constraintTop_toBottomOf="@+id/iv_crown"
+                app:layout_constraintEnd_toEndOf="@+id/iv_crown"
+                app:layout_constraintStart_toStartOf="@+id/iv_crown" />
 
-                app:layout_constraintBottom_toBottomOf="@+id/tv_location"
-                app:layout_constraintEnd_toEndOf="@+id/iv_uniform"
-                app:layout_constraintStart_toStartOf="@+id/iv_uniform" />
+            <TextView
+                android:id="@+id/tv_mvp_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="이날의 MVP"
+                style="@style/textStyle_subheading"
+                app:layout_constraintTop_toBottomOf="@+id/tv_mvp_name"
+                app:layout_constraintStart_toStartOf="@+id/tv_mvp_name"
+                app:layout_constraintEnd_toEndOf="@+id/tv_mvp_name"
+                android:layout_marginTop="10dp"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

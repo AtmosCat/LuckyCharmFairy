@@ -112,9 +112,7 @@ class MatchDetailFragment : Fragment() {
         } else {
             binding.tvLocation.text = "장소 : ?"
         }
-
-        binding.tvMvpName.text = "MVP : ${clickedMatch.mvp}"
-        // 선수 백넘버 로직 추가
+        binding.tvMvpName.text = clickedMatch.mvp
         binding.tvContent.text = clickedMatch.content
 
     }
