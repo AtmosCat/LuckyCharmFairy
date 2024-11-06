@@ -1,12 +1,15 @@
 package com.luckycharmfairy.presentation.mymatches.matchdetail
 
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -66,6 +69,10 @@ class MatchDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.btnBack.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+
         val data = param1
         selectedDayMatches = userViewModel.selectedDayMatches.value!!
         clickedMatch = selectedDayMatches.find { it.id == data }!!
@@ -82,8 +89,20 @@ class MatchDetailFragment : Fragment() {
             }
         })
 
-        binding.tvHometeam.text = clickedMatch.home
-        binding.tvAwayteam.text = clickedMatch.away
+        binding.viewHometeam.text = clickedMatch.home.shortname
+        setTeamColor(binding.viewHometeam, clickedMatch.home.teamcolor)
+        binding.viewAwayteam.text = clickedMatch.away.shortname
+        setTeamColor(binding.viewAwayteam, clickedMatch.away.teamcolor)
+        if (clickedMatch.myteam == "홈 팀") {
+            binding.ivHomeStar.visibility = View.VISIBLE
+            binding.ivAwayStar.visibility = View.GONE
+        } else if (clickedMatch.myteam == "어웨이 팀") {
+            binding.ivAwayStar.visibility = View.VISIBLE
+            binding.ivHomeStar.visibility = View.GONE
+        } else {
+            binding.ivAwayStar.visibility = View.GONE
+            binding.ivHomeStar.visibility = View.GONE
+        }
         binding.tvHomescore.text = clickedMatch.homescore.toString()
         binding.tvAwayscore.text = clickedMatch.awayscore.toString()
         binding.tvResult.text = clickedMatch.result
@@ -97,12 +116,12 @@ class MatchDetailFragment : Fragment() {
         }
 
         when (clickedMatch.feeling) {
-            "happy" -> binding.ivWeather.setImageResource(R.drawable.feeling_happy)
-            "lovely" -> binding.ivWeather.setImageResource(R.drawable.feeling_lovely)
-            "soso" -> binding.ivWeather.setImageResource(R.drawable.feeling_soso)
-            "sad" -> binding.ivWeather.setImageResource(R.drawable.feeling_sad)
-            "angry" -> binding.ivWeather.setImageResource(R.drawable.feeling_angry)
-            else -> binding.ivWeather.setImageResource(R.drawable.bg_weather)
+            "happy" -> binding.ivFeeling.setImageResource(R.drawable.feeling_happy)
+            "lovely" -> binding.ivFeeling.setImageResource(R.drawable.feeling_lovely)
+            "soso" -> binding.ivFeeling.setImageResource(R.drawable.feeling_soso)
+            "sad" -> binding.ivFeeling.setImageResource(R.drawable.feeling_sad)
+            "angry" -> binding.ivFeeling.setImageResource(R.drawable.feeling_angry)
+            else -> binding.ivFeeling.setImageResource(R.drawable.bg_weather)
         }
 
         binding.tvDate.text = "${clickedMatch.year}년 ${clickedMatch.month}월 ${clickedMatch.date}}일(${clickedMatch.day})"
@@ -117,6 +136,9 @@ class MatchDetailFragment : Fragment() {
 
     }
 
+    private fun setTeamColor(team: Button, teamcolor: String) {
+        team.setBackgroundColor(Color.parseColor(teamcolor))
+    }
 
 }
 

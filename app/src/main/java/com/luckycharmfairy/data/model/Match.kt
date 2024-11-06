@@ -12,8 +12,8 @@ data class Match (
     var weather: String = "",
     var feeling: String = "",
     var sport: String = "",
-    var home: String = "",
-    var away: String = "",
+    var home: Team = Team(),
+    var away: Team = Team(),
     var homescore: Int = 0,
     var awayscore: Int = 0,
     var result: String = "", // WIN, LOSE, TIE, CANCEL, NONE

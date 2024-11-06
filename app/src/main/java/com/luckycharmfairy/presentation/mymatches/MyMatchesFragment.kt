@@ -76,7 +76,7 @@ class MyMatchesFragment : Fragment() {
         binding.recyclerviewMatchRecords.adapter = myMatchesAdapter
         binding.recyclerviewMatchRecords.layoutManager = LinearLayoutManager(requireContext())
 
-        val spinnerItems = listOf("야구", "축구", "농구", "여자배구", "남자배구")
+        val spinnerItems = listOf("야구", "남자축구", "남자농구", "여자배구", "남자배구")
         val spinnerAdapter =
             ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerItems)
         spinnerAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
@@ -172,11 +172,7 @@ class MyMatchesFragment : Fragment() {
                 val matchDetail = MatchDetailFragment.newInstance(dataToSend)
                 requireActivity().supportFragmentManager.beginTransaction().apply {
                     hide(this@MyMatchesFragment)
-                    if (matchDetailFragment == null) {
-                        add(R.id.main_frame, matchDetail, "MatchDetailFragment")
-                    } else {
-                        show(matchDetail)
-                    }
+                    add(R.id.main_frame, matchDetail, "MatchDetailFragment")
                     addToBackStack(null)
                     commit()
                 }
@@ -187,11 +183,7 @@ class MyMatchesFragment : Fragment() {
             val addMyMatchOneFragment = requireActivity().supportFragmentManager.findFragmentByTag("AddMyMatchOneFragment")
             requireActivity().supportFragmentManager.beginTransaction().apply {
                 hide(this@MyMatchesFragment)
-                if (addMyMatchOneFragment == null) {
-                    add(R.id.main_frame, AddMyMatchOneFragment(), "AddMyMatchOneFragment")
-                } else {
-                    show(addMyMatchOneFragment)
-                }
+                add(R.id.main_frame, AddMyMatchOneFragment())
                 addToBackStack(null)
                 commit()
             }

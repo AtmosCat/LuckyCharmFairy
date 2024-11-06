@@ -17,16 +17,22 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.luckycharmfairy.data.model.Match
+import com.luckycharmfairy.data.model.Team
 import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.data.model.baseballLocations
+import com.luckycharmfairy.data.model.baseballTeamNames
 import com.luckycharmfairy.data.model.baseballTeams
 import com.luckycharmfairy.data.model.menBasketballLocations
+import com.luckycharmfairy.data.model.menBasketballTeamNames
 import com.luckycharmfairy.data.model.menBasketballTeams
 import com.luckycharmfairy.data.model.menFootballLocations
+import com.luckycharmfairy.data.model.menFootballTeamNames
 import com.luckycharmfairy.data.model.menFootballTeams
 import com.luckycharmfairy.data.model.menVolleyballLocations
+import com.luckycharmfairy.data.model.menVolleyballTeamNames
 import com.luckycharmfairy.data.model.menVolleyballTeams
 import com.luckycharmfairy.data.model.womenVolleyballLocations
+import com.luckycharmfairy.data.model.womenVolleyballTeamNames
 import com.luckycharmfairy.data.model.womenVolleyballTeams
 import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
@@ -44,7 +50,8 @@ class AddMyMatchOneFragment : Fragment() {
 
     private var currentUser: User = User()
     private var selectedSport = ""
-    private var selectedSportTeams = listOf<String>()
+    private var selectedSportTeams = listOf<Team>()
+    private var selectedSportTeamNames = listOf<String>()
     private var selectedYear = CalendarDay.from(Calendar.getInstance()).year.toString()
     private var selectedMonth = String.format("%02d", CalendarDay.from(Calendar.getInstance()).month + 1)
     private var selectedDate = CalendarDay.from(Calendar.getInstance()).day.toString()
@@ -63,8 +70,10 @@ class AddMyMatchOneFragment : Fragment() {
     private var selectedWeather = ""
     private var selectedFeeling = ""
     private var selectedMyteam = ""
-    private var selectedHomeTeam = ""
-    private var selectedAwayTeam = ""
+    private var selectedHomeTeamName = ""
+    private var selectedAwayTeamName = ""
+    private var selectedHomeTeam = Team()
+    private var selectedAwayTeam = Team()
     private var selectedHomescore = -1
     private var selectedAwayscore = -1
     private var selectedResult = ""
@@ -175,21 +184,26 @@ class AddMyMatchOneFragment : Fragment() {
                 selectedSport = spinnerSports[position]
                 when (selectedSport) {
                     "야구" -> {
+                        selectedSportTeamNames = baseballTeamNames
                         selectedSportTeams = baseballTeams
                     }
                     "남자축구" -> {
+                        selectedSportTeamNames = menFootballTeamNames
                         selectedSportTeams = menFootballTeams
                     }
                     "남자농구" -> {
+                        selectedSportTeamNames = menBasketballTeamNames
                         selectedSportTeams = menBasketballTeams
                     }
                     "남자배구" -> {
+                        selectedSportTeamNames = menVolleyballTeamNames
                         selectedSportTeams = menVolleyballTeams
                     }
                     "여자배구" -> {
+                        selectedSportTeamNames = womenVolleyballTeamNames
                         selectedSportTeams = womenVolleyballTeams
                     }
-                    else -> selectedSportTeams = listOf("직접 입력")
+                    else -> selectedSportTeamNames = listOf("직접 입력")
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -288,17 +302,17 @@ class AddMyMatchOneFragment : Fragment() {
 
         binding.btnHometeam.setOnClickListener{
             binding.recyclerviewTeams.visibility = View.VISIBLE
-            teamSelectionAdapter.submitList(selectedSportTeams)
+            teamSelectionAdapter.submitList(selectedSportTeamNames)
             teamSelectionAdapter.itemClick = object : TeamSelectionAdapter.ItemClick {
                 override fun onClick(view: View, position: Int) {
+                    selectedHomeTeamName = selectedSportTeamNames[position]
                     binding.recyclerviewTeams.visibility = View.GONE
-                    if (selectedHomeTeam == "직접 입력") {
+                    if (selectedHomeTeamName == "직접 입력") {
                         binding.btnHometeam.visibility = View.GONE
                         binding.etHomeTeam.visibility = View.VISIBLE
                     } else {
-                        selectedHomeTeam = selectedSportTeams[position]
                         binding.btnHometeam.visibility = View.VISIBLE
-                        binding.btnHometeam.setText(selectedHomeTeam)
+                        binding.btnHometeam.setText(selectedHomeTeamName)
                         binding.etHomeTeam.visibility = View.GONE
                         binding.etHomeTeam.setText("")
                     }
@@ -307,17 +321,18 @@ class AddMyMatchOneFragment : Fragment() {
         }
         binding.btnAwayteam.setOnClickListener{
             binding.recyclerviewTeams.visibility = View.VISIBLE
-            teamSelectionAdapter.submitList(selectedSportTeams)
+            teamSelectionAdapter.submitList(selectedSportTeamNames)
             teamSelectionAdapter.itemClick = object : TeamSelectionAdapter.ItemClick {
                 override fun onClick(view: View, position: Int) {
+                    selectedAwayTeamName = selectedSportTeamNames[position]
                     binding.recyclerviewTeams.visibility = View.GONE
-                    if (selectedAwayTeam == "직접 입력") {
+                    if (selectedAwayTeamName == "직접 입력") {
                         binding.btnAwayteam.visibility = View.GONE
                         binding.etAwayTeam.visibility = View.VISIBLE
                     } else {
-                        selectedAwayTeam = selectedSportTeams[position]
+                        selectedAwayTeamName = selectedSportTeamNames[position]
                         binding.btnAwayteam.visibility = View.VISIBLE
-                        binding.btnAwayteam.setText(selectedAwayTeam)
+                        binding.btnAwayteam.setText(selectedAwayTeamName)
                         binding.etAwayTeam.visibility = View.GONE
                         binding.etAwayTeam.setText("")
                     }
@@ -325,7 +340,7 @@ class AddMyMatchOneFragment : Fragment() {
             }
         }
 
-        val spinnerResult = listOf("승리", "패배", "무승부", "경기 취소", "타 팀 직관")
+        val spinnerResult = listOf("승리", "패배", "무승부", "경기 취소", "타팀 직관")
         val spinnerResultAdapter =
             ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerResult)
         spinnerResultAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
@@ -354,12 +369,26 @@ class AddMyMatchOneFragment : Fragment() {
                 selectedAwayscore = binding.etAwayScore.text.toString().toInt()
             }
 
-            if (selectedHomeTeam == "직접 입력") {
-                selectedHomeTeam = binding.etHomeTeam.text.toString()
+            if (selectedHomeTeamName == "직접 입력") {
+                selectedHomeTeam = Team(
+                    name = binding.etHomeTeam.text.toString(),
+                    shortname = binding.etHomeTeam.text.toString(),
+                    sport = selectedSport,
+                    teamcolor = "#999999" )
+            } else {
+                selectedHomeTeam = selectedSportTeams.find { it.name == selectedHomeTeamName }!!
             }
-            if (selectedAwayTeam == "직접 입력") {
-                selectedAwayTeam = binding.etAwayTeam.text.toString()
+
+            if (selectedAwayTeamName == "직접 입력") {
+                selectedAwayTeam = Team(
+                    name = binding.etAwayTeam.text.toString(),
+                    shortname = binding.etAwayTeam.text.toString(),
+                    sport = selectedSport,
+                    teamcolor = "#999999" )
+            } else {
+                selectedAwayTeam = selectedSportTeams.find { it.name == selectedAwayTeamName }!!
             }
+
             if (binding.etMvp.text.isNullOrEmpty()) {
                 selectedMvp = ""
             } else {

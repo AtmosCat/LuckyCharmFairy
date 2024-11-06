@@ -1,9 +1,11 @@
 package com.luckycharmfairy.presentation.mymatches
 
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -62,18 +64,27 @@ class MyMatchesAdapter(private val userViewModel: UserViewModel) :
 
         fun bind(item: Match) {
             timeAndLocation.text = "${item.year}년 ${item.month}월 ${item.date}일 (${item.day}) - ${item.location}"
-            hometeam.text = item.home
-            awayteam.text = item.away
+            hometeam.text = item.home.shortname
+            setTeamColor(hometeam, item.home.teamcolor)
+            awayteam.text = item.away.shortname
+            setTeamColor(awayteam, item.away.teamcolor)
             homescore.text = item.homescore.toString()
             awayscore.text = item.awayscore.toString()
             result.text = item.result
-            if (item.myteam == item.home) {
+            if (item.myteam == "홈 팀") {
                 homestar.visibility = View.VISIBLE
                 awaystar.visibility = View.GONE
-            } else {
+            } else if (item.myteam == "어웨이 팀") {
                 awaystar.visibility = View.VISIBLE
+                homestar.visibility = View.GONE
+            } else {
+                awaystar.visibility = View.GONE
                 homestar.visibility = View.GONE
             }
         }
+        private fun setTeamColor(team: Button, teamcolor: String) {
+            team.setBackgroundColor(Color.parseColor(teamcolor))
+        }
+
     }
 }

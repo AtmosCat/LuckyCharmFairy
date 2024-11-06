@@ -7,6 +7,6 @@
     <color name="main_gray">#B7B7B7</color>
     <color name="main_light_gray">#E3E3E3</color>
     <color name="main_mint">#53DBAB</color>
-    <color name="background">#ECFBF6</color>
+    <color name="background">#FAFAFA</color>
     <color name="calendar_events">#FF6F61</color>
 </resources>

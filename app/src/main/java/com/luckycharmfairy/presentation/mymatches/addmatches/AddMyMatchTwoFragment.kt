@@ -66,7 +66,6 @@ class AddMyMatchTwoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         binding.recyclerviewPhoto.adapter = photoAdapter
         binding.recyclerviewPhoto.layoutManager = LinearLayoutManager(requireContext(),
             LinearLayoutManager.HORIZONTAL, false)
@@ -76,9 +75,9 @@ class AddMyMatchTwoFragment : Fragment() {
         binding.btnClose.setOnClickListener{
             userViewModel.initializeTemporaryImageUrls()
             requireActivity().supportFragmentManager.beginTransaction().apply {
-            hide(this@AddMyMatchTwoFragment)
+            remove(this@AddMyMatchTwoFragment)
             if (addMyMatchOneFragment != null) {
-                hide(addMyMatchOneFragment)
+                remove(addMyMatchOneFragment)
             }
             if (myMatchesFragment != null) {
                 show(myMatchesFragment)
@@ -133,6 +132,7 @@ class AddMyMatchTwoFragment : Fragment() {
 //        })
 
         binding.btnSave.setOnClickListener {
+            matchContent = binding.etContent.text.toString()
             userViewModel.addNewMatch(matchContent)
             Toast.makeText(requireContext(), "직관 기록이 저장되었습니다.", Toast.LENGTH_SHORT).show()
             requireActivity().supportFragmentManager.beginTransaction().apply {

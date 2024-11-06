@@ -11,10 +11,10 @@
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_round_border_medium"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/background"
         android:elevation="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@id/btn_back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
@@ -49,27 +49,12 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_title"
             />
 
-        <Button
-            android:id="@+id/btn_save"
-            android:layout_width="80dp"
-            android:layout_height="30dp"
-            android:background="@drawable/bg_round_border_small"
-            android:backgroundTint="@color/main_mint"
-            app:layout_constraintTop_toTopOf="@+id/btn_back"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_back"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="10dp"
-            android:text="저장하기"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:fontFamily="@font/nanum_square_ac_regular"
-            />
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@+id/tv_title"
-            app:layout_constraintBottom_toTopOf="@+id/tab_circle1"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="25dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -219,6 +204,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_margin="10dp"
         android:text="이전"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:fontFamily="@font/nanum_square_ac_regular"
+        />
+
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:background="@drawable/bg_round_border_small"
+        android:backgroundTint="@color/main_mint"
+        app:layout_constraintTop_toTopOf="@+id/btn_back"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_back"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="10dp"
+        android:text="저장하기"
         android:textColor="@color/white"
         android:textSize="12sp"
         android:fontFamily="@font/nanum_square_ac_regular"

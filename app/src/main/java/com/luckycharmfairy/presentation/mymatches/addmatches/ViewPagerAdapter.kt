@@ -14,7 +14,6 @@ class ViewPagerAdapter(private val imageUrls: MutableList<String>, private val u
 
     class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
-        val btnClose: ImageView = itemView.findViewById(R.id.viewpager_btn_close) // 버튼 초기화
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
@@ -40,16 +39,6 @@ class ViewPagerAdapter(private val imageUrls: MutableList<String>, private val u
             error(R.drawable.error_image)
         }
 
-        // btnClose 클릭 리스너 설정
-        holder.btnClose.setOnClickListener {
-            val adapterPosition = holder.adapterPosition // 현재 어댑터에서의 위치 가져오기
-            if (adapterPosition != RecyclerView.NO_POSITION) { // 유효한 위치인지 확인
-                imageUrls.removeAt(adapterPosition)
-                userViewModel.temporaryImageUrls.value!!.removeAt(position)
-                notifyItemRemoved(adapterPosition)
-                notifyItemRangeChanged(adapterPosition, imageUrls.size) // 남은 아이템의 위치 업데이트
-            }
-        }
     }
 
     override fun getItemCount(): Int = imageUrls.size

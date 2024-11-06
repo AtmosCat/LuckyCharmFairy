@@ -14,7 +14,7 @@ data class Team(
     var players: MutableList<String> = mutableListOf()
 )
 
-public val baseballTeams = listOf(
+public val baseballTeamNames = listOf(
     "한화 이글스",
     "LG 트윈스",
     "삼성 라이온즈",
@@ -27,7 +27,21 @@ public val baseballTeams = listOf(
     "NC 다이노스",
     "직접 입력"
     )
- 
+
+public val baseballTeams: List<Team>
+    get() = listOf(
+        baseball_HanwhaEagles,
+        baseball_SamsungLions,
+        baseball_KiwoonHeroes,
+        baseball_LgTwins,
+        baseball_KiaTigers,
+        baseball_DusanBears,
+        baseball_LotteGiants,
+        baseball_NcDinos,
+        baseball_SsgLanders,
+        baseball_KtWiz
+    )
+
 public val baseball_HanwhaEagles = Team(
     sport = "야구",
     name = "한화 이글스",
@@ -169,7 +183,7 @@ public val baseball_NcDinos = Team(
     players = mutableListOf()
 )
 
-public val menFootballTeams = listOf(
+public val menFootballTeamNames = listOf(
     "강원 FC",
     "광주 FC",
     "김천 상무 FC",
@@ -184,6 +198,22 @@ public val menFootballTeams = listOf(
     "포항 스틸러스",
     "직접 입력"
 )
+
+public val menFootballTeams: List<Team>
+    get() = listOf(
+        menFootball_DaejeonHanaCitizen,
+        menFootball_GimcheonSangmuFc,
+        menFootball_KangwonFc,
+        menFootball_JeonbukHyundaiMotors,
+        menFootball_DaeguFc,
+        menFootball_FcSeoul,
+        menFootball_GwangjuFc,
+        menFootball_IncheonUnitedFc,
+        menFootball_JejuUnitedFc,
+        menFootball_PohangSteelers,
+        menFootball_SuwonFc,
+        menFootball_UlsanHDFc
+    )
 
 public val menFootball_GwangjuFc = Team(
     sport = "남자축구",
@@ -345,7 +375,7 @@ public val menFootball_PohangSteelers = Team(
     players = mutableListOf()
 )
 
-public val menBasketballTeams = listOf(
+public val menBasketballTeamNames = listOf(
     "고양 소노 스카이거너스",
     "대구 한국가스공사 페가수스",
     "서울 SK 나이츠",
@@ -358,6 +388,20 @@ public val menBasketballTeams = listOf(
     "서울 삼성 썬더스",
     "직접 입력"
 )
+
+public val menBasketballTeams: List<Team>
+    get() = listOf(
+        menBasketball_GoyangSonoSkygunners,
+        menBasketball_DaeguKogasPegasus,
+        menBasketball_BusanKccEgis,
+        menBasketball_SeoulSkKnights,
+        menBasketball_ChangwonLgSakers,
+        menBasketball_AnyangKgcRedboosters,
+        menBasketball_SeoulSamsungThunders,
+        menBasketball_SuwonKtSonicboom,
+        menBasketball_WonjuDbPromy,
+        menBasketball_UlsanHyundaiMobisPheobus
+    )
 
 public val menBasketball_GoyangSonoSkygunners = Team(
     sport = "남자농구",
@@ -500,7 +544,7 @@ public val menBasketball_SeoulSamsungThunders = Team(
 )
 
 
-public val menVolleyballTeams = listOf(
+public val menVolleyballTeamNames = listOf(
     "인천 대한항공 점보스",
     "안산 OK저축은행 읏맨",
     "서울 우리카드 우리WON",
@@ -511,7 +555,18 @@ public val menVolleyballTeams = listOf(
     "직접 입력"
 )
 
-public val menVolleybball_IncheonKalJumbos = Team(
+public val menVolleyballTeams: List<Team>
+    get() = listOf(
+        menVolleyball_IncheonKalJumbos,
+        menVolleyball_AnsanOkbankOkman,
+        menVolleyball_SuwonKepcoBigstorm,
+        menVolleyball_SeoulWooricardWooriwon,
+        menVolleyball_CheonanHyundaicapitalSkywalkers,
+        menVolleyball_DaejeonSamsungInsurancesBluefangs,
+        menVolleyball_UijeonguKbStars
+    )
+
+public val menVolleyball_IncheonKalJumbos = Team(
     sport = "남자배구",
     name = "인천 대한항공 점보스",
     shortname = "대한항공",
@@ -525,7 +580,7 @@ public val menVolleybball_IncheonKalJumbos = Team(
     players = mutableListOf()
 )
 
-public val menVolleybball_AnsanOkbankOkman = Team(
+public val menVolleyball_AnsanOkbankOkman = Team(
     sport = "남자배구",
     name = "안산 OK저축은행 읏맨",
     shortname = "OK저축은행",
@@ -538,7 +593,7 @@ public val menVolleybball_AnsanOkbankOkman = Team(
     homepage = "https://www.okfinancialsports.com/volleyball/main/main.asp",
     players = mutableListOf()
 )
-public val menVolleybball_SeoulWooricardWooriwon = Team(
+public val menVolleyball_SeoulWooricardWooriwon = Team(
     sport = "남자배구",
     name = "서울 우리카드 우리WON",
     shortname = "우리카드",
@@ -551,7 +606,7 @@ public val menVolleybball_SeoulWooricardWooriwon = Team(
     homepage = "https://m.wooricard.com/dcmw/yh1/cid/cid04/wbvbteam/M1CID201S33.do",
     players = mutableListOf()
 )
-public val menVolleybball_CheonanHyundaicapitalSkywalkers = Team(
+public val menVolleyball_CheonanHyundaicapitalSkywalkers = Team(
     sport = "남자배구",
     name = "천안 현대캐피탈 스카이워커스",
     shortname = "현대캐피탈",
@@ -564,7 +619,7 @@ public val menVolleybball_CheonanHyundaicapitalSkywalkers = Team(
     homepage = "https://www.skywalkers.co.kr/",
     players = mutableListOf()
 )
-public val menVolleybball_SuwonKepcoBigstorm = Team(
+public val menVolleyball_SuwonKepcoBigstorm = Team(
     sport = "남자배구",
     name = "수원 한국전력 빅스톰",
     shortname = "한국전력",
@@ -577,7 +632,7 @@ public val menVolleybball_SuwonKepcoBigstorm = Team(
     homepage = "https://home.kepco.co.kr/kepco/SP/A/main/volley.do?menuCd=FN1104",
     players = mutableListOf()
 )
-public val menVolleybball_DaejeonSamsungInsurancesBluefangs = Team(
+public val menVolleyball_DaejeonSamsungInsurancesBluefangs = Team(
     sport = "남자배구",
     name = "대전 삼성화재 블루팡스",
     shortname = "삼성화재",
@@ -590,7 +645,7 @@ public val menVolleybball_DaejeonSamsungInsurancesBluefangs = Team(
     homepage = "https://kovo.co.kr/bluefangs",
     players = mutableListOf()
 )
-public val menVolleybball_ = Team(
+public val menVolleyball_UijeonguKbStars = Team(
     sport = "남자배구",
     name = "의정부 KB손해보험 스타즈",
     shortname = "KB손해보험",
@@ -604,7 +659,7 @@ public val menVolleybball_ = Team(
     players = mutableListOf()
 )
 
-public val womenVolleyballTeams = listOf(
+public val womenVolleyballTeamNames = listOf(
     "수원 현대건설 힐스테이트",
     "인천 흥국생명 핑크스파이더스",
     "대전 정관장 레드스파크스",
@@ -615,7 +670,18 @@ public val womenVolleyballTeams = listOf(
     "직접 입력"
 )
 
-public val womenVolleybball_SuwonHyundaiconstructionHillstate = Team(
+public val womenVolleyballTeams: List<Team>
+    get() = listOf(
+        womenVolleyball_SuwonHyundaiconstructionHillstate,
+        womenVolleyball_DaejeonKgcRedsparks,
+        womenVolleyball_GscaltexSeoulKixx,
+        womenVolleyball_HwaseongIbkAltos,
+        womenVolleyball_IncheonHeungkukinsurancesPinkspiders,
+        womenVolleyball_GimcheonExHipass,
+        womenVolleybball_GwangjuPepperbanAipeppers
+    )
+
+public val womenVolleyball_SuwonHyundaiconstructionHillstate = Team(
     sport = "여자배구",
     name = "수원 현대건설 힐스테이트",
     shortname = "현대건설",
@@ -629,7 +695,7 @@ public val womenVolleybball_SuwonHyundaiconstructionHillstate = Team(
     players = mutableListOf()
 )
 
-public val womenVolleybball_IncheonHeungkukinsurancesPinkspiders = Team(
+public val womenVolleyball_IncheonHeungkukinsurancesPinkspiders = Team(
     sport = "여자배구",
     name = "인천 흥국생명 핑크스파이더스",
     shortname = "흥국생명",
@@ -642,7 +708,7 @@ public val womenVolleybball_IncheonHeungkukinsurancesPinkspiders = Team(
     homepage = "https://www.pinkspiders.co.kr/",
     players = mutableListOf()
 )
-public val womenVolleybball_DaejeonKgcRedsparks = Team(
+public val womenVolleyball_DaejeonKgcRedsparks = Team(
     sport = "여자배구",
     name = "대전 정관장 레드스파크스",
     shortname = "정관장",
@@ -655,7 +721,7 @@ public val womenVolleybball_DaejeonKgcRedsparks = Team(
     homepage = "https://www.kgcsports.com/volleyball/main/main.php",
     players = mutableListOf()
 )
-public val womenVolleybball_GscaltexSeoulKixx = Team(
+public val womenVolleyball_GscaltexSeoulKixx = Team(
     sport = "여자배구",
     name = "GS칼텍스 서울 KIXX",
     shortname = "GS칼텍스",
@@ -668,7 +734,7 @@ public val womenVolleybball_GscaltexSeoulKixx = Team(
     homepage = "https://www.gsvolleyball.com/",
     players = mutableListOf()
 )
-public val womenVolleybball_HwaseongIbkAltos = Team(
+public val womenVolleyball_HwaseongIbkAltos = Team(
     sport = "여자배구",
     name = "화성 IBK기업은행 알토스",
     shortname = "IBK",
@@ -681,7 +747,7 @@ public val womenVolleybball_HwaseongIbkAltos = Team(
     homepage = "http://sports.ibk.co.kr/m/volleyball/main/",
     players = mutableListOf()
 )
-public val womenVolleybball_GimcheonExHipass = Team(
+public val womenVolleyball_GimcheonExHipass = Team(
     sport = "여자배구",
     name = "김천 한국도로공사 하이패스",
     shortname = "한국도로공사",
@@ -694,7 +760,7 @@ public val womenVolleybball_GimcheonExHipass = Team(
     homepage = "https://www.exsportsclub.com/",
     players = mutableListOf()
 )
-public val womenVolleybball_ = Team(
+public val womenVolleybball_GwangjuPepperbanAipeppers = Team(
     sport = "여자배구",
     name = "광주 페퍼저축은행 AI 페퍼스",
     shortname = "페퍼저축은행",
