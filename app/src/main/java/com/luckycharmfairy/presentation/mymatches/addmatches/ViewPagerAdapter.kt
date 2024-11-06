@@ -29,10 +29,10 @@ class ViewPagerAdapter(private val imageUrls: MutableList<String>, private val u
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val imageUrl = imageUrls[position]
-        holder.itemView.setOnLongClickListener {
-            itemClick?.onClick(it, position)
-            true
-        }
+//        holder.itemView.setOnLongClickListener {
+//            itemClick?.onClick(it, position)
+//            true
+//        }
 
         holder.imageView.load(imageUrl) {
             placeholder(R.drawable.placeholder)

@@ -9,6 +9,7 @@
         android:id="@+id/tv_match_time_and_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="2024년 10월 31일(목) 18:00 - 대전한화생명이글스파크"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"

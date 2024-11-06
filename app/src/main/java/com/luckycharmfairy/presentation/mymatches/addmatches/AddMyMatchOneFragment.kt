@@ -276,7 +276,7 @@ class AddMyMatchOneFragment : Fragment() {
         feelingButton1Background = binding.viewHappyBackground
         feelingButton2Background = binding.viewLovelyBackground
         feelingButton3Background = binding.viewSosoBackground
-        feelingButton4Background = binding.viewSnowyBackground
+        feelingButton4Background = binding.viewSadBackground
         feelingButton5Background = binding.viewAngryBackground
         feelingButtonBackgroundList = listOf(feelingButton1Background, feelingButton2Background, feelingButton3Background,
                 feelingButton4Background, feelingButton5Background)

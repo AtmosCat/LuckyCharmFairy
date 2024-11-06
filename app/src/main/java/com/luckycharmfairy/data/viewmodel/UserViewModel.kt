@@ -276,7 +276,11 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     fun addNewMatch(content: String) {
         viewModelScope.launch {
             runCatching {
-                _temporaryMatchData.value?.photos = _temporaryImageUrls.value!!
+                if (_temporaryImageUrls.value.isNullOrEmpty()) {
+                    _temporaryMatchData.value?.photos = mutableListOf<String>()
+                } else {
+                    _temporaryMatchData.value?.photos = _temporaryImageUrls.value!!
+                }
                 _temporaryMatchData.value?.content = content
                 val newMatch = _temporaryMatchData.value
                 db.collection("user")

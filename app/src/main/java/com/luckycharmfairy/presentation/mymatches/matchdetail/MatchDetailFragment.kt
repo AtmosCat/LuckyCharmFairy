@@ -79,8 +79,13 @@ class MatchDetailFragment : Fragment() {
 
         val viewPager = view.findViewById<ViewPager2>(R.id.viewpager_match_detail)
 
-        val viewPagerAdapter = ViewPagerAdapter(clickedMatch.photos, userViewModel)
-        viewPager.adapter = viewPagerAdapter
+        if (clickedMatch.photos.size != 0) {
+            binding.ivCamera.visibility = View.GONE
+            val viewPagerAdapter = ViewPagerAdapter(clickedMatch.photos, userViewModel)
+            viewPager.adapter = viewPagerAdapter
+        } else {
+            binding.ivCamera.visibility = View.VISIBLE
+        }
 
         viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
