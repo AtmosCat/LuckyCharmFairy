@@ -1,13 +1,16 @@
 package com.luckycharmfairy.presentation.mymatches.matchdetail
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -22,6 +25,7 @@ import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMatchDetailBinding
 import com.luckycharmfairy.presentation.mymatches.addmatches.ViewPagerAdapter
+import com.luckycharmfairy.presentation.mymatches.editmatch.EditMyMatchOneFragment
 
 private const val ARG_PARAM1 = "param1"
 class MatchDetailFragment : Fragment() {
@@ -41,7 +45,7 @@ class MatchDetailFragment : Fragment() {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
@@ -111,6 +115,15 @@ class MatchDetailFragment : Fragment() {
         binding.tvHomescore.text = clickedMatch.homescore.toString()
         binding.tvAwayscore.text = clickedMatch.awayscore.toString()
         binding.tvResult.text = clickedMatch.result
+        when (clickedMatch.sport) {
+            "야구" -> binding.ivSport.setImageResource(R.drawable.baseball)
+            "남자축구" -> binding.ivSport.setImageResource(R.drawable.football)
+            "남자농구" -> binding.ivSport.setImageResource(R.drawable.basketball)
+            "남자배구" -> binding.ivSport.setImageResource(R.drawable.volleyball)
+            "여자배구" -> binding.ivSport.setImageResource(R.drawable.volleyball)
+            else -> binding.ivSport.visibility = View.GONE
+        }
+
         when (clickedMatch.weather) {
             "sunny" -> binding.ivWeather.setImageResource(R.drawable.weather_sunny)
             "sunny_cloudy" -> binding.ivWeather.setImageResource(R.drawable.weather_sunny_cloudy)
@@ -138,6 +151,57 @@ class MatchDetailFragment : Fragment() {
         }
         binding.tvMvpName.text = clickedMatch.mvp
         binding.tvContent.text = clickedMatch.content
+
+        binding.btnMenu.setOnClickListener { view ->
+            val popupMenu = PopupMenu(requireContext(), view)
+            popupMenu.menuInflater.inflate(R.menu.popup_menu_mine, popupMenu.menu)
+            popupMenu.setOnMenuItemClickListener { item: MenuItem ->
+                when (item.itemId) {
+                    R.id.action_edit -> {
+                        val dataToSend = clickedMatch.id
+                        requireActivity().supportFragmentManager.beginTransaction().apply {
+                            hide(this@MatchDetailFragment)
+                            add(R.id.main_frame, EditMyMatchOneFragment())
+                            addToBackStack(null)
+                            commit()
+                        }
+                        true
+                    }
+                    R.id.action_delete -> {
+                        AlertDialog.Builder(requireContext())
+                            .setTitle("게시글 삭제하기")
+                            .setMessage("게시글을 삭제하시겠습니까?")
+                            .setPositiveButton("삭제") { dialog, _ ->
+                                postViewModel.deletePost(clickedItem.id)
+                                if (postViewModel.filteredPosts.value.isNullOrEmpty()) {
+                                    val newItems = postViewModel.allPosts.value!!.sortedBy { it.timestamp }
+                                    CommunityHomeAdapter().updateData(newItems)
+                                } else {
+                                    val newAllItems = postViewModel.allPosts.value!!.sortedBy { it.timestamp }
+                                    CommunityHomeAdapter().updateData(newAllItems)
+                                    val newFilteredItems = postViewModel.filteredPosts.value!!.sortedBy { it.timestamp }
+                                    PostListAdapter().updateData(newFilteredItems)
+                                }
+
+                                userViewModel.deleteMyPost(currentUser.email, clickedItem)
+                                Toast.makeText(this.requireContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                                dialog.dismiss()
+                                requireActivity().supportFragmentManager.popBackStack()
+                            }
+                            .setNegativeButton("취소") { dialog, which ->
+                                dialog.dismiss()
+                            }
+                            .show()
+                        true
+                    }
+                    else -> {
+                        false
+                    }
+                }
+            }
+            popupMenu.show()
+        }
+
 
     }
 

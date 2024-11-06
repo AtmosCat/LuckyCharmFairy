@@ -9,7 +9,8 @@
         android:id="@+id/tv_match_time_and_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="12dp"
+        style="@style/textStyle_subheading"
         android:text="2024년 10월 31일(목) 18:00 - 대전한화생명이글스파크"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,12 +33,12 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.33" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_0.5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_0.5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5"  />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_0.66"
@@ -96,6 +97,17 @@
         app:layout_constraintEnd_toStartOf="@+id/tv_score_colone"
         app:layout_constraintTop_toTopOf="@+id/view_hometeam"
         app:layout_constraintBottom_toBottomOf="@+id/view_hometeam"
+        />
+
+    <ImageView
+        android:id="@+id/iv_sport"
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:src="@drawable/baseball"
+        app:layout_constraintStart_toStartOf="@+id/tv_homescore"
+        app:layout_constraintEnd_toEndOf="@+id/tv_awayscore"
+        app:layout_constraintTop_toBottomOf="@+id/tv_homescore"
+        app:layout_constraintBottom_toBottomOf="parent"
         />
 
     <TextView

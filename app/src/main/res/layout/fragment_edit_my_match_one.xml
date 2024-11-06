@@ -1,0 +1,726 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/main_frame"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.mymatches.editmatch.EditMyMatchOneFragment">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:backgroundTint="@color/background"
+        android:elevation="1dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@id/btn_next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <ImageView
+            android:id="@+id/btn_close"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:src="@drawable/close"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="20dp"
+            app:tint="@color/main_medium_gray" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="수정하기"
+            style="@style/textStyle_title"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/line1"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/main_dark_gray"
+            android:layout_marginTop="19dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/line1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                <TextView
+                    android:id="@+id/tv_sports"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="종목"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/guideline_75dp"
+                    android:layout_marginTop="30dp"
+                    />
+
+                <Spinner
+                    android:id="@+id/spinner_sports"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintTop_toTopOf="@+id/tv_sports"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_sports"
+                    app:layout_constraintStart_toEndOf="@+id/guideline_75dp"
+                    android:layout_marginStart="10dp"
+                    />
+
+                <TextView
+                    android:id="@+id/btn_add_sports"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:text="종목 추가"
+                    android:background="@drawable/bg_round_border_big"
+                    android:backgroundTint="@color/main_light_gray"
+                    android:paddingVertical="5dp"
+                    android:paddingHorizontal="8dp"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintBottom_toBottomOf="@+id/spinner_sports"
+                    app:layout_constraintStart_toEndOf="@+id/spinner_sports"
+                    app:layout_constraintTop_toTopOf="@+id/spinner_sports"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    style="@style/textStyle_subheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="날짜"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_sports"
+                    app:layout_constraintEnd_toStartOf="@id/guideline_75dp" />
+
+                <TextView
+                    android:id="@+id/btn_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="2024.10.31(목)"
+                    android:background="@drawable/bg_round_border_big"
+                    android:backgroundTint="@color/main_light_gray"
+                    android:paddingVertical="5dp"
+                    android:paddingHorizontal="8dp"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_date"
+                    app:layout_constraintStart_toEndOf="@+id/guideline_75dp"
+                    app:layout_constraintTop_toTopOf="@+id/tv_date"
+                    />
+
+                <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                    android:id="@+id/calendar_matchday_selector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    app:mcv_selectionColor="@color/main_mint"
+                    android:elevation="4dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:background="@drawable/bg_round_border_medium"
+                    android:backgroundTint="@color/main_light_gray"
+                    android:visibility="gone"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    style="@style/textStyle_subheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="시각"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_date"
+                    app:layout_constraintEnd_toStartOf="@id/guideline_75dp" />
+
+                <TextView
+                    android:id="@+id/btn_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="18:00"
+                    android:background="@drawable/bg_round_border_big"
+                    android:backgroundTint="@color/main_light_gray"
+                    android:paddingVertical="5dp"
+                    android:paddingHorizontal="8dp"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_time"
+                    app:layout_constraintStart_toEndOf="@+id/guideline_75dp"
+                    app:layout_constraintTop_toTopOf="@+id/tv_time"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="장소"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_time"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="30dp"
+                    app:layout_constraintEnd_toStartOf="@id/guideline_75dp"
+                    />
+
+                <EditText
+                    android:id="@+id/et_location"
+                    style="@style/textStyle_detail"
+                    android:textColor="@color/main_dark_gray"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:hint="장소를 입력해주세요."
+                    android:maxLines="2"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_location"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline_75dp"
+                    app:layout_constraintTop_toTopOf="@+id/tv_location" />
+
+                <TextView
+                    android:id="@+id/tv_weather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="날씨"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_location"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="30dp"
+                    app:layout_constraintEnd_toStartOf="@id/guideline_75dp"
+                    />
+
+                <View
+                    android:id="@+id/view_sunny_background"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/bg_weather"
+                    app:layout_constraintTop_toTopOf="@+id/tv_weather"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_weather"
+                    app:layout_constraintStart_toEndOf="@+id/guideline_75dp"
+                    android:layout_marginStart="10dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/btn_sunny"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:elevation="2dp"
+                    android:src="@drawable/weather_sunny"
+                    app:layout_constraintTop_toTopOf="@+id/view_sunny_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_sunny_background"
+                    app:layout_constraintStart_toStartOf="@+id/view_sunny_background"
+                    app:layout_constraintEnd_toEndOf="@+id/view_sunny_background"
+                    />
+
+                <View
+                    android:id="@+id/view_sunny_cloudy_background"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/bg_weather"
+                    app:layout_constraintTop_toTopOf="@+id/view_sunny_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_sunny_background"
+                    app:layout_constraintStart_toEndOf="@+id/view_sunny_background"
+                    android:layout_marginStart="15dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/btn_sunny_cloudy"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:elevation="2dp"
+                    android:src="@drawable/weather_sunny_cloudy"
+                    app:layout_constraintTop_toTopOf="@+id/view_sunny_cloudy_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_sunny_cloudy_background"
+                    app:layout_constraintStart_toStartOf="@+id/view_sunny_cloudy_background"
+                    app:layout_constraintEnd_toEndOf="@+id/view_sunny_cloudy_background"
+                    />
+
+                <View
+                    android:id="@+id/view_cloudy_background"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/bg_weather"
+                    app:layout_constraintTop_toTopOf="@+id/view_sunny_cloudy_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_sunny_cloudy_background"
+                    app:layout_constraintStart_toEndOf="@+id/view_sunny_cloudy_background"
+                    android:layout_marginStart="15dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/btn_cloudy"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:elevation="2dp"
+                    android:src="@drawable/weather_cloudy"
+                    app:layout_constraintTop_toTopOf="@+id/view_cloudy_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_cloudy_background"
+                    app:layout_constraintStart_toStartOf="@+id/view_cloudy_background"
+                    app:layout_constraintEnd_toEndOf="@+id/view_cloudy_background"
+                    />
+
+                <View
+                    android:id="@+id/view_rainy_background"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/bg_weather"
+                    app:layout_constraintTop_toTopOf="@+id/view_cloudy_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_cloudy_background"
+                    app:layout_constraintStart_toEndOf="@+id/view_cloudy_background"
+                    android:layout_marginStart="15dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/btn_rainy"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:elevation="2dp"
+                    android:src="@drawable/weather_rainy"
+                    app:layout_constraintTop_toTopOf="@+id/view_rainy_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_rainy_background"
+                    app:layout_constraintStart_toStartOf="@+id/view_rainy_background"
+                    app:layout_constraintEnd_toEndOf="@+id/view_rainy_background"
+                    />
+
+                <View
+                    android:id="@+id/view_snowy_background"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/bg_weather"
+                    app:layout_constraintTop_toTopOf="@+id/view_rainy_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_rainy_background"
+                    app:layout_constraintStart_toEndOf="@+id/view_rainy_background"
+                    android:layout_marginStart="15dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/btn_snowy"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:elevation="2dp"
+                    android:src="@drawable/weather_snowy"
+                    app:layout_constraintTop_toTopOf="@+id/view_snowy_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_snowy_background"
+                    app:layout_constraintStart_toStartOf="@+id/view_snowy_background"
+                    app:layout_constraintEnd_toEndOf="@+id/view_snowy_background"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_feeling"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="기분"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_weather"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="30dp"
+                    app:layout_constraintEnd_toStartOf="@id/guideline_75dp"
+                    />
+
+                <View
+                    android:id="@+id/view_happy_background"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/bg_weather"
+                    app:layout_constraintTop_toTopOf="@+id/tv_feeling"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_feeling"
+                    app:layout_constraintStart_toEndOf="@+id/guideline_75dp"
+                    android:layout_marginStart="10dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/btn_happy"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:elevation="1dp"
+                    android:src="@drawable/feeling_happy"
+                    app:layout_constraintTop_toTopOf="@+id/view_happy_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_happy_background"
+                    app:layout_constraintStart_toStartOf="@+id/view_happy_background"
+                    app:layout_constraintEnd_toEndOf="@+id/view_happy_background"
+                    />
+
+                <View
+                    android:id="@+id/view_lovely_background"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/bg_weather"
+                    app:layout_constraintTop_toTopOf="@+id/view_happy_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_happy_background"
+                    app:layout_constraintStart_toEndOf="@+id/view_happy_background"
+                    android:layout_marginStart="15dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/btn_lovely"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:elevation="1dp"
+                    android:src="@drawable/feeling_lovely"
+                    app:layout_constraintTop_toTopOf="@+id/view_lovely_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_lovely_background"
+                    app:layout_constraintStart_toStartOf="@+id/view_lovely_background"
+                    app:layout_constraintEnd_toEndOf="@+id/view_lovely_background"
+                    />
+
+                <View
+                    android:id="@+id/view_soso_background"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/bg_weather"
+                    app:layout_constraintTop_toTopOf="@+id/view_lovely_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_lovely_background"
+                    app:layout_constraintStart_toEndOf="@+id/view_lovely_background"
+                    android:layout_marginStart="15dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/btn_soso"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:elevation="1dp"
+                    android:src="@drawable/feeling_soso"
+                    app:layout_constraintTop_toTopOf="@+id/view_soso_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_soso_background"
+                    app:layout_constraintStart_toStartOf="@+id/view_soso_background"
+                    app:layout_constraintEnd_toEndOf="@+id/view_soso_background"
+                    />
+
+                <View
+                    android:id="@+id/view_sad_background"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/bg_weather"
+                    app:layout_constraintTop_toTopOf="@+id/view_soso_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_soso_background"
+                    app:layout_constraintStart_toEndOf="@+id/view_soso_background"
+                    android:layout_marginStart="15dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/btn_sad"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:elevation="1dp"
+                    android:src="@drawable/feeling_sad"
+                    app:layout_constraintTop_toTopOf="@+id/view_sad_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_sad_background"
+                    app:layout_constraintStart_toStartOf="@+id/view_sad_background"
+                    app:layout_constraintEnd_toEndOf="@+id/view_sad_background"
+                    />
+
+                <View
+                    android:id="@+id/view_angry_background"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/bg_weather"
+                    app:layout_constraintTop_toTopOf="@+id/view_sad_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_sad_background"
+                    app:layout_constraintStart_toEndOf="@+id/view_sad_background"
+                    android:layout_marginStart="15dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/btn_angry"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:elevation="1dp"
+                    android:src="@drawable/feeling_angry"
+                    app:layout_constraintTop_toTopOf="@+id/view_angry_background"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_angry_background"
+                    app:layout_constraintStart_toStartOf="@+id/view_angry_background"
+                    app:layout_constraintEnd_toEndOf="@+id/view_angry_background"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_myteam"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="응원한 팀"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_feeling"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="30dp"
+                    app:layout_constraintEnd_toStartOf="@id/guideline_75dp"
+                    />
+
+                <Spinner
+                    android:id="@+id/spinner_myteam"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_myteam"
+                    app:layout_constraintStart_toEndOf="@+id/guideline_75dp"
+                    app:layout_constraintTop_toTopOf="@+id/tv_myteam" />
+
+                <TextView
+                    android:id="@+id/tv_teams"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="팀 선택"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_myteam"
+                    android:layout_marginTop="30dp"
+                    app:layout_constraintEnd_toStartOf="@id/guideline_75dp"
+                    />
+
+                <Button
+                    android:id="@+id/btn_hometeam"
+                    style="@style/textStyle_subheading"
+                    android:layout_width="0dp"
+                    android:maxLines="1"
+                    android:layout_height="25dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@drawable/bg_round_border_big"
+                    android:backgroundTint="@color/main_light_gray"
+                    android:maxWidth="200dp"
+                    android:text="홈"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_teams"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/guideline_75dp"
+                    app:layout_constraintTop_toTopOf="@+id/tv_teams" />
+
+                <Button
+                    android:id="@+id/btn_awayteam"
+                    style="@style/textStyle_subheading"
+                    android:layout_width="0dp"
+                    android:maxLines="1"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_round_border_big"
+                    android:backgroundTint="@color/main_light_gray"
+                    android:text="어웨이"
+                    app:layout_constraintEnd_toEndOf="@+id/btn_hometeam"
+                    app:layout_constraintStart_toStartOf="@+id/btn_hometeam"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_hometeam" />
+
+                <EditText
+                    android:id="@+id/et_home_team"
+                    style="@style/textStyle_subheading"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/bg_round_border_big"
+                    android:backgroundTint="@color/main_light_gray"
+                    android:gravity="center"
+                    android:hint="홈"
+                    android:maxLines="1"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_hometeam"
+                    app:layout_constraintEnd_toEndOf="@+id/btn_hometeam"
+                    app:layout_constraintStart_toStartOf="@+id/btn_hometeam"
+                    app:layout_constraintTop_toTopOf="@+id/btn_hometeam" />
+
+                <EditText
+                    android:id="@+id/et_away_team"
+                    android:layout_width="0dp"
+                    android:maxLines="1"
+                    android:layout_height="0dp"
+                    android:hint="어웨이"
+                    android:gravity="center"
+                    style="@style/textStyle_subheading"
+                    android:visibility="gone"
+                    android:background="@drawable/bg_round_border_big"
+                    android:backgroundTint="@color/main_light_gray"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_awayteam"
+                    app:layout_constraintEnd_toEndOf="@+id/btn_awayteam"
+                    app:layout_constraintStart_toStartOf="@+id/btn_awayteam"
+                    app:layout_constraintTop_toTopOf="@+id/btn_awayteam" />
+
+                <TextView
+                    android:id="@+id/tv_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="스코어"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_awayteam"
+                    android:layout_marginTop="30dp"
+                    app:layout_constraintEnd_toStartOf="@id/guideline_75dp"
+                    />
+
+                <EditText
+                    android:id="@+id/et_home_score"
+                    style="@style/textStyle_subheading"
+                    android:textColor="@color/main_dark_gray"
+                    android:layout_width="0dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/bg_round_border_big"
+                    android:backgroundTint="@color/main_light_gray"
+                    android:gravity="center"
+                    android:hint="홈"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_score"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_colone"
+                    app:layout_constraintStart_toStartOf="@+id/btn_hometeam"
+                    app:layout_constraintTop_toTopOf="@+id/tv_score" />
+
+                <TextView
+                    android:id="@+id/tv_colone"
+                    style="@style/textStyle_subheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  :  "
+                    app:layout_constraintBottom_toBottomOf="@+id/et_home_score"
+                    app:layout_constraintEnd_toEndOf="@+id/btn_awayteam"
+                    app:layout_constraintStart_toStartOf="@+id/btn_awayteam"
+                    app:layout_constraintTop_toTopOf="@+id/et_home_score" />
+
+                <EditText
+                    android:id="@+id/et_away_score"
+                    style="@style/textStyle_subheading"
+                    android:textColor="@color/main_dark_gray"
+                    android:layout_width="0dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/bg_round_border_big"
+                    android:backgroundTint="@color/main_light_gray"
+                    android:gravity="center"
+                    android:hint="어웨이"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_colone"
+                    app:layout_constraintEnd_toEndOf="@+id/btn_awayteam"
+                    app:layout_constraintStart_toEndOf="@+id/tv_colone"
+                    app:layout_constraintTop_toTopOf="@+id/tv_colone" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview_teams"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:background="@drawable/bg_round_border_medium"
+                    android:backgroundTint="@color/main_light_gray"
+                    android:elevation="3dp"
+                    android:visibility="gone"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="결과"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_score"
+                    android:layout_marginTop="30dp"
+                    app:layout_constraintEnd_toStartOf="@id/guideline_75dp"
+                    />
+
+                <Spinner
+                    android:id="@+id/spinner_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@+id/tv_result"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_result"
+                    app:layout_constraintStart_toEndOf="@+id/guideline_75dp"
+                    android:layout_marginStart="10dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_mvp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MVP"
+                    android:gravity="center"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_result"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="30dp"
+                    app:layout_constraintEnd_toStartOf="@id/guideline_75dp"
+                    />
+
+                <EditText
+                    android:id="@+id/et_mvp"
+                    style="@style/textStyle_detail"
+                    android:textColor="@color/main_dark_gray"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:maxLines="1"
+                    android:hint="MVP를 입력하세요."
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_mvp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_mvp"
+                    app:layout_constraintStart_toEndOf="@+id/guideline_75dp"/>
+
+
+                <View
+                    android:id="@+id/guideline_75dp"
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/main_dark_gray"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="75dp"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_0.5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:background="@drawable/bg_round_border_small"
+        android:backgroundTint="@color/main_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="10dp"
+        android:text="다음"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:fontFamily="@font/nanum_square_ac_regular"
+        />
+
+    <View
+        android:id="@+id/tab_circle1"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="15dp"
+        android:elevation="2dp"
+        android:background="@drawable/bg_round_border_big"
+        android:backgroundTint="@color/main_medium_gray"
+        app:layout_constraintEnd_toStartOf="@id/guideline_0.5"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <View
+        android:id="@+id/tab_circle2"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:elevation="2dp"
+        android:background="@drawable/bg_round_border_big"
+        android:backgroundTint="@color/main_gray"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintStart_toEndOf="@id/guideline_0.5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

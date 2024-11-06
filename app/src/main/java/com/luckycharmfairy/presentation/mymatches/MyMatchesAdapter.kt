@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.data.viewmodel.UserViewModel
+import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.RecyclerviewMatchesBinding
 
 class MyMatchesAdapter(private val userViewModel: UserViewModel) :
@@ -61,6 +62,7 @@ class MyMatchesAdapter(private val userViewModel: UserViewModel) :
         val result = binding.tvResult
         val homestar = binding.ivHomeStar
         val awaystar = binding.ivAwayStar
+        val sport = binding.ivSport
 
         fun bind(item: Match) {
             timeAndLocation.text = "${item.year}년 ${item.month}월 ${item.date}일 (${item.day}) - ${item.location}"
@@ -80,6 +82,14 @@ class MyMatchesAdapter(private val userViewModel: UserViewModel) :
             } else {
                 awaystar.visibility = View.GONE
                 homestar.visibility = View.GONE
+            }
+            when (item.sport) {
+                "야구" -> sport.setImageResource(R.drawable.baseball)
+                "남자축구" -> sport.setImageResource(R.drawable.football)
+                "남자농구" -> sport.setImageResource(R.drawable.basketball)
+                "남자배구" -> sport.setImageResource(R.drawable.volleyball)
+                "여자배구" -> sport.setImageResource(R.drawable.volleyball)
+                else -> sport.visibility = View.GONE
             }
         }
         private fun setTeamColor(team: Button, teamcolor: String) {
