@@ -339,26 +339,6 @@ class AddMyMatchOneFragment : Fragment() {
             }
         }
 
-        val spinnerMvp = listOf("류현진", "문동주", "김서현", "노시환", "페라자", "직접 입력")
-        val spinnerMvpAdapter =
-            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerMvp)
-        spinnerMvpAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
-        binding.spinnerMvp.adapter = spinnerMvpAdapter
-        binding.spinnerMvp.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                selectedMvp = spinnerMvp[position]
-                if (selectedMvp == "직접 입력") {
-                    binding.etMvp.visibility = View.VISIBLE
-                } else {
-                    binding.etMvp.visibility = View.GONE
-                    binding.etMvp.setText("")
-                }
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                selectedResult = spinnerResult[0]
-            }
-        }
-
         binding.btnNext.setOnClickListener{
             selectedLocation = binding.etLocation.text.toString()
 
@@ -380,7 +360,9 @@ class AddMyMatchOneFragment : Fragment() {
             if (selectedAwayTeam == "직접 입력") {
                 selectedAwayTeam = binding.etAwayTeam.text.toString()
             }
-            if (selectedMvp == "직접 입력") {
+            if (binding.etMvp.text.isNullOrEmpty()) {
+                selectedMvp = ""
+            } else {
                 selectedMvp = binding.etMvp.text.toString()
             }
             val temporaryMatchData = Match(
