@@ -31,6 +31,9 @@ class MySportsAdapter : ListAdapter<String, MySportsAdapter.ViewHolder>(object :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
+        if (position == 0) {
+            holder.btnDelete.visibility = View.GONE
+        }
 
         holder.btnDelete.setOnClickListener {
             itemClick?.onClick(it, position)
@@ -41,7 +44,7 @@ class MySportsAdapter : ListAdapter<String, MySportsAdapter.ViewHolder>(object :
         var sport = binding.tvSportName
         var btnDelete = binding.btnDeleteMySport
         fun bind(item: String) {
-            sport.text = item
+            sport.text = "·"+item
         }
     }
 

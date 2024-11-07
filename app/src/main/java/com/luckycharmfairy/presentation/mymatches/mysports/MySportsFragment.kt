@@ -74,11 +74,13 @@ class MySportsFragment : Fragment() {
         val addSportDialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_my_sport, null)
         val etNewSport = addSportDialogView.findViewById<EditText>(R.id.et_new_sport)
 
-        if (addSportDialogView.parent != null) {
-            (addSportDialogView.parent as ViewGroup).removeView(addSportDialogView)
-        }
+
         binding.btnAddMySport.setOnClickListener{
-            Builder(requireContext())
+            if (addSportDialogView.parent != null) {
+                (addSportDialogView.parent as ViewGroup).removeView(addSportDialogView)
+            }
+            etNewSport.setText("")
+            AlertDialog.Builder(requireContext())
                 .setView(addSportDialogView)
                 .setPositiveButton("확인") { dialog, _ ->
                     val newSport = etNewSport.text.toString()
@@ -96,7 +98,7 @@ class MySportsFragment : Fragment() {
 
         mySportsAdapter.itemClick = object : MySportsAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
-                Builder(requireContext())
+                AlertDialog.Builder(requireContext())
                     .setTitle("삭제")
                     .setMessage("종목을 삭제할까요?")
                     .setPositiveButton("확인") { dialog, _ ->
