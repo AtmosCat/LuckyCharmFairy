@@ -76,7 +76,7 @@ class MyMatchesFragment : Fragment() {
         binding.recyclerviewMatchRecords.adapter = myMatchesAdapter
         binding.recyclerviewMatchRecords.layoutManager = LinearLayoutManager(requireContext())
 
-        val spinnerItems = listOf("전체 종목", "야구", "남자축구", "남자농구", "여자배구", "남자배구")
+        val spinnerItems = userViewModel.currentUser.value!!.mysports
         val spinnerAdapter =
             ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerItems)
         spinnerAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)

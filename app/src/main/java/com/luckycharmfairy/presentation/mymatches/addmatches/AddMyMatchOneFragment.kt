@@ -38,6 +38,7 @@ import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentAddMyMatchOneBinding
 import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
+import com.luckycharmfairy.presentation.mymatches.mysports.MySportsFragment
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import java.util.Calendar
@@ -166,13 +167,14 @@ class AddMyMatchOneFragment : Fragment() {
             }
         }
 
-//        val spinnerSports = currentUser.mysports
-        val spinnerSports = mutableListOf("야구","남자축구","남자농구","남자배구","여자배구")
-//        if (spinnerSports.isEmpty()) {
-//            spinnerSports.add("종목을 추가해주세요")
-//        }
+        val spinnerSports = currentUser.mysports
         binding.btnAddSports.setOnClickListener{
-            // MY종목 관리 프래그먼트 이동
+            requireActivity().supportFragmentManager.beginTransaction().apply {
+                hide(this@AddMyMatchOneFragment)
+                add(R.id.main_frame, MySportsFragment())
+                addToBackStack(null)
+                commit()
+            }
         }
         val spinnerSportsAdapter =
             ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerSports)

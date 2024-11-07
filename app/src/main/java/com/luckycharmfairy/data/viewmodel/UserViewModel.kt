@@ -353,6 +353,20 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun editMySport(mySports: MutableList<String>) {
+        viewModelScope.launch {
+            runCatching {
+                currentUser.value!!.mysports = mySports
+                db.collection("user")
+                    .document(currentUser.value!!.email)
+                    .set(currentUser.value!!)
+            }.onFailure {
+                Log.e(TAG, "editMySport() failed! : ${it.message}")
+                handleException(it)
+            }
+        }
+    }
+
     fun getBlockedUsers(){
         db.collection("user")
             .document(currentUser.value!!.email)
