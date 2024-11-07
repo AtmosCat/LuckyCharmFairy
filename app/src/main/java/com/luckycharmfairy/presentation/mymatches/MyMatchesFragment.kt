@@ -95,6 +95,7 @@ class MyMatchesFragment : Fragment() {
                     myMatchesAdapter.submitList(data)
                     todayMatches = data
                 }
+                addCalendarDot()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 selectedSport = spinnerItems[0]
@@ -116,23 +117,7 @@ class MyMatchesFragment : Fragment() {
 //        val recyclerView = binding.calendarMonthlyMatches.getChildAt(0) as RecyclerView
 //        recyclerView.addItemDecoration(VerticalSpacingItemDecoration(spacingInPixels))
 
-        // 직관한 날짜 작은 점 표시
-        val eventDays = mutableListOf<CalendarDay>()
-        userViewModel.getSelectedMonthMatchdays(currentUserEmail, selectedSport, selectedYear, selectedMonth)
-        userViewModel.selectedMonthMatchdays.observe(viewLifecycleOwner) { data ->
-            val selectedMonthMatchdays = data
-
-            if (selectedMonthMatchdays != null && selectedMonthMatchdays.size != 0) {
-                selectedMonthMatchdays.forEach {
-                    eventDays += (CalendarDay.from(selectedYear.toInt(), selectedMonth.toInt()-1, it.toInt()))
-                }
-            }
-            var matchdaysCount = selectedMonthMatchdays?.size
-            if (matchdaysCount == null) matchdaysCount == 0
-            binding.tvMonthlyMatches.text = "이번 달에 ${selectedSport} 경기를 ${matchdaysCount}일 직관했어요!"
-            val eventDecorator = EventDecorator(eventDays)
-            binding.calendarMonthlyMatches.addDecorators(eventDecorator)
-        }
+        addCalendarDot()
 
         binding.calendarMonthlyMatches.setSelectedDate(CalendarDay.from(Calendar.getInstance()))
         binding.calendarMonthlyMatches.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
@@ -159,6 +144,8 @@ class MyMatchesFragment : Fragment() {
                 userViewModel.getSelectedDateMatches(currentUserEmail, selectedSport, selectedYear, selectedMonth, selectedDate)
                 userViewModel.selectedDayMatches.observe(viewLifecycleOwner) { data ->
                     myMatchesAdapter.submitList(data)
+                    if (data.size == 0) binding.tvNoticeNoMatches.visibility = View.VISIBLE
+                    else binding.tvNoticeNoMatches.visibility = View.GONE
                     todayMatches = data
                 }
             }
@@ -190,6 +177,28 @@ class MyMatchesFragment : Fragment() {
         }
 
     }
+
+    private fun addCalendarDot() {
+        userViewModel.getSelectedMonthMatchdays(currentUserEmail, selectedSport, selectedYear, selectedMonth)
+        userViewModel.selectedMonthMatchdays.observe(viewLifecycleOwner) { data ->
+            val selectedMonthMatchdays = data
+
+            val eventDays = mutableListOf<CalendarDay>()
+            selectedMonthMatchdays?.forEach {
+                eventDays += (CalendarDay.from(selectedYear.toInt(), selectedMonth.toInt()-1, it.toInt()))
+            }
+            val matchdaysCount = selectedMonthMatchdays?.size
+            binding.tvMonthlyMatches.text = "이번 달에 ${selectedSport} 경기를 ${matchdaysCount}일 직관했어요!"
+            val eventDecorator = EventDecorator(eventDays)
+            if (eventDays.size != 0) {
+                binding.calendarMonthlyMatches.removeDecorators()
+                binding.calendarMonthlyMatches.addDecorators(eventDecorator)
+            } else {
+                binding.calendarMonthlyMatches.removeDecorators()
+            }
+        }
+    }
+
     class VerticalSpacingItemDecoration(private val spacing: Int) : RecyclerView.ItemDecoration() {
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
             outRect.bottom = spacing // 아래쪽 간격 설정
