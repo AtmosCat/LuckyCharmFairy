@@ -83,5 +83,8 @@ dependencies {
     implementation (libs.firebase.bom.v3210)
     implementation (libs.com.google.firebase.firebase.auth.ktx)
     implementation (libs.play.services.auth.v2050)
+
+    // 그래프
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
 

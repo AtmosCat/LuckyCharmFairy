@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.luckycharmfairy.presentation.mymatches.MyMatchesFragment"
+    tools:context="com.luckycharmfairy.presentation.mymatches.matchreport.MatchReportFragment"
     android:background="@color/background">
 
 
@@ -20,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
-    
+
     <ImageView
         android:id="@+id/iv_ball"
         android:layout_width="0dp"
@@ -32,18 +31,6 @@
         app:layout_constraintStart_toEndOf="@+id/tv_app_name"
         android:src="@drawable/baseball"
         app:tint="@color/main_mint" />
-
-    <Spinner
-        android:id="@+id/spinner_sport"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/textStyle_subtitle"
-        android:gravity="right"
-        app:layout_constraintTop_toTopOf="@+id/tv_app_name"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_app_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="20dp"
-        />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_0.5"
@@ -57,10 +44,9 @@
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:background="@drawable/bg_round_border_small"
-        android:backgroundTint="@color/main_mint"
+        android:backgroundTint="@color/main_light_gray"
         android:text="직관 기록"
         style="@style/textStyle_subtitle"
-        android:textColor="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/guideline_0.5"
         app:layout_constraintTop_toBottomOf="@+id/tv_app_name"
         android:layout_marginTop="35dp"
@@ -72,9 +58,10 @@
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:background="@drawable/bg_round_border_small"
-        android:backgroundTint="@color/main_light_gray"
+        android:backgroundTint="@color/main_mint"
         android:text="직관 리포트"
         style="@style/textStyle_subtitle"
+        android:textColor="@color/white"
         app:layout_constraintStart_toEndOf="@+id/guideline_0.5"
         app:layout_constraintTop_toTopOf="@+id/btn_match_record"
         android:layout_marginStart="5dp"
@@ -83,92 +70,53 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintTop_toBottomOf="@+id/btn_match_record"
         app:layout_constraintBottom_toTopOf="@+id/view_tab_background"
         >
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
 
-    <TextView
-        android:id="@+id/tv_monthly_matches"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="이번 달에 OO경기를 O일 직관했어요!"
-        style="@style/textStyle_subheading"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/calendar_monthly_matches"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="10dp"
-        />
+            <Spinner
+                android:id="@+id/spinner_sport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@+id/spinner_my_team"
+                app:layout_constraintBottom_toBottomOf="@+id/spinner_my_team"
+                app:layout_constraintEnd_toStartOf="@+id/spinner_my_team"
+                android:layout_marginEnd="10dp"
+                />
 
-    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-        android:id="@+id/calendar_monthly_matches"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/bg_round_border_medium"
-        android:backgroundTint="@color/main_light_gray"
-        app:mcv_selectionColor="@color/main_mint"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_monthly_matches"
-        app:layout_constraintWidth_percent="0.85"
-        android:paddingVertical="0dp"/>
+            <Spinner
+                android:id="@+id/spinner_my_team"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@+id/spinner_period"
+                app:layout_constraintBottom_toBottomOf="@+id/spinner_period"
+                app:layout_constraintEnd_toStartOf="@+id/spinner_period"
+                android:layout_marginEnd="10dp"
+                />
 
-    <TextView
-        android:id="@+id/tv_match_record_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="직관 기록"
-        style="@style/textStyle_subtitle"
-        app:layout_constraintTop_toBottomOf="@+id/calendar_monthly_matches"
-        app:layout_constraintStart_toStartOf="@+id/calendar_monthly_matches"
-        android:layout_marginTop="30dp"
-        />
+            <Spinner
+                android:id="@+id/spinner_period"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="10dp"
+                />
 
-    <Button
-        android:id="@+id/btn_add_match_record"
-        android:layout_width="80dp"
-        android:layout_height="30dp"
-        android:background="@drawable/bg_round_border_small"
-        android:backgroundTint="@color/main_mint"
-        android:text="추가하기"
-        style="@style/textStyle_subheading"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toTopOf="@+id/tv_match_record_title"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_match_record_title"
-        app:layout_constraintEnd_toEndOf="@+id/calendar_monthly_matches"
-        />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_match_records"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/tv_match_record_title"
-        app:layout_constraintStart_toStartOf="@id/calendar_monthly_matches"
-        app:layout_constraintEnd_toEndOf="@id/calendar_monthly_matches"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="30dp"
-        />
-
-    <TextView
-        android:id="@+id/tv_notice_no_matches"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="직관한 경기가 없습니다."
-        style="@style/textStyle_subheading"
-        app:layout_constraintEnd_toEndOf="@+id/recyclerview_match_records"
-        app:layout_constraintStart_toStartOf="@+id/recyclerview_match_records"
-        app:layout_constraintTop_toTopOf="@+id/recyclerview_match_records" />
+            <com.github.mikephil.charting.charts.BarChart
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@+id/spinner_period"
+                />
 
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
     <View
         android:layout_width="match_parent"
