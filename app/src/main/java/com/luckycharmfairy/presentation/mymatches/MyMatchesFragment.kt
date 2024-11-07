@@ -172,7 +172,7 @@ class MyMatchesFragment : Fragment() {
                 val matchDetail = MatchDetailFragment.newInstance(dataToSend)
                 requireActivity().supportFragmentManager.beginTransaction().apply {
                     hide(this@MyMatchesFragment)
-                    add(R.id.main_frame, matchDetail, "MatchDetailFragment")
+                    add(R.id.main_frame, matchDetail)
                     addToBackStack(null)
                     commit()
                 }

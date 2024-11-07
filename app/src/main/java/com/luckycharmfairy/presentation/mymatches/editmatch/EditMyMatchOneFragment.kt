@@ -67,6 +67,8 @@ class EditMyMatchOneFragment : Fragment() {
     private var selectedAwayscore = -1
     private var selectedResult = ""
     private var selectedMvp = ""
+    private var selectedPhotos = mutableListOf<String>()
+    private var selectedContent = ""
 
     private var weatherList = listOf(
         "sunny",
@@ -192,6 +194,8 @@ class EditMyMatchOneFragment : Fragment() {
         selectedAwayscore = clickedMatch.awayscore
         selectedResult = clickedMatch.result
         selectedMvp = clickedMatch.mvp
+        selectedPhotos = clickedMatch.photos
+        selectedContent = clickedMatch.content
 
 
         binding.btnClose.setOnClickListener{
@@ -279,9 +283,12 @@ class EditMyMatchOneFragment : Fragment() {
             })
         }
 
+        binding.btnTime.setText(selectedTime)
         binding.btnTime.setOnClickListener{
             showTimePickerDialog()
         }
+
+        binding.etLocation.setText(selectedLocation)
 
         weatherButton1 = binding.btnSunny
         weatherButton2 = binding.btnSunnyCloudy
@@ -299,6 +306,8 @@ class EditMyMatchOneFragment : Fragment() {
         weatherButtonBackgroundList = listOf(weatherButton1Background, weatherButton2Background,
             weatherButton3Background, weatherButton4Background, weatherButton5Background)
 
+        val weatherIndex = weatherList.indexOf(selectedWeather)
+        weatherButtonBackgroundList[weatherIndex].setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.main_medium_gray))
         weatherButtonList.forEach{ weatherClicker(it, weatherButtonList, weatherButtonBackgroundList) }
 
         feelingButton1 = binding.btnHappy
@@ -317,6 +326,8 @@ class EditMyMatchOneFragment : Fragment() {
         feelingButtonBackgroundList = listOf(feelingButton1Background, feelingButton2Background, feelingButton3Background,
             feelingButton4Background, feelingButton5Background)
 
+        val feelingIndex = feelingList.indexOf(selectedFeeling)
+        feelingButtonBackgroundList[feelingIndex].setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.main_medium_gray))
         feelingButtonList.forEach{ feelingClicker(it, feelingButtonList, feelingButtonBackgroundList) }
 
         val spinnerHomeAway = listOf("홈 팀", "어웨이 팀", "없음")
@@ -370,7 +381,6 @@ class EditMyMatchOneFragment : Fragment() {
             binding.btnAwayteam.visibility = View.GONE
             binding.etAwayTeam.visibility = View.VISIBLE
         } else {
-            selectedAwayTeamName = selectedSportTeamNames[position]
             binding.btnAwayteam.visibility = View.VISIBLE
             binding.btnAwayteam.setText(selectedAwayTeamName)
             binding.etAwayTeam.visibility = View.GONE
@@ -388,7 +398,6 @@ class EditMyMatchOneFragment : Fragment() {
                         binding.btnAwayteam.visibility = View.GONE
                         binding.etAwayTeam.visibility = View.VISIBLE
                     } else {
-                        selectedAwayTeamName = selectedSportTeamNames[position]
                         binding.btnAwayteam.visibility = View.VISIBLE
                         binding.btnAwayteam.setText(selectedAwayTeamName)
                         binding.etAwayTeam.visibility = View.GONE
@@ -398,8 +407,8 @@ class EditMyMatchOneFragment : Fragment() {
             }
         }
 
-        binding.etHomeScore.setText(selectedHomescore)
-        binding.etAwayScore.setText(selectedAwayscore)
+        binding.etHomeScore.setText(selectedHomescore.toString())
+        binding.etAwayScore.setText(selectedAwayscore.toString())
         binding.etMvp.setText(selectedMvp)
 
         val spinnerResult = listOf("승리", "패배", "무승부", "경기 취소", "타팀 직관")
@@ -477,10 +486,11 @@ class EditMyMatchOneFragment : Fragment() {
                 result = selectedResult,
                 myteam = selectedMyteam,
                 mvp = selectedMvp,
-                photos = mutableListOf(),
-                content = ""
+                photos = selectedPhotos,
+                content = selectedContent
             )
             userViewModel.saveTemporaryMatchData(temporaryMatchData)
+            val editMyMatchTwoFragment = EditMyMatchTwoFragment.newInstance(clickedMatch.id)
             requireActivity().supportFragmentManager.beginTransaction().apply {
                 setCustomAnimations(
                     R.anim.slide_in_left,
@@ -488,8 +498,8 @@ class EditMyMatchOneFragment : Fragment() {
                     R.anim.slide_out_left,
                     R.anim.slide_out_right
                 )
-                hide(this@AddMyMatchOneFragment)
-                add(R.id.main_frame, AddMyMatchTwoFragment(), "AddMyMatchTwoFragment")
+                hide(this@EditMyMatchOneFragment)
+                add(R.id.main_frame, editMyMatchTwoFragment)
                 addToBackStack(null)
                 commit()
             }

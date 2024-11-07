@@ -299,6 +299,47 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun editMatch(matchContent: String) {
+        viewModelScope.launch {
+            runCatching {
+                if (_temporaryImageUrls.value.isNullOrEmpty()) {
+                    _temporaryMatchData.value?.photos = mutableListOf()
+                } else {
+                    _temporaryMatchData.value?.photos = _temporaryImageUrls.value!!
+                }
+                _temporaryMatchData.value?.content = matchContent
+                val edittedMatch = _temporaryMatchData.value
+                val matchToEdit = currentUser.value!!.matches.find { it.id == edittedMatch!!.id }
+                val index = currentUser.value!!.matches.indexOf(matchToEdit)
+                if (edittedMatch != null) {
+                    currentUser.value!!.matches[index] = edittedMatch
+                }
+                db.collection("user")
+                    .document(currentUser.value!!.email)
+                    .set(currentUser.value!!)
+            }.onFailure {
+                Log.e(TAG, "editMatch() failed! : ${it.message}")
+                handleException(it)
+            }
+        }
+    }
+
+    fun deleteMatch(_id: String) {
+        viewModelScope.launch {
+            runCatching {
+                val matchToDelete = currentUser.value!!.matches.find { it.id == _id }
+                val index = currentUser.value!!.matches.indexOf(matchToDelete)
+                currentUser.value!!.matches.removeAt(index)
+                db.collection("user")
+                    .document(currentUser.value!!.email)
+                    .set(currentUser.value!!)
+            }.onFailure {
+                Log.e(TAG, "deleteMatch() failed! : ${it.message}")
+                handleException(it)
+            }
+        }
+    }
+
     fun getBlockedUsers(){
         db.collection("user")
             .document(currentUser.value!!.email)

@@ -1,9 +1,7 @@
 package com.luckycharmfairy.presentation.mymatches.matchdetail
 
 import android.app.AlertDialog
-import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -12,18 +10,17 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMatchDetailBinding
+import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
+import com.luckycharmfairy.presentation.mymatches.addmatches.AddMyMatchOneFragment
 import com.luckycharmfairy.presentation.mymatches.addmatches.ViewPagerAdapter
 import com.luckycharmfairy.presentation.mymatches.editmatch.EditMyMatchOneFragment
 
@@ -74,7 +71,12 @@ class MatchDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            requireActivity().supportFragmentManager.beginTransaction().apply {
+                hide(this@MatchDetailFragment)
+                add(R.id.main_frame, MyMatchesFragment())
+                addToBackStack(null)
+                commit()
+            }
         }
 
         val data = param1
@@ -159,9 +161,10 @@ class MatchDetailFragment : Fragment() {
                 when (item.itemId) {
                     R.id.action_edit -> {
                         val dataToSend = clickedMatch.id
+                        val editMatchFrag = EditMyMatchOneFragment.newInstance(dataToSend)
                         requireActivity().supportFragmentManager.beginTransaction().apply {
                             hide(this@MatchDetailFragment)
-                            add(R.id.main_frame, EditMyMatchOneFragment())
+                            add(R.id.main_frame, editMatchFrag, "EditMyMatchOneFragment")
                             addToBackStack(null)
                             commit()
                         }
@@ -169,22 +172,20 @@ class MatchDetailFragment : Fragment() {
                     }
                     R.id.action_delete -> {
                         AlertDialog.Builder(requireContext())
-                            .setTitle("게시글 삭제하기")
-                            .setMessage("게시글을 삭제하시겠습니까?")
+                            .setTitle("직관 기록 삭제하기")
+                            .setMessage("기록을 삭제하시겠습니까?")
                             .setPositiveButton("삭제") { dialog, _ ->
-                                postViewModel.deletePost(clickedItem.id)
-                                if (postViewModel.filteredPosts.value.isNullOrEmpty()) {
-                                    val newItems = postViewModel.allPosts.value!!.sortedBy { it.timestamp }
-                                    CommunityHomeAdapter().updateData(newItems)
-                                } else {
-                                    val newAllItems = postViewModel.allPosts.value!!.sortedBy { it.timestamp }
-                                    CommunityHomeAdapter().updateData(newAllItems)
-                                    val newFilteredItems = postViewModel.filteredPosts.value!!.sortedBy { it.timestamp }
-                                    PostListAdapter().updateData(newFilteredItems)
-                                }
-
-                                userViewModel.deleteMyPost(currentUser.email, clickedItem)
-                                Toast.makeText(this.requireContext(), "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                                userViewModel.deleteMatch(clickedMatch.id)
+//                                if (postViewModel.filteredPosts.value.isNullOrEmpty()) {
+//                                    val newItems = postViewModel.allPosts.value!!.sortedBy { it.timestamp }
+//                                    CommunityHomeAdapter().updateData(newItems)
+//                                } else {
+//                                    val newAllItems = postViewModel.allPosts.value!!.sortedBy { it.timestamp }
+//                                    CommunityHomeAdapter().updateData(newAllItems)
+//                                    val newFilteredItems = postViewModel.filteredPosts.value!!.sortedBy { it.timestamp }
+//                                    PostListAdapter().updateData(newFilteredItems)
+//                                }
+                                Toast.makeText(requireContext(), "직관 기록이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
                                 dialog.dismiss()
                                 requireActivity().supportFragmentManager.popBackStack()
                             }
