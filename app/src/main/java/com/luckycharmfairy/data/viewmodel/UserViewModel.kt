@@ -202,8 +202,14 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                     val snapshot = transaction.get(userRef)
                     val currentUser = snapshot.toObject(User::class.java)
                     val matches = currentUser?.matches ?: emptyList()
-                    val selectedMonthMatches = matches.filter {
-                        it.sport == selectedSport && it.year == selectedYear && it.month == selectedMonth }
+                    var selectedMonthMatches = mutableListOf<Match>()
+                    if (selectedSport != "전체 종목") {
+                        selectedMonthMatches = matches.filter {
+                            it.sport == selectedSport && it.year == selectedYear && it.month == selectedMonth }.toMutableList()
+                    } else {
+                        selectedMonthMatches = matches.filter {
+                            it.year == selectedYear && it.month == selectedMonth }.toMutableList()
+                    }
                     val matchdays = mutableListOf<String>()
                     selectedMonthMatches.forEach{
                         if (it.date !in matchdays) {
@@ -231,9 +237,16 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                     val snapshot = transaction.get(userRef)
                     val currentUser = snapshot.toObject(User::class.java)
                     val matches = currentUser?.matches ?: emptyList()
-                    val selectedDayMatches = matches.filter {
-                        it.sport == selectedSport &&it.year == selectedYear && it.month == selectedMonth && it.date == selectedDate
-                    }.toMutableList()
+                    var selectedDayMatches = mutableListOf<Match>()
+                    if (selectedSport != "전체 종목") {
+                        selectedDayMatches = matches.filter {
+                            it.sport == selectedSport && it.year == selectedYear && it.month == selectedMonth && it.date == selectedDate
+                        }.toMutableList()
+                    } else {
+                        selectedDayMatches = matches.filter {
+                            it.year == selectedYear && it.month == selectedMonth && it.date == selectedDate
+                        }.toMutableList()
+                    }
                     _selectedDayMatches.postValue(selectedDayMatches)
                 }.addOnSuccessListener {
                     println("Succeeded to get Selected Date's Matches")

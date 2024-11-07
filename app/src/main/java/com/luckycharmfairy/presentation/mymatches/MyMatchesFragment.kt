@@ -31,7 +31,7 @@ class MyMatchesFragment : Fragment() {
 
     private var currentUserEmail: String = ""
 
-    private var selectedSport = "야구"
+    private var selectedSport = "전체 종목"
     private var selectedYear = CalendarDay.from(Calendar.getInstance()).year.toString()
     private var selectedMonth = String.format("%02d", CalendarDay.from(Calendar.getInstance()).month + 1)
     private var selectedDate = CalendarDay.from(Calendar.getInstance()).day.toString()
@@ -76,7 +76,7 @@ class MyMatchesFragment : Fragment() {
         binding.recyclerviewMatchRecords.adapter = myMatchesAdapter
         binding.recyclerviewMatchRecords.layoutManager = LinearLayoutManager(requireContext())
 
-        val spinnerItems = listOf("야구", "남자축구", "남자농구", "여자배구", "남자배구")
+        val spinnerItems = listOf("전체 종목", "야구", "남자축구", "남자농구", "여자배구", "남자배구")
         val spinnerAdapter =
             ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerItems)
         spinnerAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
@@ -97,7 +97,7 @@ class MyMatchesFragment : Fragment() {
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                selectedSport = "야구"
+                selectedSport = spinnerItems[0]
             }
         }
 
@@ -124,12 +124,12 @@ class MyMatchesFragment : Fragment() {
 
             if (selectedMonthMatchdays != null && selectedMonthMatchdays.size != 0) {
                 selectedMonthMatchdays.forEach {
-                    eventDays.add(CalendarDay.from(selectedYear.toInt(), selectedMonth.toInt()-1, it.toInt()))
+                    eventDays += (CalendarDay.from(selectedYear.toInt(), selectedMonth.toInt()-1, it.toInt()))
                 }
             }
             var matchdaysCount = selectedMonthMatchdays?.size
             if (matchdaysCount == null) matchdaysCount == 0
-            binding.tvMonthlyMatches.text = "${selectedYear}년 ${selectedMonth}월에 ${selectedSport} 경기를 ${matchdaysCount}일 직관했어요!"
+            binding.tvMonthlyMatches.text = "이번 달에 ${selectedSport} 경기를 ${matchdaysCount}일 직관했어요!"
             val eventDecorator = EventDecorator(eventDays)
             binding.calendarMonthlyMatches.addDecorators(eventDecorator)
         }
