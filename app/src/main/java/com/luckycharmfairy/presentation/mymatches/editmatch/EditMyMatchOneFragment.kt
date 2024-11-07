@@ -335,14 +335,14 @@ class EditMyMatchOneFragment : Fragment() {
             ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerHomeAway)
         spinnerMyteamAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
         val spinnerMyteamIndex = spinnerHomeAway.indexOf(selectedMyteam)
-        binding.spinnerMyteam.setSelection(spinnerMyteamIndex)
         binding.spinnerMyteam.adapter = spinnerMyteamAdapter
+        binding.spinnerMyteam.setSelection(spinnerMyteamIndex)
         binding.spinnerMyteam.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 selectedMyteam = spinnerHomeAway[position]
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                selectedMyteam = spinnerHomeAway[0]
+                selectedMyteam = "없음"
             }
         }
 
@@ -414,10 +414,10 @@ class EditMyMatchOneFragment : Fragment() {
         val spinnerResult = listOf("승리", "패배", "무승부", "경기 취소", "타팀 직관")
         val spinnerResultAdapter =
             ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerResult)
-        val spinnerResultIndex = spinnerResult.indexOf(selectedResult)
-        binding.spinnerResult.setSelection(spinnerResultIndex)
         spinnerResultAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
+        val spinnerResultIndex = spinnerResult.indexOf(selectedResult)
         binding.spinnerResult.adapter = spinnerResultAdapter
+        binding.spinnerResult.setSelection(spinnerResultIndex)
         binding.spinnerResult.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 selectedResult = spinnerResult[position]

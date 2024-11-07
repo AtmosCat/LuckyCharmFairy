@@ -94,7 +94,7 @@
         android:maxLength="3"
         android:fontFamily="@font/nanum_square_ac_bold"
         android:textColor="@color/main_dark_gray"
-        android:textSize="28sp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/tv_score_colone"
         app:layout_constraintTop_toTopOf="@+id/view_hometeam"
         app:layout_constraintBottom_toBottomOf="@+id/view_hometeam"
@@ -125,21 +125,20 @@
         app:layout_constraintBottom_toBottomOf="@+id/view_hometeam"
         />
 
-    <TextView
-        android:id="@+id/tv_awayscore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="000"
-        android:maxLength="3"
-        android:fontFamily="@font/nanum_square_ac_bold"
-        android:textColor="@color/main_dark_gray"
-        android:textSize="28sp"
-        app:layout_constraintStart_toEndOf="@+id/tv_score_colone"
-        app:layout_constraintTop_toTopOf="@+id/view_hometeam"
-        app:layout_constraintBottom_toBottomOf="@+id/view_hometeam"
-        />
+        <TextView
+            android:id="@+id/tv_awayscore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nanum_square_ac_bold"
+            android:maxLength="3"
+            android:text="000"
+            android:textColor="@color/main_dark_gray"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/view_hometeam"
+            app:layout_constraintStart_toEndOf="@+id/tv_score_colone"
+            app:layout_constraintTop_toTopOf="@+id/view_hometeam" />
 
-    <TextView
+        <TextView
         android:id="@+id/tv_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
