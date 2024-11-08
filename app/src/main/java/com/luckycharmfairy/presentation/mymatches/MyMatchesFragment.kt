@@ -152,7 +152,6 @@ class MyMatchesFragment : Fragment() {
             }
         })
 
-        val matchDetailFragment = requireActivity().supportFragmentManager.findFragmentByTag("MatchDetailFragment")
         myMatchesAdapter.itemClick = object : MyMatchesAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
                 val clickedMatch = todayMatches[position]
@@ -166,7 +165,6 @@ class MyMatchesFragment : Fragment() {
                 }
             }
         }
-
 
         val myPageFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyPageFragment")
         myMatchesAdapter.itemClick = object : MyMatchesAdapter.ItemClick {

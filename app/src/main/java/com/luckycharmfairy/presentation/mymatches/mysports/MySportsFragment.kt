@@ -1,14 +1,12 @@
 package com.luckycharmfairy.presentation.mymatches.mysports
 
 import android.app.AlertDialog
-import android.app.AlertDialog.*
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewmodel.initializer
@@ -17,13 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
-import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMySportsBinding
-import com.luckycharmfairy.presentation.mymatches.MyMatchesAdapter
-import com.luckycharmfairy.presentation.mymatches.matchdetail.MatchDetailFragment
-import com.prolificinteractive.materialcalendarview.CalendarDay
-import java.util.Calendar
-
 
 class MySportsFragment : Fragment() {
 
