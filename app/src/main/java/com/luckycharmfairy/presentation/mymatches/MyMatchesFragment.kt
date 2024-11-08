@@ -19,6 +19,7 @@ import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.presentation.EventDecorator
 import com.luckycharmfairy.presentation.mymatches.addmatches.AddMyMatchOneFragment
+import com.luckycharmfairy.presentation.mypage.MyPageFragment
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import java.util.Calendar
@@ -160,6 +161,23 @@ class MyMatchesFragment : Fragment() {
                 requireActivity().supportFragmentManager.beginTransaction().apply {
                     hide(this@MyMatchesFragment)
                     add(R.id.main_frame, matchDetail)
+                    addToBackStack(null)
+                    commit()
+                }
+            }
+        }
+
+
+        val myPageFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyPageFragment")
+        myMatchesAdapter.itemClick = object : MyMatchesAdapter.ItemClick {
+            override fun onClick(view: View, position: Int) {
+                requireActivity().supportFragmentManager.beginTransaction().apply {
+                    hide(this@MyMatchesFragment)
+                    if (myPageFragment == null) {
+                        add(R.id.main_frame, MyPageFragment(), "MyPageFragment")
+                    } else {
+                        show(myPageFragment)
+                    }
                     addToBackStack(null)
                     commit()
                 }

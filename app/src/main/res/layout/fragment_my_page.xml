@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.luckycharmfairy.presentation.mypage.MyPageFragment"
+    android:background="@color/background">
+
+    <View
+        android:id="@+id/view_profile_frame"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:background="@color/main_mint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cardview_mypage_frame"
+        android:layout_width="110dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:layout_marginStart="25dp"
+        app:layout_constraintBottom_toBottomOf="@+id/view_profile_frame"
+        app:layout_constraintStart_toStartOf="@+id/view_profile_frame"
+        app:layout_constraintTop_toTopOf="@+id/view_profile_frame">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardview_mypage_profile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_profile_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profile_ex" />
+
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/btn_edit_photo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/gallery_round"
+        app:tint="@color/white"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/cardview_mypage_frame"
+        app:layout_constraintEnd_toEndOf="@+id/cardview_mypage_frame"
+        />
+
+    <ImageView
+        android:id="@+id/btn_edit_profile"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/edit"
+        app:layout_constraintTop_toTopOf="@+id/view_profile_frame"
+        app:layout_constraintEnd_toEndOf="@+id/view_profile_frame"
+        android:layout_margin="15dp"
+        app:tint="@color/white" />
+
+    <ImageView
+        android:id="@+id/btn_save_profile"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/checked"
+        app:layout_constraintTop_toTopOf="@+id/btn_edit_profile"
+        app:layout_constraintEnd_toEndOf="@+id/btn_edit_profile"
+        app:layout_constraintStart_toStartOf="@+id/btn_edit_profile"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_edit_profile"
+        android:layout_margin="15dp"
+        app:tint="@color/white"
+        android:visibility="gone"
+        />
+
+
+    <EditText
+        android:id="@+id/et_profile_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:text="익명의 사용자"
+        android:enabled="false"
+        android:textSize="18sp"
+        android:background="@android:color/transparent"
+        android:textColor="@color/white"
+        android:fontFamily="@font/nanum_square_ac_extrabold"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cardview_mypage_frame"
+        app:layout_constraintEnd_toEndOf="@+id/view_profile_frame"
+        app:layout_constraintStart_toEndOf="@+id/cardview_mypage_frame"
+        app:layout_constraintTop_toTopOf="@+id/cardview_mypage_frame" />
+
+    <Button
+        android:id="@+id/btn_profile"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:background="@drawable/bg_round_border_small"
+        android:backgroundTint="@color/white"
+        android:text="내 프로필"
+        style="@style/textStyle_subheading"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@+id/et_profile_name"
+        app:layout_constraintTop_toBottomOf="@+id/et_profile_name" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/view_profile_frame"
+        app:layout_constraintBottom_toTopOf="@+id/view_tab_background"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <TextView
+                android:id="@+id/btn_settings"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:text="환경설정"
+                style="@style/textStyle_title"
+                android:gravity="center_vertical"
+                android:paddingStart="30dp"
+                android:background="@drawable/bg_rectangular_updown_border"
+                android:fontFamily="@font/nanum_square_ac_bold"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/btn_mysports_manager"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:text="MY종목 관리"
+                style="@style/textStyle_title"
+                android:gravity="center_vertical"
+                android:paddingStart="30dp"
+                android:background="@drawable/bg_rectangular_updown_border"
+                android:fontFamily="@font/nanum_square_ac_bold"
+                app:layout_constraintTop_toBottomOf="@+id/btn_settings"
+                />
+
+            <TextView
+                android:id="@+id/btn_myteam_manager"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:text="MY팀 관리"
+                style="@style/textStyle_title"
+                android:gravity="center_vertical"
+                android:paddingStart="30dp"
+                android:background="@drawable/bg_rectangular_updown_border"
+                android:fontFamily="@font/nanum_square_ac_bold"
+                app:layout_constraintTop_toBottomOf="@+id/btn_mysports_manager"
+                />
+
+            <TextView
+                android:id="@+id/btn_membership_manager"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:text="멤버십 관리"
+                style="@style/textStyle_title"
+                android:gravity="center_vertical"
+                android:paddingStart="30dp"
+                android:background="@drawable/bg_rectangular_updown_border"
+                android:fontFamily="@font/nanum_square_ac_bold"
+                app:layout_constraintTop_toBottomOf="@+id/btn_myteam_manager"
+                />
+
+            <TextView
+                android:id="@+id/btn_customer_services"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:text="고객센터"
+                style="@style/textStyle_title"
+                android:gravity="center_vertical"
+                android:paddingStart="30dp"
+                android:background="@drawable/bg_rectangular_updown_border"
+                android:fontFamily="@font/nanum_square_ac_bold"
+                app:layout_constraintTop_toBottomOf="@+id/btn_membership_manager"
+                />
+
+            <TextView
+                android:id="@+id/btn_notice"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:text="공지사항"
+                style="@style/textStyle_title"
+                android:gravity="center_vertical"
+                android:paddingStart="30dp"
+                android:background="@drawable/bg_rectangular_updown_border"
+                android:fontFamily="@font/nanum_square_ac_bold"
+                app:layout_constraintTop_toBottomOf="@+id/btn_customer_services"
+                />
+
+            <TextView
+                android:id="@+id/btn_app_info"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:text="앱 정보"
+                style="@style/textStyle_title"
+                android:gravity="center_vertical"
+                android:paddingStart="30dp"
+                android:background="@drawable/bg_rectangular_updown_border"
+                android:fontFamily="@font/nanum_square_ac_bold"
+                app:layout_constraintTop_toBottomOf="@+id/btn_notice"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/black"
+        android:elevation="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/view_tab_background"
+        />
+
+    <View
+        android:id="@+id/view_tab_background"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@+id/btn_tab_my_matches"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/white"
+        />
+
+    <ImageView
+        android:id="@+id/btn_tab_my_matches"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.23"
+        android:src="@drawable/calendar"
+        android:layout_margin="5dp"
+        android:paddingHorizontal="30dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="35dp"
+        app:tint="@color/main_mint" />
+
+    <TextView
+        android:id="@+id/tv_btn_tab_my_matches"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="나의 직관"
+        android:textSize="16sp"
+        android:fontFamily="@font/nanum_square_ac_bold"
+        android:textColor="@color/main_mint"
+        app:layout_constraintStart_toStartOf="@+id/btn_tab_my_matches"
+        app:layout_constraintEnd_toEndOf="@+id/btn_tab_my_matches"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_tab_my_matches"
+        android:layout_marginBottom="8dp"
+        />
+
+    <ImageView
+        android:id="@+id/btn_tab_my_team"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:paddingHorizontal="30dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="35dp"
+        android:src="@drawable/flag"
+        app:tint="@color/main_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintStart_toEndOf="@+id/btn_tab_my_matches"
+        app:layout_constraintWidth_percent="0.23" />
+
+    <TextView
+        android:id="@+id/tv_btn_tab_my_team"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MY팀"
+        android:textSize="16sp"
+        android:fontFamily="@font/nanum_square_ac_bold"
+        android:textColor="@color/main_gray"
+        app:layout_constraintStart_toStartOf="@+id/btn_tab_my_team"
+        app:layout_constraintEnd_toEndOf="@+id/btn_tab_my_team"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_tab_my_team"
+        android:layout_marginBottom="8dp"
+        />
+
+    <ImageView
+        android:id="@+id/btn_tab_my_player"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:paddingHorizontal="30dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="35dp"
+        android:src="@drawable/uniform"
+        app:tint="@color/main_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintStart_toEndOf="@+id/btn_tab_my_team"
+        app:layout_constraintWidth_percent="0.23" />
+
+    <TextView
+        android:id="@+id/tv_btn_tab_my_player"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MY선수"
+        android:textSize="16sp"
+        android:fontFamily="@font/nanum_square_ac_bold"
+        android:textColor="@color/main_gray"
+        app:layout_constraintStart_toStartOf="@+id/btn_tab_my_player"
+        app:layout_constraintEnd_toEndOf="@+id/btn_tab_my_player"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_tab_my_player"
+        android:layout_marginBottom="8dp"
+        />
+
+    <ImageView
+        android:id="@+id/btn_tab_mypage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="5dp"
+        android:paddingHorizontal="30dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="35dp"
+        android:src="@drawable/mypage"
+        app:tint="@color/main_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintStart_toEndOf="@+id/btn_tab_my_player"
+        app:layout_constraintWidth_percent="0.23" />
+
+    <TextView
+        android:id="@+id/tv_btn_tab_mypage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="마이페이지"
+        android:textSize="16sp"
+        android:fontFamily="@font/nanum_square_ac_bold"
+        android:textColor="@color/main_gray"
+        app:layout_constraintStart_toStartOf="@+id/btn_tab_mypage"
+        app:layout_constraintEnd_toEndOf="@+id/btn_tab_mypage"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_tab_mypage"
+        android:layout_marginBottom="8dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

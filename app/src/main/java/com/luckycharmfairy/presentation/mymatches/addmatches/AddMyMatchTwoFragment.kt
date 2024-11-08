@@ -110,7 +110,7 @@ class AddMyMatchTwoFragment : Fragment() {
                         }
                     }
                 }
-            }
+        }
 
         binding.btnAddNewPhoto.setOnClickListener{
             Toast.makeText(this.requireContext(), "올리실 사진을 선택해주세요.", Toast.LENGTH_SHORT).show()
