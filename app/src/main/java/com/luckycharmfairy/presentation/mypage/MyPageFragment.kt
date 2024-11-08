@@ -103,153 +103,123 @@ class MyPageFragment : Fragment() {
         binding.etProfileName.setText(currentUser.nickname)
 
         binding.btnEditProfile.setOnClickListener{
-            isProfileEditting = !isProfileEditting
-            if (isProfileEditting) {
-                binding.btnEditProfile.visibility = View.GONE
-                binding.btnSaveProfile.visibility = View.VISIBLE
-                binding.btnEditPhoto.visibility = View.VISIBLE
-                binding.etProfileName.isEnabled = true
-                binding.btnEditPhoto.setOnClickListener{
-                    pickImage()
-                }
-            } else {
-
+            isProfileEditting = true
+            binding.btnEditProfile.visibility = View.GONE
+            binding.btnSaveProfile.visibility = View.VISIBLE
+            binding.btnEditPhoto.visibility = View.VISIBLE
+            binding.etProfileName.isEnabled = true
+            binding.btnEditPhoto.setOnClickListener{
+                pickImage()
             }
         }
 
-        binding.btnMypageSettings.setOnClickListener{
-            val popupMenu = PopupMenu(requireContext(), binding.btnMypageSettings)
-            popupMenu.menuInflater.inflate(R.menu.popup_menu_settings, popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener { item: MenuItem ->
-                when (item.itemId) {
-                    R.id.action_signout -> {
-                        AlertDialog.Builder(requireContext())
-                            .setTitle("로그아웃")
-                            .setMessage("로그아웃하시겠습니까?")
-                            .setPositiveButton("확인") { dialog, _ ->
-                                userViewModel.signOut()
-                                Toast.makeText(requireContext(),"로그아웃되었습니다.",Toast.LENGTH_SHORT).show()
-                                dialog.dismiss()
-                                val signInFragment = requireActivity().supportFragmentManager.findFragmentByTag("SignInFragment")
-                                requireActivity().supportFragmentManager.beginTransaction().apply {
-                                    remove(this@MyPageFragment)
-                                    if (signInFragment == null) {
-                                        add(R.id.main_frame, SignInFragment(), "SignInFragment")
-                                    } else {
-                                        show(signInFragment)
-                                    }
-                                    addToBackStack(null)
-                                    commit()
-                                }
-                            }
-                            .setNegativeButton("취소") { dialog, which ->
-                                dialog.dismiss()
-                            }
-                            .show()
-                        true
-                    }
-                    R.id.action_delete_id -> {
-                        AlertDialog.Builder(requireContext())
-                            .setTitle("회원탈퇴")
-                            .setMessage("회원탈퇴하시겠습니까?\n삭제된 계정 정보는 복구하실 수 없습니다.")
-                            .setPositiveButton("확인") { dialog, _ ->
-                                userViewModel.deleteID(currentUser)
-                                Toast.makeText(requireContext(),"회원탈퇴되었습니다.",Toast.LENGTH_SHORT).show()
-                                dialog.dismiss()
-                                val signInFragment = requireActivity().supportFragmentManager.findFragmentByTag("SignInFragment")
-                                requireActivity().supportFragmentManager.beginTransaction().apply {
-                                    remove(this@MyPageFragment)
-                                    if (signInFragment == null) {
-                                        add(R.id.main_frame, SignInFragment(), "SignInFragment")
-                                    } else {
-                                        show(signInFragment)
-                                    }
-                                    addToBackStack(null)
-                                    commit()
-                                }
-                            }
-                            .setNegativeButton("취소") { dialog, which ->
-                                dialog.dismiss()
-                            }
-                            .show()
-                        true
-                    }
-                    else -> false
-                }
-            }
-            popupMenu.show()
+        binding.btnSaveProfile.setOnClickListener{
+            isProfileEditting = false
+            userViewModel.currentUser.value!!.nickname = binding.etProfileName.text.toString()
+            userViewModel.updateCurrentUserInfo()
+            binding.btnEditProfile.visibility = View.VISIBLE
+            binding.btnSaveProfile.visibility = View.GONE
+            binding.btnEditPhoto.visibility = View.GONE
+            binding.etProfileName.isEnabled = false
         }
 
-        val editProfileFragment = requireActivity().supportFragmentManager.findFragmentByTag("EditProfileFragment")
-        binding.btnEditProfile.setOnClickListener{
+        binding.btnProfile.setOnClickListener{
+            // 내 프로필 이동
+        }
+
+        val settingsFragment = requireActivity().supportFragmentManager.findFragmentByTag("SettingsFragment")
+        binding.btnSettings.setOnClickListener{
             requireActivity().supportFragmentManager.beginTransaction().apply {
                 hide(this@MyPageFragment)
-                if (editProfileFragment == null) {
-                    add(R.id.main_frame, EditProfileFragment(), "EditProfileFragment")
+                if (settingsFragment == null) {
+                    add(R.id.main_frame, SettingsFragment(), "SettingsFragment")
                 } else {
-                    show(editProfileFragment)
+                    show(settingsFragment)
                 }
                 addToBackStack(null)
                 commit()
             }
         }
 
-        userViewModel.currentUser.observe(viewLifecycleOwner) { data ->
-            if (data?.photo == "") {
-                binding.ivProfileImage.setImageBitmap(sampleBitmap)
-            } else {
-                userViewModel.getDownloadUrl(
-                    onSuccess = { downloadUrl ->
-                        // 이미지 로드
-                        binding.ivProfileImage.load(downloadUrl) {
-                            crossfade(true)
-                            placeholder(R.drawable.placeholder) // 로딩 중에 표시할 이미지
-                            error(R.drawable.error_image) // 로드 실패 시 표시할 이미지
-                        }
-                    },
-                    onFailure = { exception ->
-                        // 실패 처리
-                        binding.ivProfileImage.setImageResource(R.drawable.error_image)
-                    })
-            }
-            binding.tvProfileName.text = data?.nickname
-            binding.tvMyAllergies.text = "⚠️ 나의 알러지 성분: ${data?.allergy}"
-
-            val currentUserAllergiesCount = data?.allergy?.size
-
-            if (currentUserAllergiesCount != null) {
-                if (currentUserAllergiesCount >= 1) {
-                    for(i in 0..currentUserAllergiesCount - 1) {
-                        myAllergyFrameList[i].isVisible = true
-                        myAllergyList[i].isVisible = true
-                        setAllergyImage(myAllergyList[i], data.allergy[i])
-                    }
-                }
-            }
-        }
-
-        val favoriteFragment = requireActivity().supportFragmentManager.findFragmentByTag("FavoriteFragment")
-        binding.viewMypageMenu1.setOnClickListener{
-            requireActivity().supportFragmentManager.beginTransaction().apply {
-                hide(this@MyPageFragment)
-                if (favoriteFragment == null) {
-                    add(R.id.main_frame, FavoriteFragment(), "FavoriteFragment")
-                } else {
-                    show(favoriteFragment)
-                }
-                addToBackStack(null)
-                commit()
-            }
-        }
-
-//        val membershipFragment = requireActivity().supportFragmentManager.findFragmentByTag("MembershipFragment")
-//        binding.viewMypageMenu3.setOnClickListener{
+//        val mySportsManagerFragment = requireActivity().supportFragmentManager.findFragmentByTag("MySportsManagerFragment")
+//        binding.btnSettings.setOnClickListener{
 //            requireActivity().supportFragmentManager.beginTransaction().apply {
 //                hide(this@MyPageFragment)
-//                if (membershipFragment == null) {
-//                    add(R.id.main_frame, MembershipFragment(), "MembershipFragment")
+//                if (mySportsManagerFragment == null) {
+//                    add(R.id.main_frame, MySportsManagerFragment(), "MySportsManagerFragment")
 //                } else {
-//                    show(membershipFragment)
+//                    show(mySportsManagerFragment)
+//                }
+//                addToBackStack(null)
+//                commit()
+//            }
+//        }
+//
+//
+//        val myTeamManagerFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyTeamManagerFragment")
+//        binding.btnSettings.setOnClickListener{
+//            requireActivity().supportFragmentManager.beginTransaction().apply {
+//                hide(this@MyPageFragment)
+//                if (mySportsManagerFragment == null) {
+//                    add(R.id.main_frame, MyTeamManagerFragment(), "MyTeamManagerFragment")
+//                } else {
+//                    show(myTeamManagerFragment)
+//                }
+//                addToBackStack(null)
+//                commit()
+//            }
+//        }
+//
+//        val membershipManagerFragment = requireActivity().supportFragmentManager.findFragmentByTag("MembershipManagerFragment")
+//        binding.btnMembershipManager.setOnClickListener{
+//            requireActivity().supportFragmentManager.beginTransaction().apply {
+//                hide(this@MyPageFragment)
+//                if (membershipManagerFragment == null) {
+//                    add(R.id.main_frame, MembershipManagerFragment(), "MembershipManagerFragment")
+//                } else {
+//                    show(membershipManagerFragment)
+//                }
+//                addToBackStack(null)
+//                commit()
+//            }
+//        }
+//
+//        val customerServiceFragment = requireActivity().supportFragmentManager.findFragmentByTag("CustomerServiceFragment")
+//        binding.btnMembershipManager.setOnClickListener{
+//            requireActivity().supportFragmentManager.beginTransaction().apply {
+//                hide(this@MyPageFragment)
+//                if (customerServiceFragment == null) {
+//                    add(R.id.main_frame, CustomerServiceFragment(), "CustomerServiceFragment")
+//                } else {
+//                    show(customerServiceFragment)
+//                }
+//                addToBackStack(null)
+//                commit()
+//            }
+//        }
+//
+//        val noticeFragment = requireActivity().supportFragmentManager.findFragmentByTag("NoticeFragment")
+//        binding.btnMembershipManager.setOnClickListener{
+//            requireActivity().supportFragmentManager.beginTransaction().apply {
+//                hide(this@MyPageFragment)
+//                if (noticeFragment == null) {
+//                    add(R.id.main_frame, NoticeFragment(), "NoticeFragment")
+//                } else {
+//                    show(noticeFragment)
+//                }
+//                addToBackStack(null)
+//                commit()
+//            }
+//        }
+//
+//        val appInfoFragment = requireActivity().supportFragmentManager.findFragmentByTag("AppInfoFragment")
+//        binding.btnMembershipManager.setOnClickListener{
+//            requireActivity().supportFragmentManager.beginTransaction().apply {
+//                hide(this@MyPageFragment)
+//                if (appInfoFragment == null) {
+//                    add(R.id.main_frame, AppInfoFragment(), "AppInfoFragment")
+//                } else {
+//                    show(appInfoFragment)
 //                }
 //                addToBackStack(null)
 //                commit()
@@ -276,7 +246,10 @@ class MyPageFragment : Fragment() {
         val bitmap = uriToBitmap(uri)
         bitmap?.let {
             uploadImageToFirebaseStorage(it) { imageUrl ->
-                // 유저 정보 업데이트
+                if (imageUrl != null) {
+                    userViewModel.currentUser.value?.photo = imageUrl
+                }
+                userViewModel.updateCurrentUserInfo()
             }
         }
     }
