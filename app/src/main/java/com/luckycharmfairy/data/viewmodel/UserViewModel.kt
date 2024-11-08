@@ -407,7 +407,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
             runCatching {
                 _currentUser.value = User()
             }.onFailure {
-                Log.e(TAG, "updateCurrentUserInfo() failed! : ${it.message}")
+                Log.e(TAG, "signOut() failed! : ${it.message}")
                 handleException(it)
             }
         }
@@ -416,7 +416,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     fun deleteID(user: User) {
         viewModelScope.launch {
             runCatching {
-                _currentUser.value = null
+                _currentUser.value = User()
                 db.collection("user")
                     .document(user.email)
                     .delete()
@@ -424,24 +424,6 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                         println("User ${user.email} deleted successfully")
                     }.addOnFailureListener { exception ->
                         println("Failed to delete User ${user.email} : $exception")
-                    }
-
-                db.collection("post")
-                    .whereEqualTo("posterEmail", user.email)
-                    .get()
-                    .addOnSuccessListener { posts ->
-                        for (post in posts) {
-                            post.reference.delete()
-                                .addOnSuccessListener {
-                                    println("Deleted file with ID: ${post.id}")
-                                }
-                                .addOnFailureListener { e ->
-                                    println("Error deleting file: $e")
-                                }
-                        }
-                    }
-                    .addOnFailureListener{ e ->
-                        println("Error getting documents: $e")
                     }
             }.onFailure {
                 Log.e(TAG, "deleteID() failed! : ${it.message}")

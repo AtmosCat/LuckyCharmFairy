@@ -247,7 +247,7 @@
         android:paddingHorizontal="30dp"
         android:paddingTop="15dp"
         android:paddingBottom="35dp"
-        app:tint="@color/main_mint" />
+        app:tint="@color/main_gray" />
 
     <TextView
         android:id="@+id/tv_btn_tab_my_matches"
@@ -256,7 +256,7 @@
         android:text="나의 직관"
         android:textSize="16sp"
         android:fontFamily="@font/nanum_square_ac_bold"
-        android:textColor="@color/main_mint"
+        android:textColor="@color/main_gray"
         app:layout_constraintStart_toStartOf="@+id/btn_tab_my_matches"
         app:layout_constraintEnd_toEndOf="@+id/btn_tab_my_matches"
         app:layout_constraintBottom_toBottomOf="@+id/btn_tab_my_matches"
@@ -330,7 +330,7 @@
         android:paddingTop="15dp"
         android:paddingBottom="35dp"
         android:src="@drawable/mypage"
-        app:tint="@color/main_gray"
+        app:tint="@color/main_mint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent="0.1"
         app:layout_constraintStart_toEndOf="@+id/btn_tab_my_player"
@@ -343,7 +343,7 @@
         android:text="마이페이지"
         android:textSize="16sp"
         android:fontFamily="@font/nanum_square_ac_bold"
-        android:textColor="@color/main_gray"
+        android:textColor="@color/main_mint"
         app:layout_constraintStart_toStartOf="@+id/btn_tab_mypage"
         app:layout_constraintEnd_toEndOf="@+id/btn_tab_mypage"
         app:layout_constraintBottom_toBottomOf="@+id/btn_tab_mypage"

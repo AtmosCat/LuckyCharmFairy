@@ -34,6 +34,7 @@ import com.luckycharmfairy.data.model.sampleBitmap
 import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyPageBinding
+import com.luckycharmfairy.presentation.mypage.settings.SettingsFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
