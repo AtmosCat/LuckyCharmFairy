@@ -10,7 +10,9 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.luckycharmfairy.data.model.Team
 import com.luckycharmfairy.data.model.User
+import com.luckycharmfairy.data.model.baseballTeams
 import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyTeamManagerBinding
@@ -28,7 +30,11 @@ class MyTeamManagerFragment : Fragment() {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
     }
 
+    private val selectedSportTeamNames = mutableListOf<String>()
+    private val selectedSport = ""
+
     private val myTeamSportsAdapter by lazy { MyTeamSportsAdapter() }
+    private val myTeamTeamsAdapter by lazy { MyTeamTeamsAdapter(selectedSport, selectedSportTeamNames, userViewModel) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +75,30 @@ class MyTeamManagerFragment : Fragment() {
 //            }
 //        }
 
+        myTeamTeamsAdapter.itemClick = object : MyTeamTeamsAdapter.ItemClick {
+            override fun onClick(view: View, position: Int) {
+                var selectedTeam = Team()
+                selectedSport =
+                if (selectedSport == "야구"
+                    || selectedSport == "남자축구"
+                    || selectedSport == "남자농구"
+                    || selectedSport == "남자배구"
+                    || selectedSport == "여자배구") {
+                    selectedTeam = baseballTeams.find { it.name == teams[position] }!!
+                } else {
+                    selectedTeam = currentUser.myteams.find { it.name == teams[position] }!!
+                }
+                if (selectedTeam !in currentUser.myteams) {
+                    userViewModel.currentUser.value!!.myteams.add(selectedTeam)
+                    userViewModel.updateCurrentUserInfo()
+                    holder.btnLike.setImageResource(R.drawable.star)
+                } else {
+                    currentUser.myteams.remove(selectedTeam)
+                    userViewModel.updateWholeCurrentUserInfo(currentUser)
+                    holder.btnLike.setImageResource(R.drawable.empty_star)
+                }
+            }
+        }
 
 
 

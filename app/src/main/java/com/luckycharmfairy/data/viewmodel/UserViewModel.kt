@@ -58,6 +58,10 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val _temporaryImageUrls = MutableLiveData<MutableList<String>>()
     val temporaryImageUrls : LiveData<MutableList<String>> get() = _temporaryImageUrls
 
+    init {
+        _currentUser.value = User()
+    }
+
     fun addUser(user: User) {
         viewModelScope.launch {
             runCatching {
@@ -193,6 +197,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 }
         }
     }
+
 
     fun getSelectedMonthMatchdays(_email: String, selectedSport: String, selectedYear: String, selectedMonth: String) {
         viewModelScope.launch {

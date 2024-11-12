@@ -58,6 +58,7 @@ class MyTeamSportsAdapter : ListAdapter<String, MyTeamSportsAdapter.ViewHolder>(
             binding.recyclerviewMyteamTeams.adapter = teamAdapter
             binding.recyclerviewMyteamTeams.layoutManager = LinearLayoutManager(binding.root.context)
             val sports = selectedSportTeamNames
+
             sports.toMutableList().remove("직접 입력")
             teamAdapter.submitList(sports)
         }
