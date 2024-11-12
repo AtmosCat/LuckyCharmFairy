@@ -13,6 +13,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.presentation.mymatches.matchdetail.MatchDetailFragment
 import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
@@ -30,6 +31,7 @@ class MyMatchesFragment : Fragment() {
     private var _binding: FragmentMyMatchesBinding? = null
     private val binding get() = _binding!!
 
+    private var currentUser = User()
     private var currentUserEmail: String = ""
 
     private var selectedSport = "전체 종목"
@@ -72,12 +74,21 @@ class MyMatchesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        currentUserEmail = userViewModel.currentUser.value!!.email
+//        currentUserEmail = userViewModel.currentUser.value?.email
+
+        userViewModel.currentUser.observe(viewLifecycleOwner) { data ->
+            if (data != null) {
+                currentUser = data
+            }
+            if (data != null) {
+                currentUserEmail = data.email
+            }
+        }
 
         binding.recyclerviewMatchRecords.adapter = myMatchesAdapter
         binding.recyclerviewMatchRecords.layoutManager = LinearLayoutManager(requireContext())
 
-        val spinnerItems = userViewModel.currentUser.value!!.mysports
+        val spinnerItems = currentUser.mysports
         val spinnerAdapter =
             ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerItems)
         spinnerAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
@@ -167,18 +178,16 @@ class MyMatchesFragment : Fragment() {
         }
 
         val myPageFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyPageFragment")
-        myMatchesAdapter.itemClick = object : MyMatchesAdapter.ItemClick {
-            override fun onClick(view: View, position: Int) {
-                requireActivity().supportFragmentManager.beginTransaction().apply {
-                    hide(this@MyMatchesFragment)
-                    if (myPageFragment == null) {
-                        add(R.id.main_frame, MyPageFragment(), "MyPageFragment")
-                    } else {
-                        show(myPageFragment)
-                    }
-                    addToBackStack(null)
-                    commit()
+        binding.btnTabMypage.setOnClickListener{
+            requireActivity().supportFragmentManager.beginTransaction().apply {
+                hide(this@MyMatchesFragment)
+                if (myPageFragment == null) {
+                    add(R.id.main_frame, MyPageFragment(), "MyPageFragment")
+                } else {
+                    show(myPageFragment)
                 }
+                addToBackStack(null)
+                commit()
             }
         }
 

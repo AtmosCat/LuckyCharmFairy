@@ -43,7 +43,7 @@ class PhotoAdapter :
                 itemClick?.onClick(it, position)
             }
         }.onFailure { exception ->
-            Log.e("NewPostAdapter", "Exception! ${exception.message}")
+            Log.e("PhotoAdapter", "Exception! ${exception.message}")
         }
     }
 

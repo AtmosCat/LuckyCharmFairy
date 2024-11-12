@@ -15,6 +15,7 @@ import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyTeamManagerBinding
 import com.luckycharmfairy.presentation.mymatches.MyMatchesAdapter
+import com.luckycharmfairy.presentation.mymatches.matchdetail.MatchDetailFragment
 
 class MyTeamManagerFragment : Fragment() {
 
@@ -27,8 +28,10 @@ class MyTeamManagerFragment : Fragment() {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
     }
 
+    private val selectedSportTeamNames = mutableListOf<String>()
+
     private val myTeamSportsAdapter by lazy { MyTeamSportsAdapter() }
-    private val myTeamTeamsAdapter by lazy { MyTeamTeamsAdapter() }
+    private val myTeamTeamsAdapter by lazy { MyTeamTeamsAdapter(selectedSportTeamNames, userViewModel) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,9 +52,9 @@ class MyTeamManagerFragment : Fragment() {
         binding.recyclerviewMyteam.adapter = myTeamSportsAdapter
         binding.recyclerviewMyteam.layoutManager = LinearLayoutManager(requireContext())
 
-        val recyclerviewMyTeams = requireActivity().findViewById<RecyclerView>(R.id.recyclerview_myteam_teams)
-        recyclerviewMyTeams.adapter = myTeamTeamsAdapter
-        recyclerviewMyTeams.layoutManager = LinearLayoutManager(requireContext())
+//        val recyclerviewMyTeams = requireActivity().findViewById<RecyclerView>(R.id.recyclerview_myteam_teams)
+//        recyclerviewMyTeams.adapter = myTeamTeamsAdapter
+//        recyclerviewMyTeams.layoutManager = LinearLayoutManager(requireContext())
 
         currentUser = userViewModel.currentUser.value!!
 
@@ -59,14 +62,22 @@ class MyTeamManagerFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
         }
 
-        myTeamSportsAdapter.submitList(currentUser.mysports)
-        val currentUserMyTeamNames = mutableListOf<String>()
-        for (myteam in currentUser.myteams) {
-            if (myteam.name !in currentUserMyTeamNames) {
-                currentUserMyTeamNames += myteam.name
+        val sports = currentUser.mysports
+        sports.removeAt(0)
+        myTeamSportsAdapter.submitList(sports)
+//        val currentUserMyTeamNames = mutableListOf<String>()
+//        for (myteam in currentUser.myteams) {
+//            if (myteam.name !in currentUserMyTeamNames) {
+//                currentUserMyTeamNames += myteam.name
+//            }
+//        }
+
+        myTeamTeamsAdapter.itemClick = object : MyTeamTeamsAdapter.ItemClick {
+            override fun onClick(view: View, position: Int) {
+
             }
         }
-        myTeamTeamsAdapter.submitList(currentUserMyTeamNames)
+
 
 
     }

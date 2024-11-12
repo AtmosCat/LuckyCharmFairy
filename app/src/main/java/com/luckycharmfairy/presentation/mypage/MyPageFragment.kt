@@ -34,10 +34,8 @@ import com.luckycharmfairy.data.model.sampleBitmap
 import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyPageBinding
-import com.luckycharmfairy.presentation.mymatches.MyMatchesAdapter
 import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
 import com.luckycharmfairy.presentation.mymatches.mysports.MySportsFragment
-import com.luckycharmfairy.presentation.mypage.mysportsmanager.MySportsManagerFragment
 import com.luckycharmfairy.presentation.mypage.myteammanager.MyTeamManagerFragment
 import com.luckycharmfairy.presentation.mypage.settings.SettingsFragment
 import kotlinx.coroutines.Dispatchers
@@ -162,7 +160,7 @@ class MyPageFragment : Fragment() {
         }
 
         val mySportsFragment = requireActivity().supportFragmentManager.findFragmentByTag("MySportsFragment")
-        binding.btnSettings.setOnClickListener{
+        binding.btnMysportsManager.setOnClickListener{
             requireActivity().supportFragmentManager.beginTransaction().apply {
                 hide(this@MyPageFragment)
                 if (mySportsFragment == null) {
@@ -176,7 +174,7 @@ class MyPageFragment : Fragment() {
         }
 
         val myTeamManagerFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyTeamManagerFragment")
-        binding.btnSettings.setOnClickListener{
+        binding.btnMyteamManager.setOnClickListener{
             requireActivity().supportFragmentManager.beginTransaction().apply {
                 hide(this@MyPageFragment)
                 if (myTeamManagerFragment == null) {
