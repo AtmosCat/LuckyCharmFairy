@@ -503,44 +503,48 @@
             android:maxLines="1"
             android:layout_height="25dp"
             android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="10dp"
             android:background="@drawable/bg_round_border_big"
             android:backgroundTint="@color/main_light_gray"
+            android:maxWidth="200dp"
             android:text="어웨이"
-            app:layout_constraintEnd_toEndOf="@+id/btn_hometeam"
-            app:layout_constraintStart_toStartOf="@+id/btn_hometeam"
-            app:layout_constraintTop_toBottomOf="@+id/btn_hometeam" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline_75dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_teams" />
 
         <EditText
             android:id="@+id/et_home_team"
             style="@style/textStyle_subheading"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="25dp"
+            android:layout_marginHorizontal="10dp"
             android:background="@drawable/bg_round_border_big"
             android:backgroundTint="@color/main_light_gray"
             android:gravity="center"
             android:hint="홈"
             android:maxLines="1"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_hometeam"
-            app:layout_constraintEnd_toEndOf="@+id/btn_hometeam"
-            app:layout_constraintStart_toStartOf="@+id/btn_hometeam"
-            app:layout_constraintTop_toTopOf="@+id/btn_hometeam" />
+            app:layout_constraintBottom_toBottomOf="@+id/tv_teams"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/guideline_75dp"
+            app:layout_constraintTop_toTopOf="@+id/tv_teams"  />
 
         <EditText
             android:id="@+id/et_away_team"
             android:layout_width="0dp"
             android:maxLines="1"
-            android:layout_height="0dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="20dp"
             android:hint="어웨이"
             android:gravity="center"
             style="@style/textStyle_subheading"
             android:visibility="gone"
+            android:layout_marginHorizontal="10dp"
             android:background="@drawable/bg_round_border_big"
             android:backgroundTint="@color/main_light_gray"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_awayteam"
-            app:layout_constraintEnd_toEndOf="@+id/btn_awayteam"
-            app:layout_constraintStart_toStartOf="@+id/btn_awayteam"
-            app:layout_constraintTop_toTopOf="@+id/btn_awayteam" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline_75dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_teams" />
 
         <TextView
             android:id="@+id/tv_score"
@@ -549,8 +553,8 @@
             android:text="스코어"
             style="@style/textStyle_subheading"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_awayteam"
-            android:layout_marginTop="30dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_teams"
+            android:layout_marginTop="70dp"
             app:layout_constraintEnd_toStartOf="@id/guideline_75dp"
             />
 
@@ -568,7 +572,7 @@
             android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="@+id/tv_score"
             app:layout_constraintEnd_toStartOf="@+id/tv_colone"
-            app:layout_constraintStart_toStartOf="@+id/btn_hometeam"
+            app:layout_constraintStart_toStartOf="@+id/et_location"
             app:layout_constraintTop_toTopOf="@+id/tv_score" />
 
         <TextView
@@ -578,8 +582,8 @@
             android:layout_height="wrap_content"
             android:text="  :  "
             app:layout_constraintBottom_toBottomOf="@+id/et_home_score"
-            app:layout_constraintEnd_toEndOf="@+id/btn_awayteam"
-            app:layout_constraintStart_toStartOf="@+id/btn_awayteam"
+            app:layout_constraintEnd_toEndOf="@+id/et_location"
+            app:layout_constraintStart_toStartOf="@+id/et_location"
             app:layout_constraintTop_toTopOf="@+id/et_home_score" />
 
         <EditText
@@ -595,7 +599,7 @@
             android:inputType="number"
             android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="@+id/tv_colone"
-            app:layout_constraintEnd_toEndOf="@+id/btn_awayteam"
+            app:layout_constraintEnd_toEndOf="@+id/et_location"
             app:layout_constraintStart_toEndOf="@+id/tv_colone"
             app:layout_constraintTop_toTopOf="@+id/tv_colone" />
 
