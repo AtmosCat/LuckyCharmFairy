@@ -173,19 +173,19 @@ class MyPageFragment : Fragment() {
             }
         }
 
-        val myTeamManagerFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyTeamManagerFragment")
-        binding.btnMyteamManager.setOnClickListener{
-            requireActivity().supportFragmentManager.beginTransaction().apply {
-                hide(this@MyPageFragment)
-                if (myTeamManagerFragment == null) {
-                    add(R.id.main_frame, MyTeamManagerFragment(), "MyTeamManagerFragment")
-                } else {
-                    show(myTeamManagerFragment)
-                }
-                addToBackStack(null)
-                commit()
-            }
-        }
+//        val myTeamManagerFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyTeamManagerFragment")
+//        binding.btnMyteamManager.setOnClickListener{
+//            requireActivity().supportFragmentManager.beginTransaction().apply {
+//                hide(this@MyPageFragment)
+//                if (myTeamManagerFragment == null) {
+//                    add(R.id.main_frame, MyTeamManagerFragment(), "MyTeamManagerFragment")
+//                } else {
+//                    show(myTeamManagerFragment)
+//                }
+//                addToBackStack(null)
+//                commit()
+//            }
+//        }
 //
 //        val membershipManagerFragment = requireActivity().supportFragmentManager.findFragmentByTag("MembershipManagerFragment")
 //        binding.btnMembershipManager.setOnClickListener{

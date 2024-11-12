@@ -4,30 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="20dp"
-    android:paddingTop="20dp"
     >
 
     <TextView
-        android:id="@+id/tv_sport_title"
+        android:id="@+id/tv_sport_name"
+        android:text="종목명"
+        android:gravity="center_vertical"
         style="@style/textStyle_subtitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="종목명"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="match_parent"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="15dp"
         />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_myteam_teams"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tv_sport_title"
-        android:layout_marginTop="10dp"
-        tools:listitem="@layout/recyclerview_myteam_teams"
-        />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

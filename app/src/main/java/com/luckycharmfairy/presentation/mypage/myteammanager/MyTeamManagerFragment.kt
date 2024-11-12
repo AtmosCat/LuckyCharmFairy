@@ -12,7 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.luckycharmfairy.data.model.Team
 import com.luckycharmfairy.data.model.User
+import com.luckycharmfairy.data.model.baseballTeamNames
 import com.luckycharmfairy.data.model.baseballTeams
+import com.luckycharmfairy.data.model.menBasketballTeamNames
+import com.luckycharmfairy.data.model.menFootballTeamNames
+import com.luckycharmfairy.data.model.menVolleyballTeamNames
+import com.luckycharmfairy.data.model.menVolleyball_AnsanOkbankOkman
+import com.luckycharmfairy.data.model.womenVolleyballTeamNames
 import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyTeamManagerBinding
@@ -31,10 +37,10 @@ class MyTeamManagerFragment : Fragment() {
     }
 
     private val selectedSportTeamNames = mutableListOf<String>()
-    private val selectedSport = ""
+    private var selectedSport = ""
 
     private val myTeamSportsAdapter by lazy { MyTeamSportsAdapter() }
-    private val myTeamTeamsAdapter by lazy { MyTeamTeamsAdapter(selectedSport, selectedSportTeamNames, userViewModel) }
+    private val myTeamTeamsAdapter by lazy { MyTeamTeamsAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,12 +58,11 @@ class MyTeamManagerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.recyclerviewMyteam.adapter = myTeamSportsAdapter
-        binding.recyclerviewMyteam.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerviewMyteamSports.adapter = myTeamSportsAdapter
+        binding.recyclerviewMyteamSports.layoutManager = LinearLayoutManager(requireContext())
 
-//        val recyclerviewMyTeams = requireActivity().findViewById<RecyclerView>(R.id.recyclerview_myteam_teams)
-//        recyclerviewMyTeams.adapter = myTeamTeamsAdapter
-//        recyclerviewMyTeams.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerviewMyteamTeams.adapter = myTeamTeamsAdapter
+        binding.recyclerviewMyteamTeams.layoutManager = LinearLayoutManager(requireContext())
 
         currentUser = userViewModel.currentUser.value!!
 
@@ -65,9 +70,9 @@ class MyTeamManagerFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
         }
 
-        val sports = currentUser.mysports
-        sports.removeAt(0)
-        myTeamSportsAdapter.submitList(sports)
+        val mySports = currentUser.mysports
+        mySports[0] = "⭐MY팀" // 전체 종목 제거
+        myTeamSportsAdapter.submitList(mySports)
 //        val currentUserMyTeamNames = mutableListOf<String>()
 //        for (myteam in currentUser.myteams) {
 //            if (myteam.name !in currentUserMyTeamNames) {
@@ -75,28 +80,19 @@ class MyTeamManagerFragment : Fragment() {
 //            }
 //        }
 
-        myTeamTeamsAdapter.itemClick = object : MyTeamTeamsAdapter.ItemClick {
+        myTeamSportsAdapter.itemClick = object : MyTeamSportsAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
-                var selectedTeam = Team()
-                selectedSport =
-                if (selectedSport == "야구"
-                    || selectedSport == "남자축구"
-                    || selectedSport == "남자농구"
-                    || selectedSport == "남자배구"
-                    || selectedSport == "여자배구") {
-                    selectedTeam = baseballTeams.find { it.name == teams[position] }!!
-                } else {
-                    selectedTeam = currentUser.myteams.find { it.name == teams[position] }!!
+                selectedSport = mySports[position]
+                when (selectedSport) {
+                    "야구" -> myTeamTeamsAdapter.submitList(baseballTeamNames)
+                    "남자축구" -> myTeamTeamsAdapter.submitList(menFootballTeamNames)
+                    "남자농구" -> myTeamTeamsAdapter.submitList(menBasketballTeamNames)
+                    "남자배구" -> myTeamTeamsAdapter.submitList(menVolleyballTeamNames)
+                    "여자배구" -> myTeamTeamsAdapter.submitList(womenVolleyballTeamNames)
+                    else -> myTeamTeamsAdapter
                 }
-                if (selectedTeam !in currentUser.myteams) {
-                    userViewModel.currentUser.value!!.myteams.add(selectedTeam)
-                    userViewModel.updateCurrentUserInfo()
-                    holder.btnLike.setImageResource(R.drawable.star)
-                } else {
-                    currentUser.myteams.remove(selectedTeam)
-                    userViewModel.updateWholeCurrentUserInfo(currentUser)
-                    holder.btnLike.setImageResource(R.drawable.empty_star)
-                }
+
+
             }
         }
 
