@@ -74,16 +74,17 @@ class MyMatchesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        currentUserEmail = userViewModel.currentUser.value?.email
+        currentUser = userViewModel.currentUser.value!!
+        currentUserEmail = currentUser.email
 
-        userViewModel.currentUser.observe(viewLifecycleOwner) { data ->
-            if (data != null) {
-                currentUser = data
-            }
-            if (data != null) {
-                currentUserEmail = data.email
-            }
-        }
+//        userViewModel.currentUser.observe(viewLifecycleOwner) { data ->
+//            if (data != null) {
+//                currentUser = data
+//            }
+//            if (data != null) {
+//                currentUserEmail = data.email
+//            }
+//        }
 
         binding.recyclerviewMatchRecords.adapter = myMatchesAdapter
         binding.recyclerviewMatchRecords.layoutManager = LinearLayoutManager(requireContext())

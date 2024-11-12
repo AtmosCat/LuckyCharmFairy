@@ -28,10 +28,7 @@ class MyTeamManagerFragment : Fragment() {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
     }
 
-    private val selectedSportTeamNames = mutableListOf<String>()
-
     private val myTeamSportsAdapter by lazy { MyTeamSportsAdapter() }
-    private val myTeamTeamsAdapter by lazy { MyTeamTeamsAdapter(selectedSportTeamNames, userViewModel) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,11 +69,6 @@ class MyTeamManagerFragment : Fragment() {
 //            }
 //        }
 
-        myTeamTeamsAdapter.itemClick = object : MyTeamTeamsAdapter.ItemClick {
-            override fun onClick(view: View, position: Int) {
-
-            }
-        }
 
 
 

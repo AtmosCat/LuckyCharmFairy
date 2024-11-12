@@ -28,6 +28,8 @@ public val baseballTeamNames = listOf(
     "직접 입력"
     )
 
+public val allTeams = baseballTeams + menFootballTeams + menBasketballTeams + menVolleyballTeams + womenVolleyballTeams
+
 public val baseballTeams: List<Team>
     get() = listOf(
         baseball_HanwhaEagles,

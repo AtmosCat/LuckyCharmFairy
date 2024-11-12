@@ -401,6 +401,17 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+    fun updateWholeCurrentUserInfo(updatedUserInfo: User) {
+        viewModelScope.launch {
+            runCatching {
+                db.collection("user").document(updatedUserInfo.email)
+                    .set(updatedUserInfo)
+            }.onFailure {
+                Log.e(TAG, "updateWholeCurrentUserInfo() failed! : ${it.message}")
+                handleException(it)
+            }
+        }
+    }
 
     fun signOut() {
         viewModelScope.launch {
