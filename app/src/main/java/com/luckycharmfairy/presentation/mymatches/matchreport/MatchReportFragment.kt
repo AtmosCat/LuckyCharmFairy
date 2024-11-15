@@ -61,15 +61,25 @@ class MatchReportFragment : Fragment() {
             noResultCount = data[4]
 
             val entries = ArrayList<BarEntry>()
-            entries.add(BarEntry(0f, winCount.toFloat()))
-            entries.add(BarEntry(1f, loseCount.toFloat()))
+            entries.add(BarEntry(4f, winCount.toFloat()))
+            entries.add(BarEntry(3f, loseCount.toFloat()))
             entries.add(BarEntry(2f, tieCount.toFloat()))
-            entries.add(BarEntry(3f, cancelCount.toFloat()))
-            entries.add(BarEntry(4f, noResultCount.toFloat()))
+            entries.add(BarEntry(1f, cancelCount.toFloat()))
+            entries.add(BarEntry(0f, noResultCount.toFloat()))
+
+            // y축 반전
+//            entries.sortBy { it.x }
 
             // BarDataSet 생성
             val dataSet = BarDataSet(entries, "직관 횟수") // 레이블
             dataSet.color = ContextCompat.getColor(requireContext(), R.color.main_mint) // 색상 지정
+
+            // Y값 데이터 레이블 형식 지정
+            dataSet.setValueFormatter(object : ValueFormatter() {
+                override fun getFormattedValue(value: Float): String {
+                    return "${value.toInt()}회"
+                }
+            })
 
             // BarData 객체 생성
             val barData = BarData(dataSet)
@@ -78,7 +88,7 @@ class MatchReportFragment : Fragment() {
             matchesBarchart.data = barData
 
             // 바 너비/높이 설정
-            val barWidth = 0.3f
+            val barWidth = 0.6f
             matchesBarchart.barData.barWidth = barWidth
 
             // 바 데이터에 값 레이블 표시
@@ -88,21 +98,24 @@ class MatchReportFragment : Fragment() {
 
             // 색상 배열 설정
             val barColors = ArrayList<Int>()
-            barColors.add(ContextCompat.getColor(requireContext(), R.color.main_medium_gray))
-            barColors.add(ContextCompat.getColor(requireContext(), R.color.main_medium_gray))
-            barColors.add(ContextCompat.getColor(requireContext(), R.color.main_medium_gray))
-            barColors.add(ContextCompat.getColor(requireContext(), R.color.main_medium_gray))
             barColors.add(ContextCompat.getColor(requireContext(), R.color.main_mint))
+            barColors.add(ContextCompat.getColor(requireContext(), R.color.main_medium_gray))
+            barColors.add(ContextCompat.getColor(requireContext(), R.color.main_medium_gray))
+            barColors.add(ContextCompat.getColor(requireContext(), R.color.main_medium_gray))
+            barColors.add(ContextCompat.getColor(requireContext(), R.color.main_medium_gray))
             dataSet.colors = barColors  // 색상 배열을 데이터셋에 적용
 
             // 불필요한 그리드 라인, 축 레이블 숨기기
             matchesBarchart.setDrawGridBackground(false) // 배경 그리드 비활성화
             matchesBarchart.setDrawBorders(false) // 차트의 테두리 비활성화
 
+            // 좌측 여백 추가
+            matchesBarchart.setExtraLeftOffset(25f) // 좌측 여백 추가
+
             // 범례를 비활성화
             matchesBarchart.legend.isEnabled = false
 
-            // X축설정
+            // X축 설정
             val xAxis = matchesBarchart.xAxis
             xAxis.position = XAxis.XAxisPosition.BOTTOM  // X축이 바닥에 위치
             xAxis.setDrawGridLines(false)  // 그리드 라인 숨기기
@@ -110,40 +123,22 @@ class MatchReportFragment : Fragment() {
             xAxis.valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
                     return when (value.toInt()) {
-                        0 -> "승리"
-                        1 -> "패배"
+                        4 -> "승리"
+                        3 -> "패배"
                         2 -> "무승부"
-                        3 -> "경기 취소"
-                        4 -> "타팀 직관"
+                        1 -> "경기 취소"
+                        0 -> "타팀 직관"
                         else -> ""
                     }
                 }
             }
 
-            // y축 설정
-            val yAxis = matchesBarchart.axisLeft
-            yAxis.isEnabled = true  // Y축 활성화
-            yAxis.setDrawLabels(true)  // Y축 값 표시 활성화
-//        yAxis.setDrawGridLines(true)  // 그리드 라인 표시 (선택 사항)
-
             // Y축 값 포맷팅 (선택 사항)
-//        yAxis.valueFormatter = object : ValueFormatter() {
-//            override fun getFormattedValue(value: Float): String {
-//                return when (value.toInt()) {
-//                    0 -> "Item 1"
-//                    1 -> "Item 2"
-//                    2 -> "Item 3"
-//                    3 -> "Item 4"
-//                    4 -> "Item 5"
-//                    else -> ""
-//                }
-//            }
-//        }
-
             val leftAxis = matchesBarchart.axisLeft
             leftAxis.isEnabled = false // Y축 라벨 비활성화
             leftAxis.setDrawGridLines(false) // Y축 그리드 라인 숨기기
             leftAxis.setDrawAxisLine(false) // Y축 선 숨기기
+//            leftAxis.isInverted = true
 
             val rightAxis = matchesBarchart.axisRight
             rightAxis.isEnabled = false // 오른쪽 Y축 비활성화
@@ -158,7 +153,6 @@ class MatchReportFragment : Fragment() {
             // 차트 업데이트
             matchesBarchart.invalidate()
         }
-
-
     }
+
 }
