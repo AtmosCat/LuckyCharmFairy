@@ -1,5 +1,6 @@
 package com.luckycharmfairy.presentation.mymatches
 
+import MatchReportFragment
 import android.graphics.Rect
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -186,6 +187,20 @@ class MyMatchesFragment : Fragment() {
                     add(R.id.main_frame, MyPageFragment(), "MyPageFragment")
                 } else {
                     show(myPageFragment)
+                }
+                addToBackStack(null)
+                commit()
+            }
+        }
+
+        val matchReportFragment = requireActivity().supportFragmentManager.findFragmentByTag("MatchReportFragment")
+        binding.btnMatchReport.setOnClickListener{
+            requireActivity().supportFragmentManager.beginTransaction().apply {
+                hide(this@MyMatchesFragment)
+                if (matchReportFragment == null) {
+                    add(R.id.main_frame, MatchReportFragment(), "MatchReportFragment")
+                } else {
+                    show(matchReportFragment)
                 }
                 addToBackStack(null)
                 commit()

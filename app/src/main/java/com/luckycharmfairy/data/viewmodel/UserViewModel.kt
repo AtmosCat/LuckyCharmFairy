@@ -53,8 +53,27 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val _temporaryMatchData = MutableLiveData<Match?>()
     val temporaryMatchData : LiveData<Match?> get() = _temporaryMatchData
 
+    private val _winCount = MutableLiveData<Int?>()
+    val winCount : LiveData<Int?> get() = _winCount
+
+    private val _loseCount = MutableLiveData<Int?>()
+    val loseCount : LiveData<Int?> get() = _loseCount
+
+    private val _tieCount = MutableLiveData<Int?>()
+    val tieCount : LiveData<Int?> get() = _tieCount
+
+    private val _cancelCount = MutableLiveData<Int?>()
+    val cancelCount : LiveData<Int?> get() = _cancelCount
+
+    private val _noResultCount = MutableLiveData<Int?>()
+    val noResultCount : LiveData<Int?> get() = _noResultCount
+
+    private val _matchResultCount = MutableLiveData<MutableList<Int>>()
+    val matchResultCount : LiveData<MutableList<Int>> get() = _matchResultCount
+
     private val _bitmapBeforeSave = MutableLiveData<Bitmap>()
     val bitmapBeforeSave : LiveData<Bitmap> get() = _bitmapBeforeSave
+
     private val _temporaryImageUrls = MutableLiveData<MutableList<String>>()
     val temporaryImageUrls : LiveData<MutableList<String>> get() = _temporaryImageUrls
 
@@ -353,6 +372,32 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                     .set(currentUser.value!!)
             }.onFailure {
                 Log.e(TAG, "deleteMatch() failed! : ${it.message}")
+                handleException(it)
+            }
+        }
+    }
+
+    fun getMatchResultStat() {
+        viewModelScope.launch {
+            runCatching {
+                val matches = currentUser.value!!.matches
+                var win = 0
+                var lose = 0
+                var tie = 0
+                var cancel = 0
+                var noResult = 0
+                matches.forEach {
+                    when (it.result) {
+                        "승리" -> win += 1
+                        "패배" -> lose += 1
+                        "무승부" -> tie += 1
+                        "경기 취소" -> cancel += 1
+                        "타팀 직관" -> noResult += 1
+                    }
+                }
+                _matchResultCount.postValue(mutableListOf(win, lose, tie, cancel, noResult))
+            }.onFailure {
+                Log.e(TAG, "getMatchResultStat() failed! : ${it.message}")
                 handleException(it)
             }
         }

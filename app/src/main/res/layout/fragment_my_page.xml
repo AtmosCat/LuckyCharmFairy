@@ -127,7 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
                 android:text="환경설정"
-                style="@style/textStyle_title"
+                style="@style/textStyle_subtitle"
                 android:gravity="center_vertical"
                 android:paddingStart="30dp"
                 android:background="@drawable/bg_rectangular_updown_border"
@@ -140,7 +140,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
                 android:text="MY종목 관리"
-                style="@style/textStyle_title"
+                style="@style/textStyle_subtitle"
                 android:gravity="center_vertical"
                 android:paddingStart="30dp"
                 android:background="@drawable/bg_rectangular_updown_border"
@@ -153,7 +153,7 @@
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="90dp"-->
 <!--                android:text="MY팀 관리"-->
-<!--                style="@style/textStyle_title"-->
+<!--                style="@style/textStyle_subtitle"-->
 <!--                android:gravity="center_vertical"-->
 <!--                android:paddingStart="30dp"-->
 <!--                android:background="@drawable/bg_rectangular_updown_border"-->
@@ -166,7 +166,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
                 android:text="멤버십 관리"
-                style="@style/textStyle_title"
+                style="@style/textStyle_subtitle"
                 android:gravity="center_vertical"
                 android:paddingStart="30dp"
                 android:background="@drawable/bg_rectangular_updown_border"
@@ -179,7 +179,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
                 android:text="고객센터"
-                style="@style/textStyle_title"
+                style="@style/textStyle_subtitle"
                 android:gravity="center_vertical"
                 android:paddingStart="30dp"
                 android:background="@drawable/bg_rectangular_updown_border"
@@ -192,7 +192,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
                 android:text="공지사항"
-                style="@style/textStyle_title"
+                style="@style/textStyle_subtitle"
                 android:gravity="center_vertical"
                 android:paddingStart="30dp"
                 android:background="@drawable/bg_rectangular_updown_border"
@@ -205,7 +205,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
                 android:text="앱 정보"
-                style="@style/textStyle_title"
+                style="@style/textStyle_subtitle"
                 android:gravity="center_vertical"
                 android:paddingStart="30dp"
                 android:background="@drawable/bg_rectangular_updown_border"
