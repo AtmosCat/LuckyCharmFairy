@@ -3,7 +3,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.ui.graphics.Color
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -17,9 +16,11 @@ import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMatchReportBinding
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.luckycharmfairy.presentation.mymatches.matchreport.WinningStreakAdapter
 import java.text.DecimalFormat
 
 class MatchReportFragment : Fragment() {
@@ -45,6 +46,8 @@ class MatchReportFragment : Fragment() {
     private val userViewModel: UserViewModel by activityViewModels {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
     }
+
+    private val winningStreakAdapter by lazy { WinningStreakAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -357,6 +360,14 @@ class MatchReportFragment : Fragment() {
             val legend = awayMatchesPiechart.legend
             legend.isEnabled = false  // Legend 활성화
         }
+
+        binding.recyclerviewWinningStreak.adapter = winningStreakAdapter
+        binding.recyclerviewWinningStreak.layoutManager = LinearLayoutManager(requireContext())
+
+        userViewModel.getWinningStreakData()
+        winningStreakAdapter.submitList()
+
+
     }
 
 }

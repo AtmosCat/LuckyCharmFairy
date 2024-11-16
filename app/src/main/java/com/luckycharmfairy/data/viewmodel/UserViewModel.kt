@@ -25,6 +25,8 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import java.time.LocalDate
+import java.util.Date
 
 class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val db = FirebaseFirestore.getInstance()
@@ -438,6 +440,32 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 _awayMatchResultCount.postValue(mutableListOf(awayWin, awayLose, awayTie))
             }.onFailure {
                 Log.e(TAG, "getHomeAwayMatchStat() failed! : ${it.message}")
+                handleException(it)
+            }
+        }
+    }
+
+    fun getWinningStreakData() {
+        viewModelScope.launch {
+            runCatching {
+                val matches = currentUser.value!!.matches.sortedBy {
+                    LocalDate.of(it.year.toInt(), it.month.toInt(), it.date.toInt())
+                }
+                var finalWinningStreakMatches = mutableListOf<Match>()
+                var winningStreakMatches = mutableListOf<Match>()
+                for (i in 0..matches.size-2) {
+                    if (matches[i].result == "승리" && matches[i+1].result == "승리") {
+                        winningStreakMatches.add(matches[i+1])
+                        if (matches[i] !in winningStreakMatches) winningStreakMatches.add(matches[i])
+                    }
+                    finalWinningStreakMatches = winningStreakMatches
+                    if (winningStreakMatches.size >= finalWinningStreakMatches.size ) {
+
+                    }
+                }
+
+            }.onFailure {
+                Log.e(TAG, "getWinningStreakData() failed! : ${it.message}")
                 handleException(it)
             }
         }
