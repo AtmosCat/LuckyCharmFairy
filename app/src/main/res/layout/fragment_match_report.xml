@@ -123,7 +123,7 @@
             <com.github.mikephil.charting.charts.HorizontalBarChart
                 android:id="@+id/barchart_matches"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="200dp"
                 android:layout_marginTop="5dp"
                 android:padding="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -132,8 +132,83 @@
                 android:layout_marginHorizontal="10dp"
                 app:layout_constraintTop_toBottomOf="@+id/tv_barchart_title" />
 
+            <TextView
+                android:id="@+id/tv_piechart_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="· 응원팀 직관 승률"
+                style="@style/textStyle_subheading"
+                app:layout_constraintTop_toBottomOf="@+id/barchart_matches"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"
+                />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_piechart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:background="@drawable/bg_round_border_small"
+                android:layout_marginHorizontal="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_piechart_title"
+                >
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/piechart_all_matches"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:layout_constraintTop_toTopOf="@+id/layout_piechart"
+                app:layout_constraintStart_toStartOf="@+id/layout_piechart"
+                app:layout_constraintEnd_toEndOf="@+id/layout_piechart"
+                android:layout_marginTop="5dp"
+                />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="종합 승률"
+                    android:layout_marginTop="5dp"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintEnd_toEndOf="@+id/piechart_all_matches"
+                    app:layout_constraintStart_toStartOf="@+id/piechart_all_matches"
+                    app:layout_constraintTop_toBottomOf="@+id/piechart_all_matches" />
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/piechart_home_matches"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                app:layout_constraintTop_toBottomOf="@+id/piechart_all_matches"
+                app:layout_constraintStart_toStartOf="@+id/layout_piechart"
+                app:layout_constraintEnd_toEndOf="@+id/guideline_half"
+                app:layout_constraintBottom_toBottomOf="@+id/layout_piechart"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="15dp"
+                />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_half"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/piechart_away_matches"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                app:layout_constraintTop_toBottomOf="@+id/piechart_all_matches"
+                app:layout_constraintEnd_toEndOf="@+id/layout_piechart"
+                app:layout_constraintStart_toStartOf="@+id/guideline_half"
+                app:layout_constraintBottom_toBottomOf="@+id/layout_piechart"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="15dp"
+                />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </ScrollView>
     <View
         android:layout_width="match_parent"

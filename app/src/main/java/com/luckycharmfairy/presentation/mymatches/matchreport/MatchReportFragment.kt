@@ -17,6 +17,10 @@ import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMatchReportBinding
 import androidx.core.content.ContextCompat
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import java.text.DecimalFormat
 
 class MatchReportFragment : Fragment() {
 
@@ -50,8 +54,8 @@ class MatchReportFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Barchart 부분
         val matchesBarchart = binding.barchartMatches
-
         userViewModel.getMatchResultStat()
         userViewModel.matchResultCount.observe(viewLifecycleOwner) { data ->
             winCount = data[0]
@@ -71,18 +75,18 @@ class MatchReportFragment : Fragment() {
 //            entries.sortBy { it.x }
 
             // BarDataSet 생성
-            val dataSet = BarDataSet(entries, "직관 횟수") // 레이블
-            dataSet.color = ContextCompat.getColor(requireContext(), R.color.main_mint) // 색상 지정
+            val barDataSet = BarDataSet(entries, "직관 횟수") // 레이블
+            barDataSet.color = ContextCompat.getColor(requireContext(), R.color.main_mint) // 색상 지정
 
             // Y값 데이터 레이블 형식 지정
-            dataSet.setValueFormatter(object : ValueFormatter() {
+            barDataSet.setValueFormatter(object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
                     return "${value.toInt()}회"
                 }
             })
 
             // BarData 객체 생성
-            val barData = BarData(dataSet)
+            val barData = BarData(barDataSet)
 
             // HorizontalBarChart에 데이터 설정
             matchesBarchart.data = barData
@@ -92,18 +96,18 @@ class MatchReportFragment : Fragment() {
             matchesBarchart.barData.barWidth = barWidth
 
             // 바 데이터에 값 레이블 표시
-            dataSet.setDrawValues(true) // 각 바 위에 레이블 표시
-            dataSet.valueTextSize = 10f  // 값 텍스트 크기 설정
-            dataSet.setValueTextColor(ContextCompat.getColor(requireContext(), R.color.main_dark_gray))  // 값 텍스트 색상 설정
+            barDataSet.setDrawValues(true) // 각 바 위에 레이블 표시
+            barDataSet.valueTextSize = 10f  // 값 텍스트 크기 설정
+            barDataSet.setValueTextColor(ContextCompat.getColor(requireContext(), R.color.main_dark_gray))  // 값 텍스트 색상 설정
 
             // 색상 배열 설정
             val barColors = ArrayList<Int>()
             barColors.add(ContextCompat.getColor(requireContext(), R.color.main_mint))
+            barColors.add(ContextCompat.getColor(requireContext(), R.color.calendar_events))
             barColors.add(ContextCompat.getColor(requireContext(), R.color.main_medium_gray))
             barColors.add(ContextCompat.getColor(requireContext(), R.color.main_medium_gray))
             barColors.add(ContextCompat.getColor(requireContext(), R.color.main_medium_gray))
-            barColors.add(ContextCompat.getColor(requireContext(), R.color.main_medium_gray))
-            dataSet.colors = barColors  // 색상 배열을 데이터셋에 적용
+            barDataSet.colors = barColors  // 색상 배열을 데이터셋에 적용
 
             // 불필요한 그리드 라인, 축 레이블 숨기기
             matchesBarchart.setDrawGridBackground(false) // 배경 그리드 비활성화
@@ -152,7 +156,80 @@ class MatchReportFragment : Fragment() {
 
             // 차트 업데이트
             matchesBarchart.invalidate()
+
+            // Piechart - 종합 승률 부분
+            val allMatchesPiechart = binding.piechartAllMatches
+            val allMatchesEntries = ArrayList<PieEntry>()
+            allMatchesEntries.add(PieEntry(winCount.toFloat(), "승리"))
+            allMatchesEntries.add(PieEntry(loseCount.toFloat(), "패배"))
+            allMatchesEntries.add(PieEntry(tieCount.toFloat(), "무승부"))
+
+            // PieDataSet 생성: 데이터와 색상을 설정
+            val pieDataSet = PieDataSet(allMatchesEntries,"")
+
+            val pieColors = ArrayList<Int>()
+            pieColors.add(ContextCompat.getColor(requireContext(), R.color.main_mint))
+            pieColors.add(ContextCompat.getColor(requireContext(), R.color.calendar_events))
+            pieColors.add(ContextCompat.getColor(requireContext(), R.color.main_medium_gray))
+            pieDataSet.colors = pieColors  // 색상 배열을 데이터셋에 적용
+
+            // PieData 생성
+            val data = PieData(pieDataSet)
+
+            // PieChart에 데이터 세팅
+            allMatchesPiechart.data = data
+            allMatchesPiechart.invalidate() // 차트 갱신
+
+            // PieChart의 일부 스타일 설정
+            allMatchesPiechart.setUsePercentValues(true)  // 퍼센트 값 표시
+            allMatchesPiechart.setDrawEntryLabels(false)  // 내부 텍스트 레이블 비활성화
+            allMatchesPiechart.setEntryLabelTextSize(12f)
+
+            // 퍼센트 값을 00% 형식으로 포맷하기 위해 ValueFormatter 사용
+            pieDataSet.valueFormatter = object : ValueFormatter() {
+                private val percentFormat = DecimalFormat("00%")  // 퍼센트 형식을 00%로 설정
+                override fun getFormattedValue(value: Float): String {
+                    return percentFormat.format(value / 100f)  // 100으로 나누어서 00% 형식으로 출력
+                }
+            }
+
+            allMatchesPiechart.setDrawHoleEnabled(true) // 홀을 활성화
+            allMatchesPiechart.holeRadius = 50f // 홀 크기 설정
+            allMatchesPiechart.setHoleColor(ContextCompat.getColor(requireContext(), R.color.white)) // 홀 배경색 설정
+
+            val pieCenterText = (winCount.toDouble())/(winCount + loseCount + tieCount) * 100
+            allMatchesPiechart.setCenterText("${pieCenterText}%")
+            allMatchesPiechart.setCenterTextSize(20f)  // 중심 텍스트 크기
+
+            allMatchesPiechart.animateY(1000) // Y축 애니메이션
+
+            // Description Label 제거
+            allMatchesPiechart.description.isEnabled = false  // Description Label 비활성화
+
+            // Legend 설정 (차트 외부에 레이블 표시) - 범례
+            val legend = allMatchesPiechart.legend
+            legend.isEnabled = true  // Legend 활성화
+            legend.verticalAlignment = com.github.mikephil.charting.components.Legend.LegendVerticalAlignment.TOP
+            legend.horizontalAlignment = com.github.mikephil.charting.components.Legend.LegendHorizontalAlignment.RIGHT
+            legend.orientation = com.github.mikephil.charting.components.Legend.LegendOrientation.HORIZONTAL
+            legend.setDrawInside(false)  // 내부에 그리지 않도록 설정
+            legend.textSize = 10f  // 텍스트 크기 설정
+            legend.textColor = ContextCompat.getColor(requireContext(), R.color.main_dark_gray)  // 텍스트 색상 설정
+
+            // 차트의 오른쪽에만 여백을 추가하여 Legend를 배치 -> 차트의 이동 방지
+//            allMatchesPiechart.setExtraOffsets(0f, 0f, 150f, 0f)
+
+
+
         }
+
+        // Piechart - 홈 / 어웨이 승률 부분
+
+
+//        val homeMatchesPiechart = binding.piechartHomeMatches
+//        val awayMatchesPiechart = binding.piechartAwayMatches
+
+
     }
 
 }
