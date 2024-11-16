@@ -34,6 +34,14 @@ class MatchReportFragment : Fragment() {
     private var cancelCount = 0
     private var noResultCount = 0
 
+    private var homeWinCount = 0
+    private var homeLoseCount = 0
+    private var homeTieCount = 0
+
+    private var awayWinCount = 0
+    private var awayLoseCount = 0
+    private var awayTieCount = 0
+
     private val userViewModel: UserViewModel by activityViewModels {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
     }
@@ -166,6 +174,7 @@ class MatchReportFragment : Fragment() {
 
             // PieDataSet 생성: 데이터와 색상을 설정
             val pieDataSet = PieDataSet(allMatchesEntries,"")
+            pieDataSet.valueTextSize = 14f
 
             val pieColors = ArrayList<Int>()
             pieColors.add(ContextCompat.getColor(requireContext(), R.color.main_mint))
@@ -183,7 +192,7 @@ class MatchReportFragment : Fragment() {
             // PieChart의 일부 스타일 설정
             allMatchesPiechart.setUsePercentValues(true)  // 퍼센트 값 표시
             allMatchesPiechart.setDrawEntryLabels(false)  // 내부 텍스트 레이블 비활성화
-            allMatchesPiechart.setEntryLabelTextSize(12f)
+//            allMatchesPiechart.setEntryLabelTextSize(16f)
 
             // 퍼센트 값을 00% 형식으로 포맷하기 위해 ValueFormatter 사용
             pieDataSet.valueFormatter = object : ValueFormatter() {
@@ -198,7 +207,9 @@ class MatchReportFragment : Fragment() {
             allMatchesPiechart.setHoleColor(ContextCompat.getColor(requireContext(), R.color.white)) // 홀 배경색 설정
 
             val pieCenterText = (winCount.toDouble())/(winCount + loseCount + tieCount) * 100
-            allMatchesPiechart.setCenterText("${pieCenterText}%")
+            val decimalFormat = DecimalFormat("00%")
+            val formattedCenterText = decimalFormat.format(pieCenterText / 100)
+            allMatchesPiechart.setCenterText("${formattedCenterText}")
             allMatchesPiechart.setCenterTextSize(20f)  // 중심 텍스트 크기
 
             allMatchesPiechart.animateY(1000) // Y축 애니메이션
@@ -218,18 +229,134 @@ class MatchReportFragment : Fragment() {
 
             // 차트의 오른쪽에만 여백을 추가하여 Legend를 배치 -> 차트의 이동 방지
 //            allMatchesPiechart.setExtraOffsets(0f, 0f, 150f, 0f)
-
-
-
         }
 
         // Piechart - 홈 / 어웨이 승률 부분
+        userViewModel.getHomeAwayMatchStat()
 
+        userViewModel.homeMatchResultCount.observe(viewLifecycleOwner) { data ->
+            homeWinCount = data[0]
+            homeLoseCount = data[1]
+            homeTieCount = data[2]
 
-//        val homeMatchesPiechart = binding.piechartHomeMatches
-//        val awayMatchesPiechart = binding.piechartAwayMatches
+            val homeMatchesPiechart = binding.piechartHomeMatches
 
+            val homeMatchesEntries = ArrayList<PieEntry>()
+            homeMatchesEntries.add(PieEntry(homeWinCount.toFloat(), "승리"))
+            homeMatchesEntries.add(PieEntry(homeLoseCount.toFloat(), "패배"))
+            homeMatchesEntries.add(PieEntry(homeTieCount.toFloat(), "무승부"))
 
+            // PieDataSet 생성: 데이터와 색상을 설정
+            val pieDataSet = PieDataSet(homeMatchesEntries,"")
+            pieDataSet.valueTextSize = 12f
+
+            val pieColors = ArrayList<Int>()
+            pieColors.add(ContextCompat.getColor(requireContext(), R.color.main_mint))
+            pieColors.add(ContextCompat.getColor(requireContext(), R.color.calendar_events))
+            pieColors.add(ContextCompat.getColor(requireContext(), R.color.main_medium_gray))
+            pieDataSet.colors = pieColors  // 색상 배열을 데이터셋에 적용
+
+            // PieData 생성
+            val data = PieData(pieDataSet)
+
+            // PieChart에 데이터 세팅
+            homeMatchesPiechart.data = data
+            homeMatchesPiechart.invalidate() // 차트 갱신
+
+            // PieChart의 일부 스타일 설정
+            homeMatchesPiechart.setUsePercentValues(true)  // 퍼센트 값 표시
+            homeMatchesPiechart.setDrawEntryLabels(false)  // 내부 텍스트 레이블 비활성화
+//            homeMatchesPiechart.setEntryLabelTextSize(14f)
+
+            // 퍼센트 값을 00% 형식으로 포맷하기 위해 ValueFormatter 사용
+            pieDataSet.valueFormatter = object : ValueFormatter() {
+                private val percentFormat = DecimalFormat("00%")  // 퍼센트 형식을 00%로 설정
+                override fun getFormattedValue(value: Float): String {
+                    return percentFormat.format(value / 100f)  // 100으로 나누어서 00% 형식으로 출력
+                }
+            }
+
+            homeMatchesPiechart.setDrawHoleEnabled(true) // 홀을 활성화
+            homeMatchesPiechart.holeRadius = 50f // 홀 크기 설정
+            homeMatchesPiechart.setHoleColor(ContextCompat.getColor(requireContext(), R.color.white)) // 홀 배경색 설정
+
+            val pieCenterText = (homeWinCount.toDouble())/(homeWinCount + homeLoseCount + homeTieCount) * 100
+            val decimalFormat = DecimalFormat("00%")
+            val formattedCenterText = decimalFormat.format(pieCenterText / 100)
+            homeMatchesPiechart.setCenterText("${formattedCenterText}")
+            homeMatchesPiechart.setCenterTextSize(16f)  // 중심 텍스트 크기
+
+            homeMatchesPiechart.animateY(1000) // Y축 애니메이션
+
+            // Description Label 제거
+            homeMatchesPiechart.description.isEnabled = false  // Description Label 비활성화
+
+            // Legend 설정 (차트 외부에 레이블 표시) - 범례
+            val legend = homeMatchesPiechart.legend
+            legend.isEnabled = false  // Legend 활성화
+        }
+        // 어웨이 파이차트
+        userViewModel.awayMatchResultCount.observe(viewLifecycleOwner) { data ->
+            awayWinCount = data[0]
+            awayLoseCount = data[1]
+            awayTieCount = data[2]
+
+            val awayMatchesPiechart = binding.piechartAwayMatches
+
+            val awayMatchesEntries = ArrayList<PieEntry>()
+            awayMatchesEntries.add(PieEntry(awayWinCount.toFloat(), "승리"))
+            awayMatchesEntries.add(PieEntry(awayLoseCount.toFloat(), "패배"))
+            awayMatchesEntries.add(PieEntry(awayTieCount.toFloat(), "무승부"))
+
+            // PieDataSet 생성: 데이터와 색상을 설정
+            val pieDataSet = PieDataSet(awayMatchesEntries,"")
+            pieDataSet.valueTextSize = 12f
+
+            val pieColors = ArrayList<Int>()
+            pieColors.add(ContextCompat.getColor(requireContext(), R.color.main_mint))
+            pieColors.add(ContextCompat.getColor(requireContext(), R.color.calendar_events))
+            pieColors.add(ContextCompat.getColor(requireContext(), R.color.main_medium_gray))
+            pieDataSet.colors = pieColors  // 색상 배열을 데이터셋에 적용
+
+            // PieData 생성
+            val data = PieData(pieDataSet)
+
+            // PieChart에 데이터 세팅
+            awayMatchesPiechart.data = data
+            awayMatchesPiechart.invalidate() // 차트 갱신
+
+            // PieChart의 일부 스타일 설정
+            awayMatchesPiechart.setUsePercentValues(true)  // 퍼센트 값 표시
+            awayMatchesPiechart.setDrawEntryLabels(false)  // 내부 텍스트 레이블 비활성화
+//            awayMatchesPiechart.setEntryLabelTextSize(14f)
+
+            // 퍼센트 값을 00% 형식으로 포맷하기 위해 ValueFormatter 사용
+            pieDataSet.valueFormatter = object : ValueFormatter() {
+                private val percentFormat = DecimalFormat("00%")  // 퍼센트 형식을 00%로 설정
+                override fun getFormattedValue(value: Float): String {
+                    return percentFormat.format(value / 100f)  // 100으로 나누어서 00% 형식으로 출력
+                }
+            }
+
+            awayMatchesPiechart.setDrawHoleEnabled(true) // 홀을 활성화
+            awayMatchesPiechart.holeRadius = 50f // 홀 크기 설정
+            awayMatchesPiechart.setHoleColor(ContextCompat.getColor(requireContext(), R.color.white)) // 홀 배경색 설정
+
+            val pieCenterText = (awayWinCount.toDouble())/(awayWinCount + awayLoseCount + awayTieCount) * 100
+            val decimalFormat = DecimalFormat("00%")
+            val formattedCenterText = decimalFormat.format(pieCenterText / 100)
+            awayMatchesPiechart.setCenterText("${formattedCenterText}")
+            awayMatchesPiechart.setCenterTextSize(16f)  // 중심 텍스트 크기
+
+            awayMatchesPiechart.animateY(1000) // Y축 애니메이션
+
+            // Description Label 제거
+            awayMatchesPiechart.description.isEnabled = false  // Description Label 비활성화
+
+            // Legend 설정 (차트 외부에 레이블 표시) - 범례
+            val legend = awayMatchesPiechart.legend
+            legend.isEnabled = false  // Legend 활성화
+        }
     }
 
 }

@@ -186,14 +186,27 @@
                 app:layout_constraintEnd_toEndOf="@+id/guideline_half"
                 app:layout_constraintBottom_toBottomOf="@+id/layout_piechart"
                 android:layout_marginTop="20dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="홈 승률"
+                android:layout_marginTop="5dp"
+                style="@style/textStyle_subheading"
+                app:layout_constraintEnd_toEndOf="@+id/piechart_home_matches"
+                app:layout_constraintStart_toStartOf="@+id/piechart_home_matches"
+                app:layout_constraintTop_toBottomOf="@+id/piechart_home_matches"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="15dp"
                 />
+
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline_half"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.5" />
+
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/piechart_away_matches"
                 android:layout_width="150dp"
@@ -203,6 +216,17 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline_half"
                 app:layout_constraintBottom_toBottomOf="@+id/layout_piechart"
                 android:layout_marginTop="20dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="어웨이 승률"
+                android:layout_marginTop="5dp"
+                style="@style/textStyle_subheading"
+                app:layout_constraintEnd_toEndOf="@+id/piechart_away_matches"
+                app:layout_constraintStart_toStartOf="@+id/piechart_away_matches"
+                app:layout_constraintTop_toBottomOf="@+id/piechart_away_matches"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="15dp"
                 />
             </androidx.constraintlayout.widget.ConstraintLayout>

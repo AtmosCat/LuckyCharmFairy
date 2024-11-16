@@ -71,6 +71,12 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val _matchResultCount = MutableLiveData<MutableList<Int>>()
     val matchResultCount : LiveData<MutableList<Int>> get() = _matchResultCount
 
+    private val _homeMatchResultCount = MutableLiveData<MutableList<Int>>()
+    val homeMatchResultCount : LiveData<MutableList<Int>> get() = _homeMatchResultCount
+
+    private val _awayMatchResultCount = MutableLiveData<MutableList<Int>>()
+    val awayMatchResultCount : LiveData<MutableList<Int>> get() = _awayMatchResultCount
+
     private val _bitmapBeforeSave = MutableLiveData<Bitmap>()
     val bitmapBeforeSave : LiveData<Bitmap> get() = _bitmapBeforeSave
 
@@ -398,6 +404,40 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 _matchResultCount.postValue(mutableListOf(win, lose, tie, cancel, noResult))
             }.onFailure {
                 Log.e(TAG, "getMatchResultStat() failed! : ${it.message}")
+                handleException(it)
+            }
+        }
+    }
+
+    fun getHomeAwayMatchStat() {
+        viewModelScope.launch {
+            runCatching {
+                val homeMatches = currentUser.value!!.matches.filter { it.myteam == "홈 팀" }
+                val awayMatches = currentUser.value!!.matches.filter { it.myteam == "어웨이 팀" }
+                var homeWin = 0
+                var homeLose = 0
+                var homeTie = 0
+                var awayWin = 0
+                var awayLose = 0
+                var awayTie = 0
+                homeMatches.forEach {
+                    when (it.result) {
+                        "승리" -> homeWin += 1
+                        "패배" -> homeLose += 1
+                        "무승부" -> homeTie += 1
+                    }
+                }
+                awayMatches.forEach {
+                    when (it.result) {
+                        "승리" -> awayWin += 1
+                        "패배" -> awayLose += 1
+                        "무승부" -> awayTie += 1
+                    }
+                }
+                _homeMatchResultCount.postValue(mutableListOf(homeWin, homeLose, homeTie))
+                _awayMatchResultCount.postValue(mutableListOf(awayWin, awayLose, awayTie))
+            }.onFailure {
+                Log.e(TAG, "getHomeAwayMatchStat() failed! : ${it.message}")
                 handleException(it)
             }
         }
