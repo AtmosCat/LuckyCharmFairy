@@ -1,3 +1,4 @@
+import android.content.res.ColorStateList
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -411,6 +412,8 @@ class MatchReportFragment : Fragment() {
                 highestWinningRateDays.add(days[it])
             }
 
+            binding.tvWinByDay.text = "${highestWinningRateDays.joinToString(", ")}요일에 직관 승률이 가장 높았어요!"
+
             binding.tvMondayWinRate.text = mondayWinningRate
             binding.tvTuesdayWinRate.text = tuesdayWinningRate
             binding.tvWednesdayWinRate.text = wednesdayWinningRate
@@ -419,9 +422,39 @@ class MatchReportFragment : Fragment() {
             binding.tvSaturdayWinRate.text = saturdayWinningRate
             binding.tvSundayWinRate.text = sundayWinningRate
 
+            val tvWinningRateList = listOf(
+                binding.tvMondayWinRate,
+                binding.tvTuesdayWinRate,
+                binding.tvWednesdayWinRate,
+                binding.tvThursdayWinRate,
+                binding.tvFridayWinRate,
+                binding.tvSaturdayWinRate,
+                binding.tvSundayWinRate
+            )
 
+            val monday = binding.tvMonday
+            val tuesday = binding.tvTuesday
+            val wednesday = binding.tvWednesday
+            val thursday = binding.tvThursday
+            val friday = binding.tvFriday
+            val saturday = binding.tvSaturday
+            val sunday = binding.tvSunday
 
+            val tvDayList = listOf(
+                monday,
+                tuesday,
+                wednesday,
+                thursday,
+                friday,
+                saturday,
+                sunday
+            )
 
+            indexes.forEach {
+                val colorStateList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_mint))
+                tvDayList[it].backgroundTintList = colorStateList
+                tvWinningRateList[it].setTextColor(ContextCompat.getColor(requireContext(), R.color.main_mint))
+            }
         }
 
 
