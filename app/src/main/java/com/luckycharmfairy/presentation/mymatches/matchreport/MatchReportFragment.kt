@@ -45,6 +45,7 @@ class MatchReportFragment : Fragment() {
     private var awayTieCount = 0
 
     private var winningStreakMatches = mutableListOf<Match>()
+    private var winningMatchesByDay = mutableListOf<Int>()
 
     private val userViewModel: UserViewModel by activityViewModels {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
@@ -375,6 +376,53 @@ class MatchReportFragment : Fragment() {
             binding.tvWinningStreak.text = "내가 직관을 간 날,\n내 응원팀은 최다 ${winningStreakMatches.size}연승을 기록했어요!"
         }
 
+        // 요일별 승률 파트
+        userViewModel.getWinningMatchesByDay()
+        userViewModel.winningMatchesByDay.observe(viewLifecycleOwner) { data ->
+            winningMatchesByDay = data
+            val decimalFormat = DecimalFormat("00%")
+            val mondayWinningRate = decimalFormat.format(winningMatchesByDay[0].toDouble() / winningMatchesByDay.sum())
+            val tuesdayWinningRate = decimalFormat.format(winningMatchesByDay[1].toDouble() / winningMatchesByDay.sum())
+            val wednesdayWinningRate = decimalFormat.format(winningMatchesByDay[2].toDouble() / winningMatchesByDay.sum())
+            val thursdayWinningRate = decimalFormat.format(winningMatchesByDay[3].toDouble() / winningMatchesByDay.sum())
+            val fridayWinningRate = decimalFormat.format(winningMatchesByDay[4].toDouble() / winningMatchesByDay.sum())
+            val saturdayWinningRate = decimalFormat.format(winningMatchesByDay[5].toDouble() / winningMatchesByDay.sum())
+            val sundayWinningRate = decimalFormat.format(winningMatchesByDay[6].toDouble() / winningMatchesByDay.sum())
+
+            val winningRatesByDay = listOf(
+                mondayWinningRate,
+                tuesdayWinningRate,
+                wednesdayWinningRate,
+                thursdayWinningRate,
+                fridayWinningRate,
+                saturdayWinningRate,
+                sundayWinningRate,
+                )
+            val days = mutableListOf("월","화","수","목","금","토","일")
+            val max = winningRatesByDay.maxOrNull()
+            val indexes = mutableListOf<Int>()
+            winningRatesByDay.forEach {
+                if (it == max) {
+                    indexes.add(winningRatesByDay.indexOf(it))
+                }
+            }
+            val highestWinningRateDays = mutableListOf<String>()
+            indexes.forEach {
+                highestWinningRateDays.add(days[it])
+            }
+
+            binding.tvMondayWinRate.text = mondayWinningRate
+            binding.tvTuesdayWinRate.text = tuesdayWinningRate
+            binding.tvWednesdayWinRate.text = wednesdayWinningRate
+            binding.tvThursdayWinRate.text = thursdayWinningRate
+            binding.tvFridayWinRate.text = fridayWinningRate
+            binding.tvSaturdayWinRate.text = saturdayWinningRate
+            binding.tvSundayWinRate.text = sundayWinningRate
+
+
+
+
+        }
 
 
     }

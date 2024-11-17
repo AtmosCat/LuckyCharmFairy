@@ -82,6 +82,9 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val _winningStreakMatches = MutableLiveData<MutableList<Match>>()
     val winningStreakMatches : LiveData<MutableList<Match>> get() = _winningStreakMatches
 
+    private val _winningMatchesByDay = MutableLiveData<MutableList<Int>>()
+    val winningMatchesByDay : LiveData<MutableList<Int>> get() = _winningMatchesByDay
+
     private val _bitmapBeforeSave = MutableLiveData<Bitmap>()
     val bitmapBeforeSave : LiveData<Bitmap> get() = _bitmapBeforeSave
 
@@ -470,6 +473,30 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 _winningStreakMatches.postValue(finalWinningStreakMatches.toMutableList())
             }.onFailure {
                 Log.e(TAG, "getWinningStreakData() failed! : ${it.message}")
+                handleException(it)
+            }
+        }
+    }
+
+    fun getWinningMatchesByDay() {
+        viewModelScope.launch {
+            runCatching {
+                val matches = currentUser.value!!.matches.filter { it.result == "승리" }
+                val winningRates = mutableListOf(0,0,0,0,0,0,0) // 월 화 수 목 금 토 일
+                matches.forEach {
+                    when (it.day) {
+                        "월" -> winningRates[0] += 1
+                        "화" -> winningRates[1] += 1
+                        "수" -> winningRates[2] += 1
+                        "목" -> winningRates[3] += 1
+                        "금" -> winningRates[4] += 1
+                        "토" -> winningRates[5] += 1
+                        "일" -> winningRates[6] += 1
+                    }
+                }
+                _winningMatchesByDay.postValue(winningRates)
+            }.onFailure {
+                Log.e(TAG, "getWinningMatchesByDay() failed! : ${it.message}")
                 handleException(it)
             }
         }
