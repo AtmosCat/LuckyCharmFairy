@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.presentation.mymatches.matchreport.WinningStreakAdapter
 import java.text.DecimalFormat
 
@@ -42,6 +43,8 @@ class MatchReportFragment : Fragment() {
     private var awayWinCount = 0
     private var awayLoseCount = 0
     private var awayTieCount = 0
+
+    private var winningStreakMatches = mutableListOf<Match>()
 
     private val userViewModel: UserViewModel by activityViewModels {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
@@ -364,8 +367,14 @@ class MatchReportFragment : Fragment() {
         binding.recyclerviewWinningStreak.adapter = winningStreakAdapter
         binding.recyclerviewWinningStreak.layoutManager = LinearLayoutManager(requireContext())
 
+        // 최다 연승 기록 파트
         userViewModel.getWinningStreakData()
-        winningStreakAdapter.submitList()
+        userViewModel.winningStreakMatches.observe(viewLifecycleOwner) { data ->
+            winningStreakMatches = data
+            winningStreakAdapter.submitList(winningStreakMatches)
+            binding.tvWinningStreak.text = "내가 직관을 간 날,\n내 응원팀은 최다 ${winningStreakMatches.size}연승을 기록했어요!"
+        }
+
 
 
     }

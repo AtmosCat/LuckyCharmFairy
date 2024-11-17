@@ -263,6 +263,7 @@
                     android:text="내가 직관을 간 날,\n내 응원팀은 최다 N연승을 기록했어요!"
                     style="@style/textStyle_subtitle"
                     android:gravity="center"
+                    android:lineSpacingExtra="5dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -278,11 +279,311 @@
                     android:layout_margin="10dp"
                     tools:listitem="@layout/recyclerview_winning_streak"
                     />
-
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <TextView
+                android:id="@+id/tv_win_by_day_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="· 직관 요일별 승률"
+                style="@style/textStyle_subheading"
+                app:layout_constraintTop_toBottomOf="@+id/layout_winning_streak"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"
+                />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_win_by_day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:background="@drawable/bg_round_border_small"
+                android:layout_marginHorizontal="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_win_by_day_title"
+                >
+
+                <TextView
+                    android:id="@+id/tv_win_by_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="O요일에 직관 승률이 가장 높았어요!"
+                    style="@style/textStyle_subtitle"
+                    android:gravity="center"
+                    android:lineSpacingExtra="5dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="10dp"
+                    />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline_0.08"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.08" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline_0.20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.20" />
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline_0.32"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.32" />
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline_0.44"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.44" />
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline_0.56"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.56" />
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline_0.68"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.68" />
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline_0.80"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.80" />
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline_0.92"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.92" />
+                <TextView
+                    android:id="@+id/tv_monday"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintDimensionRatio="1:1"
+                    android:text="월"
+                    style="@style/textStyle_subtitle"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/main_gray"
+                    android:gravity="center"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginTop="15dp"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_0.08"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_0.20"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_win_by_day"
+                    android:background="@drawable/bg_round_border_big"
+                    />
+                <TextView
+                    android:id="@+id/tv_tuesday"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintDimensionRatio="1:1"
+                    android:text="화"
+                    style="@style/textStyle_subtitle"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/main_gray"
+                    android:gravity="center"
+                    android:layout_marginHorizontal="5dp"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_0.20"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_0.32"
+                    app:layout_constraintTop_toTopOf="@+id/tv_monday"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_monday"
+                    android:background="@drawable/bg_round_border_big"
+                    />
+                <TextView
+                    android:id="@+id/tv_wednesday"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintDimensionRatio="1:1"
+                    android:text="수"
+                    style="@style/textStyle_subtitle"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/main_gray"
+                    android:gravity="center"
+                    android:layout_marginHorizontal="5dp"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_0.32"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_0.44"
+                    app:layout_constraintTop_toTopOf="@+id/tv_monday"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_monday"
+                    android:background="@drawable/bg_round_border_big"
+                    />
+                <TextView
+                    android:id="@+id/tv_thursday"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintDimensionRatio="1:1"
+                    android:text="목"
+                    style="@style/textStyle_subtitle"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/main_gray"
+                    android:gravity="center"
+                    android:layout_marginHorizontal="5dp"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_0.44"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_0.56"
+                    app:layout_constraintTop_toTopOf="@+id/tv_monday"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_monday"
+                    android:background="@drawable/bg_round_border_big"
+                    />
+                <TextView
+                    android:id="@+id/tv_friday"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintDimensionRatio="1:1"
+                    android:text="금"
+                    style="@style/textStyle_subtitle"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/main_gray"
+                    android:gravity="center"
+                    android:layout_marginHorizontal="5dp"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_0.56"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_0.68"
+                    app:layout_constraintTop_toTopOf="@+id/tv_monday"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_monday"
+                    android:background="@drawable/bg_round_border_big"
+                    />
+                <TextView
+                    android:id="@+id/tv_saturday"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintDimensionRatio="1:1"
+                    android:text="토"
+                    style="@style/textStyle_subtitle"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/main_gray"
+                    android:gravity="center"
+                    android:layout_marginHorizontal="5dp"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_0.68"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_0.80"
+                    app:layout_constraintTop_toTopOf="@+id/tv_monday"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_monday"
+                    android:background="@drawable/bg_round_border_big"
+                    />
+                <TextView
+                    android:id="@+id/tv_sunday"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintDimensionRatio="1:1"
+                    android:text="일"
+                    style="@style/textStyle_subtitle"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/main_gray"
+                    android:gravity="center"
+                    android:layout_marginHorizontal="5dp"
+                    app:layout_constraintStart_toStartOf="@+id/guideline_0.80"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline_0.92"
+                    app:layout_constraintTop_toTopOf="@+id/tv_monday"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_monday"
+                    android:background="@drawable/bg_round_border_big"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_monday_win_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00%"
+                    style="@style/textStyle_subtitle"
+                    android:textColor="@color/main_gray"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_monday"
+                    app:layout_constraintStart_toStartOf="@+id/tv_monday"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_monday"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_tuesday_win_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00%"
+                    style="@style/textStyle_subtitle"
+                    android:textColor="@color/main_gray"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_tuesday"
+                    app:layout_constraintStart_toStartOf="@+id/tv_tuesday"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_tuesday"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_wednesday_win_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00%"
+                    style="@style/textStyle_subtitle"
+                    android:textColor="@color/main_gray"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_wednesday"
+                    app:layout_constraintStart_toStartOf="@+id/tv_wednesday"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_wednesday"
+                    />
+                <TextView
+                    android:id="@+id/tv_thursday_win_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00%"
+                    style="@style/textStyle_subtitle"
+                    android:textColor="@color/main_gray"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_thursday"
+                    app:layout_constraintStart_toStartOf="@+id/tv_thursday"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_thursday"
+                    />
+                <TextView
+                    android:id="@+id/tv_friday_win_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00%"
+                    style="@style/textStyle_subtitle"
+                    android:textColor="@color/main_gray"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_friday"
+                    app:layout_constraintStart_toStartOf="@+id/tv_friday"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_friday"
+                    />
+                <TextView
+                    android:id="@+id/tv_saturday_win_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00%"
+                    style="@style/textStyle_subtitle"
+                    android:textColor="@color/main_gray"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_saturday"
+                    app:layout_constraintStart_toStartOf="@+id/tv_saturday"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_saturday"
+                    />
+                <TextView
+                    android:id="@+id/tv_sunday_win_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00%"
+                    style="@style/textStyle_subtitle"
+                    android:textColor="@color/main_gray"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_sunday"
+                    app:layout_constraintStart_toStartOf="@+id/tv_sunday"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_sunday"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>

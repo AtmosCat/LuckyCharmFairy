@@ -79,6 +79,9 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val _awayMatchResultCount = MutableLiveData<MutableList<Int>>()
     val awayMatchResultCount : LiveData<MutableList<Int>> get() = _awayMatchResultCount
 
+    private val _winningStreakMatches = MutableLiveData<MutableList<Match>>()
+    val winningStreakMatches : LiveData<MutableList<Match>> get() = _winningStreakMatches
+
     private val _bitmapBeforeSave = MutableLiveData<Bitmap>()
     val bitmapBeforeSave : LiveData<Bitmap> get() = _bitmapBeforeSave
 
@@ -451,19 +454,20 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 val matches = currentUser.value!!.matches.sortedBy {
                     LocalDate.of(it.year.toInt(), it.month.toInt(), it.date.toInt())
                 }
-                var finalWinningStreakMatches = mutableListOf<Match>()
-                var winningStreakMatches = mutableListOf<Match>()
+                var finalWinningStreakMatches = mutableSetOf<Match>()
+                var winningStreakMatches = mutableSetOf<Match>()
                 for (i in 0..matches.size-2) {
                     if (matches[i].result == "승리" && matches[i+1].result == "승리") {
+                        winningStreakMatches.add(matches[i])
                         winningStreakMatches.add(matches[i+1])
-                        if (matches[i] !in winningStreakMatches) winningStreakMatches.add(matches[i])
-                    }
-                    finalWinningStreakMatches = winningStreakMatches
-                    if (winningStreakMatches.size >= finalWinningStreakMatches.size ) {
-
+                        if (winningStreakMatches.size >= finalWinningStreakMatches.size) {
+                            finalWinningStreakMatches = winningStreakMatches
+                        }
+                    } else {
+                        winningStreakMatches = mutableSetOf()
                     }
                 }
-
+                _winningStreakMatches.postValue(finalWinningStreakMatches.toMutableList())
             }.onFailure {
                 Log.e(TAG, "getWinningStreakData() failed! : ${it.message}")
                 handleException(it)

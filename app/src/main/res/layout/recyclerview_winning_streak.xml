@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <TextView
         android:id="@+id/tv_match"
+        style="@style/textStyle_subheading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="· 2024.05.06 / 고척스카이돔 / 한화 vs LG / 9:0  승리"
-        style="@style/textStyle_subheading"
         android:padding="5dp"
-        />
+        android:lineSpacingExtra="5dp"
+        android:paddingLeft="20dp"
+        android:text="· 2024.05.06 / \n고척스카이돔 / 한화 vs LG / 9:0  승리"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
