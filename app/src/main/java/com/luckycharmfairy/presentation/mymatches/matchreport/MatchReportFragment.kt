@@ -18,9 +18,14 @@ import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMatchReportBinding
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.presentation.mymatches.matchreport.WinningStreakAdapter
 import java.text.DecimalFormat
@@ -456,6 +461,57 @@ class MatchReportFragment : Fragment() {
                 tvWinningRateList[it].setTextColor(ContextCompat.getColor(requireContext(), R.color.main_mint))
             }
         }
+
+        // 최근 월별 승률 부분
+//        userViewModel.getMonthlyWinningMatches()
+//        userViewModel.monthlyWinningMatches.observe(viewLifecycleOwner) { data ->
+
+            // LineChart 뷰 가져오기
+            val lineChart: LineChart = binding.linechartMatches
+
+            // 꺾은선 그래프에 표시할 데이터 생성
+            val entries = mutableListOf<Entry>()
+            entries.add(Entry(0f, 1f))
+            entries.add(Entry(1f, 2f))
+            entries.add(Entry(2f, 0f))
+            entries.add(Entry(3f, 4f))
+            entries.add(Entry(4f, 3f))
+
+            // LineDataSet 생성 (데이터 세트를 설정)
+            val dataSet = LineDataSet(entries, "")
+
+            // 데이터 세트 색상, 라인 스타일 등 설정
+            dataSet.color = ContextCompat.getColor(requireContext(), R.color.main_mint)
+            dataSet.setCircleColor(ContextCompat.getColor(requireContext(), R.color.main_mint))  // 원 색상
+            dataSet.lineWidth = 2f  // 선 두께
+            dataSet.circleRadius = 5f  // 원 크기
+            dataSet.setDrawCircleHole(true)  // 원의 구멍 여부 설정
+
+            // LineData 생성
+            val lineData = LineData(dataSet)
+
+            // LineChart에 데이터 적용
+            lineChart.data = lineData
+
+            val xAxis = lineChart.xAxis
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
+            xAxis.setDrawGridLines(false)  // 그리드 라인 숨기기
+
+            val yAxis = lineChart.axisLeft
+            yAxis.setDrawLabels(true)  // Y축 라벨 표시
+            lineChart.axisRight.isEnabled = false  // 오른쪽 Y축 비활성화
+
+            lineChart.animateXY(2000, 2000)  // X, Y축 애니메이션 시간 2초
+
+            // 범례 비활성화
+            lineChart.legend.isEnabled = false  // 범례를 숨김
+
+            // 그래프 스타일 설정
+            lineChart.invalidate()  // 데이터를 변경한 후 그래프 다시 그리기
+
+
+
+//        }
 
 
     }

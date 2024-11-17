@@ -584,6 +584,33 @@
                     app:layout_constraintEnd_toEndOf="@+id/tv_sunday"
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tv_monthly_winning_rates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="· 최근 월별 승률"
+                style="@style/textStyle_subheading"
+                app:layout_constraintTop_toBottomOf="@+id/layout_win_by_day"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"
+                />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/linechart_matches"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="5dp"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:background="@drawable/bg_round_border_small"
+                android:layout_marginHorizontal="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_monthly_winning_rates" />
+
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
