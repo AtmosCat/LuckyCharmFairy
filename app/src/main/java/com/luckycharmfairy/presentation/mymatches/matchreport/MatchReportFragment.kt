@@ -463,29 +463,49 @@ class MatchReportFragment : Fragment() {
         }
 
         // 최근 월별 승률 부분
-//        userViewModel.getMonthlyWinningMatches()
-//        userViewModel.monthlyWinningMatches.observe(viewLifecycleOwner) { data ->
+        userViewModel.getMonthlyWinningRates()
+        userViewModel.lastAndThisYearWinningRatesByMonth.observe(viewLifecycleOwner) { data ->
 
             // LineChart 뷰 가져오기
             val lineChart: LineChart = binding.linechartMatches
 
             // 꺾은선 그래프에 표시할 데이터 생성
             val entries = mutableListOf<Entry>()
-            entries.add(Entry(0f, 1f))
-            entries.add(Entry(1f, 2f))
-            entries.add(Entry(2f, 0f))
-            entries.add(Entry(3f, 4f))
-            entries.add(Entry(4f, 3f))
+            entries.add(Entry(0f, 20f))  // 1월
+            entries.add(Entry(1f, 40f))  // 2월
+            entries.add(Entry(2f, 60f))  // 3월
+            entries.add(Entry(3f, 30f))  // 4월
+            entries.add(Entry(4f, 50f))  // 5월
+            entries.add(Entry(5f, 80f))  // 6월
+            entries.add(Entry(6f, 70f))  // 7월
+            entries.add(Entry(7f, 90f))  // 8월
+            entries.add(Entry(8f, 60f))  // 9월
+            entries.add(Entry(9f, 40f))  // 10월
+            entries.add(Entry(10f, 20f)) // 11월
+            entries.add(Entry(11f, 50f)) // 12월
 
             // LineDataSet 생성 (데이터 세트를 설정)
             val dataSet = LineDataSet(entries, "")
 
             // 데이터 세트 색상, 라인 스타일 등 설정
             dataSet.color = ContextCompat.getColor(requireContext(), R.color.main_mint)
-            dataSet.setCircleColor(ContextCompat.getColor(requireContext(), R.color.main_mint))  // 원 색상
+            dataSet.setCircleColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.main_mint
+                )
+            )  // 원 색상
             dataSet.lineWidth = 2f  // 선 두께
             dataSet.circleRadius = 5f  // 원 크기
             dataSet.setDrawCircleHole(true)  // 원의 구멍 여부 설정
+            dataSet.setDrawValues(true) // 각 점에 값 표시할지 여부 설정
+
+            // 각 점에 표시되는 값의 형식 지정 (소수점 없이 정수로 표시)
+            dataSet.valueFormatter = object : ValueFormatter() {
+                override fun getFormattedValue(value: Float): String {
+                    return value.toInt().toString()  // 소수점 없이 정수로 표시
+                }
+            }
 
             // LineData 생성
             val lineData = LineData(dataSet)
@@ -496,23 +516,48 @@ class MatchReportFragment : Fragment() {
             val xAxis = lineChart.xAxis
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.setDrawGridLines(false)  // 그리드 라인 숨기기
+            xAxis.granularity = 1f
+
+            // 표시값 설정
+            xAxis.valueFormatter = object : ValueFormatter() {
+                private val months = arrayOf(
+                    "1월",
+                    "2월",
+                    "3월",
+                    "4월",
+                    "5월",
+                    "6월",
+                    "7월",
+                    "8월",
+                    "9월",
+                    "10월",
+                    "11월",
+                    "12월"
+                )
+
+                override fun getFormattedValue(value: Float): String {
+                    return months[value.toInt()]  // X축 값에 해당하는 월 이름 반환
+                }
+            }
 
             val yAxis = lineChart.axisLeft
             yAxis.setDrawLabels(true)  // Y축 라벨 표시
             lineChart.axisRight.isEnabled = false  // 오른쪽 Y축 비활성화
-
+            yAxis.setDrawGridLines(false)
+            yAxis.axisMinimum = 0f  // Y축 최소값 0으로 설정
+            yAxis.axisMaximum = 100f  // Y축 최대값 100으로 설정
+            yAxis.granularity = 10f  // Y축 간격을 10으로 설정
             lineChart.animateXY(2000, 2000)  // X, Y축 애니메이션 시간 2초
 
             // 범례 비활성화
             lineChart.legend.isEnabled = false  // 범례를 숨김
 
+            // Description Label 제거
+            lineChart.description.isEnabled = false  // Description Label 비활성화
+
             // 그래프 스타일 설정
             lineChart.invalidate()  // 데이터를 변경한 후 그래프 다시 그리기
-
-
-
-//        }
-
+        }
 
     }
 

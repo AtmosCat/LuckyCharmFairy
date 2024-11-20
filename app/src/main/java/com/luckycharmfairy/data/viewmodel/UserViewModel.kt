@@ -85,6 +85,9 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val _winningMatchesByDay = MutableLiveData<MutableList<Int>>()
     val winningMatchesByDay : LiveData<MutableList<Int>> get() = _winningMatchesByDay
 
+    private val _lastAndThisYearWinningRatesByMonth = MutableLiveData<MutableList<Int>>()
+    val lastAndThisYearWinningRatesByMonth : LiveData<MutableList<Int>> get() = _lastAndThisYearWinningRatesByMonth
+
     private val _bitmapBeforeSave = MutableLiveData<Bitmap>()
     val bitmapBeforeSave : LiveData<Bitmap> get() = _bitmapBeforeSave
 
@@ -497,6 +500,90 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 _winningMatchesByDay.postValue(winningRates)
             }.onFailure {
                 Log.e(TAG, "getWinningMatchesByDay() failed! : ${it.message}")
+                handleException(it)
+            }
+        }
+    }
+
+    fun getMonthlyWinningRates() {
+        viewModelScope.launch {
+            runCatching {
+                val thisYear = LocalDate.now().year
+
+                val lastYearMatches = currentUser.value!!.matches.filter { it.year == "${thisYear-1}" }
+                val lastYearJanMatches = lastYearMatches.filter { it.month == "1" }.toMutableList()
+                val lastYearFebMatches = lastYearMatches.filter { it.month == "2" }.toMutableList()
+                val lastYearMarMatches = lastYearMatches.filter { it.month == "3" }.toMutableList()
+                val lastYearAprMatches = lastYearMatches.filter { it.month == "4" }.toMutableList()
+                val lastYearMayMatches = lastYearMatches.filter { it.month == "5" }.toMutableList()
+                val lastYearJunMatches = lastYearMatches.filter { it.month == "6" }.toMutableList()
+                val lastYearJulMatches = lastYearMatches.filter { it.month == "7" }.toMutableList()
+                val lastYearAugMatches = lastYearMatches.filter { it.month == "8" }.toMutableList()
+                val lastYearSepMatches = lastYearMatches.filter { it.month == "9" }.toMutableList()
+                val lastYearOctMatches = lastYearMatches.filter { it.month == "10" }.toMutableList()
+                val lastYearNovMatches = lastYearMatches.filter { it.month == "11" }.toMutableList()
+                val lastYearDecMatches = lastYearMatches.filter { it.month == "12" }.toMutableList()
+
+                val lastYearMatchesByMonth = mutableListOf(
+                    lastYearJanMatches,  // 1월 경기
+                    lastYearFebMatches,  // 2월 경기
+                    lastYearMarMatches,  // 3월 경기
+                    lastYearAprMatches,  // 4월 경기
+                    lastYearMayMatches,  // 5월 경기
+                    lastYearJunMatches,  // 6월 경기
+                    lastYearJulMatches,  // 7월 경기
+                    lastYearAugMatches,  // 8월 경기
+                    lastYearSepMatches,  // 9월 경기
+                    lastYearOctMatches,  // 10월 경기
+                    lastYearNovMatches,  // 11월 경기
+                    lastYearDecMatches   // 12월 경기
+                )
+
+                val thisYearMatches = currentUser.value!!.matches.filter { it.year == "${thisYear}" }
+                val thisYearJanMatches = thisYearMatches.filter { it.month == "1" }.toMutableList()
+                val thisYearFebMatches = thisYearMatches.filter { it.month == "2" }.toMutableList()
+                val thisYearMarMatches = thisYearMatches.filter { it.month == "3" }.toMutableList()
+                val thisYearAprMatches = thisYearMatches.filter { it.month == "4" }.toMutableList()
+                val thisYearMayMatches = thisYearMatches.filter { it.month == "5" }.toMutableList()
+                val thisYearJunMatches = thisYearMatches.filter { it.month == "6" }.toMutableList()
+                val thisYearJulMatches = thisYearMatches.filter { it.month == "7" }.toMutableList()
+                val thisYearAugMatches = thisYearMatches.filter { it.month == "8" }.toMutableList()
+                val thisYearSepMatches = thisYearMatches.filter { it.month == "9" }.toMutableList()
+                val thisYearOctMatches = thisYearMatches.filter { it.month == "10" }.toMutableList()
+                val thisYearNovMatches = thisYearMatches.filter { it.month == "11" }.toMutableList()
+                val thisYearDecMatches = thisYearMatches.filter { it.month == "12" }.toMutableList()
+
+                val thisYearMatchesByMonth = mutableListOf(
+                    thisYearJanMatches, // 1월
+                    thisYearFebMatches, // 2월
+                    thisYearMarMatches, // 3월
+                    thisYearAprMatches, // 4월
+                    thisYearMayMatches, // 5월
+                    thisYearJunMatches, // 6월
+                    thisYearJulMatches, // 7월
+                    thisYearAugMatches, // 8월
+                    thisYearSepMatches, // 9월
+                    thisYearOctMatches, // 10월
+                    thisYearNovMatches, // 11월
+                    thisYearDecMatches  // 12월
+                )
+
+                val lastAndThisYearMonthlyWinningRates = mutableListOf<Int>()
+
+                lastYearMatchesByMonth.forEach { data ->
+                    val winningRate = (data.filter{ it.result == "승리" }.size) / data.size
+                    lastAndThisYearMonthlyWinningRates.add(winningRate)
+                }
+
+                thisYearMatchesByMonth.forEach { data ->
+                    val winningRate = (data.filter{ it.result == "승리" }.size) / data.size
+                    lastAndThisYearMonthlyWinningRates.add(winningRate)
+                }
+
+                _lastAndThisYearWinningRatesByMonth.postValue(lastAndThisYearMonthlyWinningRates)
+
+            }.onFailure {
+                Log.e(TAG, "getMonthlyWinningRates() failed! : ${it.message}")
                 handleException(it)
             }
         }
