@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.data.model.Post
+import com.luckycharmfairy.data.model.Team
 import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.data.model.sampleBitmap
 import com.luckycharmfairy.presentation.UiState
@@ -590,6 +591,39 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
             }.onFailure {
                 Log.e(TAG, "getMonthlyWinningRates() failed! : ${it.message}")
+                handleException(it)
+            }
+        }
+    }
+
+    fun getWinningRatesByOpposites() {
+        viewModelScope.launch {
+            runCatching {
+                val matches = currentUser.value!!.matches
+                val oppositeTeams = mutableSetOf<Team>()
+
+                matches.forEach {
+                    if (it.myteam == "홈 팀") {
+                        oppositeTeams.add(it.away)
+                    } else if (it.myteam == "어웨이 팀") {
+                        oppositeTeams.add(it.home)
+                    }
+                }
+
+                val winningRatesByOpposites = mutableListOf<List<String>>()
+
+                oppositeTeams.forEach{
+                    val matchesVsOppositeTeam = mutableListOf<Match>()
+                    for (match in matches) {
+                        if (match.myteam == "홈 팀") {
+
+                        }
+                    }
+                }
+
+                _winningMatchesByDay.postValue()
+            }.onFailure {
+                Log.e(TAG, "getWinningMatchesByDay() failed! : ${it.message}")
                 handleException(it)
             }
         }

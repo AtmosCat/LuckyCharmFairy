@@ -591,6 +591,10 @@ class MatchReportFragment : Fragment() {
             lineChart.invalidate()  // 데이터를 변경한 후 그래프 다시 그리기
         }
 
+        // 상대 팀별 승률
+
+        userViewModel.getWinningRatesByOpposites()
+
     }
 
 }

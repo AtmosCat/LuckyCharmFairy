@@ -610,6 +610,105 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_monthly_winning_rates" />
 
 
+            <TextView
+                android:id="@+id/tv_winning_rate_against_opposites_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="· 상대 팀별 승률"
+                style="@style/textStyle_subheading"
+                app:layout_constraintTop_toBottomOf="@+id/linechart_matches"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"
+                />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_winning_rate_against_opposites"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:background="@drawable/bg_round_border_small"
+                android:layout_marginHorizontal="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_winning_rate_against_opposites_title"
+                >
+
+                <TextView
+                    android:id="@+id/tv_winning_rate_against_opposites"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="내가 응원한 팀은,\nOOOOOOOOO\n을 상대로 가장 강했어요!"
+                    style="@style/textStyle_subtitle"
+                    android:gravity="center"
+                    android:lineSpacingExtra="5dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="10dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_first_most_won_opposite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="vs. 키움 - 승률 75% (15전 10승 0무 5패)"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_winning_rate_against_opposites"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:lineSpacingExtra="5dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_second_most_won_opposite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="vs. 키움 - 승률 75% (15전 10승 0무 5패)"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_first_most_won_opposite"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:lineSpacingExtra="5dp"
+                    />
+                <TextView
+                    android:id="@+id/tv_third_most_won_opposite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="vs. 키움 - 승률 75% (15전 10승 0무 5패)"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_second_most_won_opposite"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:lineSpacingExtra="5dp"
+                    />
+                <TextView
+                    android:id="@+id/tv_fourth_most_won_opposite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="vs. 키움 - 승률 75% (15전 10승 0무 5패)"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_third_most_won_opposite"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:lineSpacingExtra="5dp"
+                    />
+                <TextView
+                    android:id="@+id/tv_fifth_most_won_opposite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="vs. 키움 - 승률 75% (15전 10승 0무 5패)"
+                    style="@style/textStyle_subheading"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_fourth_most_won_opposite"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:lineSpacingExtra="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="15dp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
