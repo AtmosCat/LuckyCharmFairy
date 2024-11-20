@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.LocalDensity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -29,6 +30,7 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.presentation.mymatches.matchreport.WinningStreakAdapter
 import java.text.DecimalFormat
+import java.time.LocalDate
 
 class MatchReportFragment : Fragment() {
 
@@ -417,7 +419,7 @@ class MatchReportFragment : Fragment() {
                 highestWinningRateDays.add(days[it])
             }
 
-            binding.tvWinByDay.text = "${highestWinningRateDays.joinToString(", ")}요일에 직관 승률이 가장 높았어요!"
+            binding.tvWinByDay.text = "${highestWinningRateDays.joinToString(", ")}요일에 직관을 갔을 때\n가장 많이 승리했어요!"
 
             binding.tvMondayWinRate.text = mondayWinningRate
             binding.tvTuesdayWinRate.text = tuesdayWinningRate
@@ -466,23 +468,51 @@ class MatchReportFragment : Fragment() {
         userViewModel.getMonthlyWinningRates()
         userViewModel.lastAndThisYearWinningRatesByMonth.observe(viewLifecycleOwner) { data ->
 
+            val recent12MonthesWinningRates = mutableListOf<Float>()
+            val thisMonth = LocalDate.now().monthValue
+
+            for (i in thisMonth..thisMonth+11) {
+                recent12MonthesWinningRates.add(data[i]*100)
+            }
+
+            val recent12Monthes = mutableListOf(
+                thisMonth-11,
+                thisMonth-10,
+                thisMonth-9,
+                thisMonth-8,
+                thisMonth-7,
+                thisMonth-6,
+                thisMonth-5,
+                thisMonth-4,
+                thisMonth-3,
+                thisMonth-2,
+                thisMonth-1,
+                thisMonth
+                )
+
+            for (i in 0..11) {
+                if (recent12Monthes[i] <= 0) {
+                    recent12Monthes[i] += 12
+                }
+            }
+
             // LineChart 뷰 가져오기
             val lineChart: LineChart = binding.linechartMatches
 
             // 꺾은선 그래프에 표시할 데이터 생성
             val entries = mutableListOf<Entry>()
-            entries.add(Entry(0f, 20f))  // 1월
-            entries.add(Entry(1f, 40f))  // 2월
-            entries.add(Entry(2f, 60f))  // 3월
-            entries.add(Entry(3f, 30f))  // 4월
-            entries.add(Entry(4f, 50f))  // 5월
-            entries.add(Entry(5f, 80f))  // 6월
-            entries.add(Entry(6f, 70f))  // 7월
-            entries.add(Entry(7f, 90f))  // 8월
-            entries.add(Entry(8f, 60f))  // 9월
-            entries.add(Entry(9f, 40f))  // 10월
-            entries.add(Entry(10f, 20f)) // 11월
-            entries.add(Entry(11f, 50f)) // 12월
+            entries.add(Entry(0f, recent12MonthesWinningRates[0].toFloat()))
+            entries.add(Entry(1f, recent12MonthesWinningRates[1].toFloat()))
+            entries.add(Entry(2f, recent12MonthesWinningRates[2].toFloat()))
+            entries.add(Entry(3f, recent12MonthesWinningRates[3].toFloat()))
+            entries.add(Entry(4f, recent12MonthesWinningRates[4].toFloat()))
+            entries.add(Entry(5f, recent12MonthesWinningRates[5].toFloat()))
+            entries.add(Entry(6f, recent12MonthesWinningRates[6].toFloat()))
+            entries.add(Entry(7f, recent12MonthesWinningRates[7].toFloat()))
+            entries.add(Entry(8f, recent12MonthesWinningRates[8].toFloat()))
+            entries.add(Entry(9f, recent12MonthesWinningRates[9].toFloat()))
+            entries.add(Entry(10f, recent12MonthesWinningRates[10].toFloat()))
+            entries.add(Entry(11f, recent12MonthesWinningRates[11].toFloat()))
 
             // LineDataSet 생성 (데이터 세트를 설정)
             val dataSet = LineDataSet(entries, "")
@@ -499,11 +529,12 @@ class MatchReportFragment : Fragment() {
             dataSet.circleRadius = 5f  // 원 크기
             dataSet.setDrawCircleHole(true)  // 원의 구멍 여부 설정
             dataSet.setDrawValues(true) // 각 점에 값 표시할지 여부 설정
+            dataSet.valueTextSize = 12f  // 텍스트 크기를 12f로 설정
 
             // 각 점에 표시되는 값의 형식 지정 (소수점 없이 정수로 표시)
             dataSet.valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
-                    return value.toInt().toString()  // 소수점 없이 정수로 표시
+                    return value.toInt().toString()+"%"  // 소수점 없이 정수로 표시
                 }
             }
 
@@ -516,23 +547,24 @@ class MatchReportFragment : Fragment() {
             val xAxis = lineChart.xAxis
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.setDrawGridLines(false)  // 그리드 라인 숨기기
-            xAxis.granularity = 1f
+            xAxis.setGranularity(1f)  // 값 간격을 1로 설정 (x축에 모든 값 표시)
+            xAxis.setGranularityEnabled(true)
 
             // 표시값 설정
             xAxis.valueFormatter = object : ValueFormatter() {
                 private val months = arrayOf(
-                    "1월",
-                    "2월",
-                    "3월",
-                    "4월",
-                    "5월",
-                    "6월",
-                    "7월",
-                    "8월",
-                    "9월",
-                    "10월",
-                    "11월",
-                    "12월"
+                    "${recent12Monthes[0]}월",
+                    "${recent12Monthes[1]}월",
+                    "${recent12Monthes[2]}월",
+                    "${recent12Monthes[3]}월",
+                    "${recent12Monthes[4]}월",
+                    "${recent12Monthes[5]}월",
+                    "${recent12Monthes[6]}월",
+                    "${recent12Monthes[7]}월",
+                    "${recent12Monthes[8]}월",
+                    "${recent12Monthes[9]}월",
+                    "${recent12Monthes[10]}월",
+                    "${recent12Monthes[11]}월"
                 )
 
                 override fun getFormattedValue(value: Float): String {

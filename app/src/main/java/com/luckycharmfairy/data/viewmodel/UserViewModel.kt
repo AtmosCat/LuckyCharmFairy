@@ -85,8 +85,8 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val _winningMatchesByDay = MutableLiveData<MutableList<Int>>()
     val winningMatchesByDay : LiveData<MutableList<Int>> get() = _winningMatchesByDay
 
-    private val _lastAndThisYearWinningRatesByMonth = MutableLiveData<MutableList<Int>>()
-    val lastAndThisYearWinningRatesByMonth : LiveData<MutableList<Int>> get() = _lastAndThisYearWinningRatesByMonth
+    private val _lastAndThisYearWinningRatesByMonth = MutableLiveData<MutableList<Float>>()
+    val lastAndThisYearWinningRatesByMonth : LiveData<MutableList<Float>> get() = _lastAndThisYearWinningRatesByMonth
 
     private val _bitmapBeforeSave = MutableLiveData<Bitmap>()
     val bitmapBeforeSave : LiveData<Bitmap> get() = _bitmapBeforeSave
@@ -568,15 +568,21 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                     thisYearDecMatches  // 12월
                 )
 
-                val lastAndThisYearMonthlyWinningRates = mutableListOf<Int>()
+                val lastAndThisYearMonthlyWinningRates = mutableListOf<Float>()
 
                 lastYearMatchesByMonth.forEach { data ->
-                    val winningRate = (data.filter{ it.result == "승리" }.size) / data.size
+                    var size = -1
+                    if (data.size > 0) size = data.size
+                    else size = 1
+                    val winningRate = (data.filter{ it.result == "승리" }.size).toFloat() / size
                     lastAndThisYearMonthlyWinningRates.add(winningRate)
                 }
 
                 thisYearMatchesByMonth.forEach { data ->
-                    val winningRate = (data.filter{ it.result == "승리" }.size) / data.size
+                    var size = -1
+                    if (data.size > 0) size = data.size
+                    else size = 1
+                    val winningRate = (data.filter{ it.result == "승리" }.size).toFloat() / size
                     lastAndThisYearMonthlyWinningRates.add(winningRate)
                 }
 
