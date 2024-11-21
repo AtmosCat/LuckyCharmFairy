@@ -54,6 +54,7 @@ class MatchReportFragment : Fragment() {
 
     private var winningStreakMatches = mutableListOf<Match>()
     private var winningMatchesByDay = mutableListOf<Int>()
+    private var winningRatesByOpposites = listOf(listOf<String>())
 
     private val userViewModel: UserViewModel by activityViewModels {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
@@ -593,7 +594,24 @@ class MatchReportFragment : Fragment() {
 
         // 상대 팀별 승률
 
+        val tvWinningRatesByOppositesList = listOf(
+            binding.tvFirstMostWonOpposite,
+            binding.tvSecondMostWonOpposite,
+            binding.tvThirdMostWonOpposite,
+            binding.tvFourthMostWonOpposite,
+            binding.tvFifthMostWonOpposite
+        )
+
         userViewModel.getWinningRatesByOpposites()
+        userViewModel.winningRatesByOpposites.observe(viewLifecycleOwner) { data ->
+            winningRatesByOpposites = data.sortedByDescending { it[2].toFloat() }
+
+            for (i in 0..tvWinningRatesByOppositesList.size-1) {
+                tvWinningRatesByOppositesList[i].text =
+                    "vs. ${winningRatesByOpposites[i][1]} - 승률 ${winningRatesByOpposites[i][2].toFloat()*100}% (${winningRatesByOpposites[i][3]}전 ${winningRatesByOpposites[i][4]}승 ${winningRatesByOpposites[i][5]}무 ${winningRatesByOpposites[i][6]}패)"
+            }
+            binding.tvWinningRateAgainstOpposites.text = "내가 응원한 팀은,\n ${winningRatesByOpposites[0][0]} \n을 상대로 가장 강했어요!"
+        }
 
     }
 

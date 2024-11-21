@@ -89,6 +89,9 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val _lastAndThisYearWinningRatesByMonth = MutableLiveData<MutableList<Float>>()
     val lastAndThisYearWinningRatesByMonth : LiveData<MutableList<Float>> get() = _lastAndThisYearWinningRatesByMonth
 
+    private val _winningRatesByOpposites = MutableLiveData<List<List<String>>>()
+    val winningRatesByOpposites : LiveData<List<List<String>>> get() = _winningRatesByOpposites
+
     private val _bitmapBeforeSave = MutableLiveData<Bitmap>()
     val bitmapBeforeSave : LiveData<Bitmap> get() = _bitmapBeforeSave
 
@@ -612,18 +615,23 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
                 val winningRatesByOpposites = mutableListOf<List<String>>()
 
-                oppositeTeams.forEach{
-                    val matchesVsOppositeTeam = mutableListOf<Match>()
-                    for (match in matches) {
-                        if (match.myteam == "홈 팀") {
-
-                        }
+                oppositeTeams.forEach{ data ->
+                    var matchesVsOppositeTeam = listOf<Match>()
+                    matchesVsOppositeTeam = matches.filter {
+                        it.home == data || it.away == data
                     }
+                    val winCount = matchesVsOppositeTeam.filter { it.result == "승리" }.size
+                    val tieCount = matchesVsOppositeTeam.filter { it.result == "무승부" }.size
+                    val loseCount = matchesVsOppositeTeam.filter { it.result == "패배" }.size
+                    var sum = -1
+                    if (winCount + loseCount + tieCount == 0) sum = 1
+                    else sum = winCount + loseCount + tieCount
+                    val winningRate = ( winCount.toFloat() / (sum) ).toString()
+                    winningRatesByOpposites.add(listOf(data.name, data.shortname, winningRate, sum.toString(), winCount.toString(), tieCount.toString(), loseCount.toString()))
                 }
-
-                _winningMatchesByDay.postValue()
+                _winningRatesByOpposites.postValue(winningRatesByOpposites)
             }.onFailure {
-                Log.e(TAG, "getWinningMatchesByDay() failed! : ${it.message}")
+                Log.e(TAG, "getWinningRatesByOpposites() failed! : ${it.message}")
                 handleException(it)
             }
         }
