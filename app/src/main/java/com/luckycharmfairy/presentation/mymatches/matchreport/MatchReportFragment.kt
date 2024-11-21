@@ -1,5 +1,10 @@
 import android.content.res.ColorStateList
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -611,6 +616,11 @@ class MatchReportFragment : Fragment() {
                     "vs. ${winningRatesByOpposites[i][1]} - 승률 ${winningRatesByOpposites[i][2].toFloat()*100}% (${winningRatesByOpposites[i][3]}전 ${winningRatesByOpposites[i][4]}승 ${winningRatesByOpposites[i][5]}무 ${winningRatesByOpposites[i][6]}패)"
             }
             binding.tvWinningRateAgainstOpposites.text = "내가 응원한 팀은,\n ${winningRatesByOpposites[0][0]} \n을 상대로 가장 강했어요!"
+
+            val spannableString = SpannableString(tvWinningRatesByOppositesList[0].text)
+            spannableString.setSpan(StyleSpan(Typeface.BOLD), 0, tvWinningRatesByOppositesList[0].text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString.setSpan(ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.main_mint)), 0, tvWinningRatesByOppositesList[0].text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            tvWinningRatesByOppositesList[0].text = spannableString
         }
 
     }
