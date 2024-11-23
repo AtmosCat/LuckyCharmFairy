@@ -31,6 +31,8 @@ import com.luckycharmfairy.data.model.menFootballTeams
 import com.luckycharmfairy.data.model.menVolleyballLocations
 import com.luckycharmfairy.data.model.menVolleyballTeamNames
 import com.luckycharmfairy.data.model.menVolleyballTeams
+import com.luckycharmfairy.data.model.womenBasketballTeamNames
+import com.luckycharmfairy.data.model.womenBasketballTeams
 import com.luckycharmfairy.data.model.womenVolleyballLocations
 import com.luckycharmfairy.data.model.womenVolleyballTeamNames
 import com.luckycharmfairy.data.model.womenVolleyballTeams
@@ -205,6 +207,10 @@ class AddMyMatchOneFragment : Fragment() {
                     "여자배구" -> {
                         selectedSportTeamNames = womenVolleyballTeamNames
                         selectedSportTeams = womenVolleyballTeams
+                    }
+                    "여자농구" -> {
+                        selectedSportTeamNames = womenBasketballTeamNames
+                        selectedSportTeams = womenBasketballTeams
                     }
                     else -> selectedSportTeamNames = listOf("직접 입력")
                 }

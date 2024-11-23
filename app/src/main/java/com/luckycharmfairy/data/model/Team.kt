@@ -28,7 +28,7 @@ public val baseballTeamNames = listOf(
     "직접 입력"
     )
 
-public val allTeams = baseballTeams + menFootballTeams + menBasketballTeams + menVolleyballTeams + womenVolleyballTeams
+public val allTeams = baseballTeams + menFootballTeams + menBasketballTeams + menVolleyballTeams + womenVolleyballTeams + womenBasketballTeams
 
 public val baseballTeams: List<Team>
     get() = listOf(
@@ -198,6 +198,19 @@ public val menFootballTeamNames = listOf(
     "전북 현대 모터스",
     "제주 유나이티드 FC",
     "포항 스틸러스",
+    "경남 FC",
+    "김포 FC",
+    "부산 아이파크",
+    "부천 FC 1995",
+    "서울 이랜드 FC",
+    "성남 FC",
+    "수원 삼성 블루윙즈",
+    "충남 아산 FC",
+    "안산 그리너스 FC",
+    "FC 안양",
+    "전남 드래곤즈",
+    "천안 시티 FC",
+    "충북 청주 FC",
     "직접 입력"
 )
 
@@ -214,7 +227,20 @@ public val menFootballTeams: List<Team>
         menFootball_JejuUnitedFc,
         menFootball_PohangSteelers,
         menFootball_SuwonFc,
-        menFootball_UlsanHDFc
+        menFootball_UlsanHDFc, // 이상 K리그1
+        menFootball_GyeongnamFc,
+        menFootball_GimpoFc,
+        menFootball_BusanIPark,
+        menFootball_BucheonFc1995,
+        menFootball_SeoulElandFc,
+        menFootball_SeongnamFc,
+        menFootball_SuwonSamsungBluewings,
+        menFootball_ChungnamAsanFc,
+        menFootball_AnsanGreenersFc,
+        menFootball_FcAnyang,
+        menFootball_JeonnamDragons,
+        menFootball_CheonanCityFc,
+        menFootball_ChungbukCheongjuFc,
     )
 
 public val menFootball_GwangjuFc = Team(
@@ -301,7 +327,7 @@ public val menFootball_FcSeoul = Team(
 public val menFootball_SuwonFc = Team(
     sport = "남자축구",
     name = "수원 FC",
-    shortname = "수원",
+    shortname = "수원FC",
     teamcolor = "#00396f",
     home = "수원",
     fans = 0,
@@ -377,6 +403,177 @@ public val menFootball_PohangSteelers = Team(
     players = mutableListOf()
 )
 
+public val menFootball_GyeongnamFc = Team(
+    sport = "남자축구",
+    name = "경남 FC",
+    shortname = "경남",
+    teamcolor = "#c02717",
+    home = "경남",
+    fans = 0,
+    youtube = "",
+    instagram = "",
+    facebook = "",
+    homepage = "",
+    players = mutableListOf()
+)
+
+public val menFootball_GimpoFc = Team(
+    sport = "남자축구",
+    name = "김포 FC",
+    shortname = "김포",
+    teamcolor = "#06443f",
+    home = "김포",
+    fans = 0,
+    youtube = "",
+    instagram = "",
+    facebook = "",
+    homepage = "",
+    players = mutableListOf()
+)
+public val menFootball_BusanIPark = Team(
+    sport = "남자축구",
+    name = "부산 아이파크",
+    shortname = "부산",
+    teamcolor = "#ee3123",
+    home = "부산",
+    fans = 0,
+    youtube = "",
+    instagram = "",
+    facebook = "",
+    homepage = "",
+    players = mutableListOf()
+)
+public val menFootball_BucheonFc1995 = Team(
+    sport = "남자축구",
+    name = "부천 FC 1995",
+    shortname = "부천",
+    teamcolor = "#ac2424",
+    home = "부천",
+    fans = 0,
+    youtube = "",
+    instagram = "",
+    facebook = "",
+    homepage = "",
+    players = mutableListOf()
+)
+public val menFootball_SeoulElandFc = Team(
+    sport = "남자축구",
+    name = "서울 이랜드 FC",
+    shortname = "서울 이랜드",
+    teamcolor = "#000130",
+    home = "서울",
+    fans = 0,
+    youtube = "",
+    instagram = "",
+    facebook = "",
+    homepage = "",
+    players = mutableListOf()
+)
+public val menFootball_SeongnamFc = Team(
+    sport = "남자축구",
+    name = "성남 FC",
+    shortname = "성남",
+    teamcolor = "#1e1c1e",
+    home = "성남",
+    fans = 0,
+    youtube = "",
+    instagram = "",
+    facebook = "",
+    homepage = "",
+    players = mutableListOf()
+)
+public val menFootball_SuwonSamsungBluewings = Team(
+    sport = "남자축구",
+    name = "수원 삼성 블루윙즈",
+    shortname = "수원 삼성",
+    teamcolor = "#0058a7",
+    home = "수원",
+    fans = 0,
+    youtube = "",
+    instagram = "",
+    facebook = "",
+    homepage = "",
+    players = mutableListOf()
+)
+public val menFootball_ChungnamAsanFc = Team(
+    sport = "남자축구",
+    name = "충남 아산 FC",
+    shortname = "아산",
+    teamcolor = "#244694",
+    home = "아산",
+    fans = 0,
+    youtube = "",
+    instagram = "",
+    facebook = "",
+    homepage = "",
+    players = mutableListOf()
+)
+public val menFootball_AnsanGreenersFc = Team(
+    sport = "남자축구",
+    name = "안산 그리너스 FC",
+    shortname = "안산",
+    teamcolor = "#00a083",
+    home = "안산",
+    fans = 0,
+    youtube = "",
+    instagram = "",
+    facebook = "",
+    homepage = "",
+    players = mutableListOf()
+)
+public val menFootball_FcAnyang = Team(
+    sport = "남자축구",
+    name = "FC 안양",
+    shortname = "안양",
+    teamcolor = "#4b237a",
+    home = "안양",
+    fans = 0,
+    youtube = "",
+    instagram = "",
+    facebook = "",
+    homepage = "",
+    players = mutableListOf()
+)
+public val menFootball_JeonnamDragons = Team(
+    sport = "남자축구",
+    name = "전남 드래곤즈",
+    shortname = "전남",
+    teamcolor = "#ffde00",
+    home = "전남",
+    fans = 0,
+    youtube = "",
+    instagram = "",
+    facebook = "",
+    homepage = "",
+    players = mutableListOf()
+)
+public val menFootball_CheonanCityFc = Team(
+    sport = "남자축구",
+    name = "천안 시티 FC",
+    shortname = "천안",
+    teamcolor = "#5fb4e5",
+    home = "천안",
+    fans = 0,
+    youtube = "",
+    instagram = "",
+    facebook = "",
+    homepage = "",
+    players = mutableListOf()
+)
+public val menFootball_ChungbukCheongjuFc = Team(
+    sport = "남자축구",
+    name = "충북 청주 FC",
+    shortname = "청주",
+    teamcolor = "#1c235a",
+    home = "청주",
+    fans = 0,
+    youtube = "",
+    instagram = "",
+    facebook = "",
+    homepage = "",
+    players = mutableListOf()
+)
+
 public val menBasketballTeamNames = listOf(
     "고양 소노 스카이거너스",
     "대구 한국가스공사 페가수스",
@@ -408,7 +605,7 @@ public val menBasketballTeams: List<Team>
 public val menBasketball_GoyangSonoSkygunners = Team(
     sport = "남자농구",
     name = "고양 소노 스카이거너스",
-    shortname = "소노",
+    shortname = "고양 소노",
     teamcolor = "#72a3cc",
     home = "고양",
     fans = 0,
@@ -436,7 +633,7 @@ public val menBasketball_DaeguKogasPegasus = Team(
 public val menBasketball_SeoulSkKnights = Team(
     sport = "남자농구",
     name = "서울 SK 나이츠",
-    shortname = "SK",
+    shortname = "SK 나이츠",
     teamcolor = "#e1002a",
     home = "서울",
     fans = 0,
@@ -450,7 +647,7 @@ public val menBasketball_SeoulSkKnights = Team(
 public val menBasketball_ChangwonLgSakers = Team(
     sport = "남자농구",
     name = "창원 LG 세이커스",
-    shortname = "LG",
+    shortname = "LG 세이커스",
     teamcolor = "#a50034",
     home = "창원",
     fans = 0,
@@ -492,7 +689,7 @@ public val menBasketball_BusanKccEgis = Team(
 public val menBasketball_SuwonKtSonicboom = Team(
     sport = "남자농구",
     name = "수원 KT 소닉붐",
-    shortname = "KT",
+    shortname = "KT 소닉붐",
     teamcolor = "#ec1c24",
     home = "수원",
     fans = 0,
@@ -520,7 +717,7 @@ public val menBasketball_AnyangKgcRedboosters = Team(
 public val menBasketball_WonjuDbPromy = Team(
     sport = "남자농구",
     name = "원주 DB 프로미",
-    shortname = "DB",
+    shortname = "DB 프로미",
     teamcolor = "#00703c",
     home = "원주",
     fans = 0,
@@ -534,7 +731,7 @@ public val menBasketball_WonjuDbPromy = Team(
 public val menBasketball_SeoulSamsungThunders = Team(
     sport = "남자농구",
     name = "서울 삼성 썬더스",
-    shortname = "삼성",
+    shortname = "삼성 썬더스",
     teamcolor = "#074ca1",
     home = "서울",
     fans = 0,
@@ -680,7 +877,7 @@ public val womenVolleyballTeams: List<Team>
         womenVolleyball_HwaseongIbkAltos,
         womenVolleyball_IncheonHeungkukinsurancesPinkspiders,
         womenVolleyball_GimcheonExHipass,
-        womenVolleybball_GwangjuPepperbanAipeppers
+        womenVolleyball_GwangjuPepperbanAipeppers
     )
 
 public val womenVolleyball_SuwonHyundaiconstructionHillstate = Team(
@@ -739,7 +936,7 @@ public val womenVolleyball_GscaltexSeoulKixx = Team(
 public val womenVolleyball_HwaseongIbkAltos = Team(
     sport = "여자배구",
     name = "화성 IBK기업은행 알토스",
-    shortname = "IBK",
+    shortname = "IBK기업은행",
     teamcolor = "#004b9c",
     home = "http://sports.ibk.co.kr/m/volleyball/main/",
     fans = 0,
@@ -762,7 +959,7 @@ public val womenVolleyball_GimcheonExHipass = Team(
     homepage = "https://www.exsportsclub.com/",
     players = mutableListOf()
 )
-public val womenVolleybball_GwangjuPepperbanAipeppers = Team(
+public val womenVolleyball_GwangjuPepperbanAipeppers = Team(
     sport = "여자배구",
     name = "광주 페퍼저축은행 AI 페퍼스",
     shortname = "페퍼저축은행",
@@ -773,5 +970,106 @@ public val womenVolleybball_GwangjuPepperbanAipeppers = Team(
     instagram = "https://www.instagram.com/aipeppers/",
     facebook = "",
     homepage = "http://www.aipeppers.kr/",
+    players = mutableListOf()
+)
+
+public val womenBasketballTeamNames = listOf(
+    "용인 삼성생명 블루밍스",
+    "인천 신한은행 에스버드",
+    "아산 우리은행 우리WON",
+    "부천 하나은행",
+    "부산 BNK 썸",
+    "청주 KB 스타즈",
+    "직접 입력"
+)
+
+public val womenBasketballTeams: List<Team>
+    get() = listOf(
+        womenBasketball_YonginSamsungLifeInsuranceBlueminx,
+        womenBasketball_IncheonShinhanBankSBird,
+        womenBasketball_AsanWooribankWooriWon,
+        womenBasketball_BucheonHanaBank,
+        womenBasketball_BusanBNKSum,
+        womenBasketball_ChungjuKbStars
+    )
+
+public val womenBasketball_YonginSamsungLifeInsuranceBlueminx = Team(
+    sport = "여자농구",
+    name = "용인 삼성생명 블루밍스",
+    shortname = "삼성생명",
+    teamcolor = "#074ca1",
+    home = "용인",
+    fans = 0,
+    youtube = "https://www.youtube.com/channel/UCrz0wWdmp-ZhRIVcbuJxETA",
+    instagram = "https://www.instagram.com/goblueminx/",
+    facebook = "https://www.facebook.com/goblueminx/?locale=ko_KR",
+    homepage = "http://www.samsungblueminx.com/",
+    players = mutableListOf()
+)
+
+public val womenBasketball_IncheonShinhanBankSBird = Team(
+    sport = "여자농구",
+    name = "인천 신한은행 에스버드",
+    shortname = "신한은행",
+    teamcolor = "#112369",
+    home = "인천",
+    fans = 0,
+    youtube = "",
+    instagram = "",
+    facebook = "",
+    homepage = "",
+    players = mutableListOf()
+)
+
+public val womenBasketball_AsanWooribankWooriWon = Team(
+    sport = "여자농구",
+    name = "아산 우리은행 우리WON",
+    shortname = "우리은행",
+    teamcolor = "#0067ac",
+    home = "아산",
+    fans = 0,
+    youtube = "",
+    instagram = "",
+    facebook = "",
+    homepage = "",
+    players = mutableListOf()
+)
+public val womenBasketball_BucheonHanaBank = Team(
+    sport = "여자농구",
+    name = "부천 하나은행",
+    shortname = "하나은행",
+    teamcolor = "#008f73",
+    home = "부천",
+    fans = 0,
+    youtube = "",
+    instagram = "",
+    facebook = "",
+    homepage = "",
+    players = mutableListOf()
+)
+public val womenBasketball_BusanBNKSum = Team(
+    sport = "여자농구",
+    name = "부산 BNK 썸",
+    shortname = "BNK 썸",
+    teamcolor = "#d62328",
+    home = "부산",
+    fans = 0,
+    youtube = "",
+    instagram = "",
+    facebook = "",
+    homepage = "",
+    players = mutableListOf()
+)
+public val womenBasketball_ChungjuKbStars = Team(
+    sport = "여자농구",
+    name = "청주 KB 스타즈",
+    shortname = "KB 스타즈",
+    teamcolor = "#ffbc00",
+    home = "청주",
+    fans = 0,
+    youtube = "",
+    instagram = "",
+    facebook = "",
+    homepage = "",
     players = mutableListOf()
 )

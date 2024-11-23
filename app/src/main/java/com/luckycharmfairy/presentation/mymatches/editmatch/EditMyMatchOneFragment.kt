@@ -25,6 +25,8 @@ import com.luckycharmfairy.data.model.menFootballTeamNames
 import com.luckycharmfairy.data.model.menFootballTeams
 import com.luckycharmfairy.data.model.menVolleyballTeamNames
 import com.luckycharmfairy.data.model.menVolleyballTeams
+import com.luckycharmfairy.data.model.womenBasketballTeamNames
+import com.luckycharmfairy.data.model.womenBasketballTeams
 import com.luckycharmfairy.data.model.womenVolleyballTeamNames
 import com.luckycharmfairy.data.model.womenVolleyballTeams
 import com.luckycharmfairy.data.viewmodel.UserViewModel
@@ -174,6 +176,10 @@ class EditMyMatchOneFragment : Fragment() {
                 selectedSportTeamNames = womenVolleyballTeamNames
                 selectedSportTeams = womenVolleyballTeams
             }
+            "여자농구" -> {
+                selectedSportTeamNames = womenBasketballTeamNames
+                selectedSportTeams = womenBasketballTeams
+            }
             else -> {
                 selectedSportTeamNames = listOf("직접 입력")
             }
@@ -203,7 +209,7 @@ class EditMyMatchOneFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
         }
 
-        val spinnerSports = mutableListOf("야구","남자축구","남자농구","남자배구","여자배구")
+        val spinnerSports = mutableListOf("야구","남자축구","남자농구","남자배구","여자배구", "여자농구")
         binding.btnAddSports.setOnClickListener{
             // MY종목 관리 프래그먼트 이동
         }
@@ -240,6 +246,10 @@ class EditMyMatchOneFragment : Fragment() {
                     "여자배구" -> {
                         selectedSportTeamNames = womenVolleyballTeamNames
                         selectedSportTeams = womenVolleyballTeams
+                    }
+                    "여자농구" -> {
+                        selectedSportTeamNames = womenBasketballTeamNames
+                        selectedSportTeams = womenBasketballTeams
                     }
                     else -> {
                         selectedSportTeamNames = listOf(selectedHomeTeamName, selectedAwayTeamName, "직접입력")
