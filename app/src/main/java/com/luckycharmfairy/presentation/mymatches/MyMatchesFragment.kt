@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -134,6 +135,13 @@ class MyMatchesFragment : Fragment() {
         addCalendarDot()
 
         binding.calendarMonthlyMatches.setSelectedDate(CalendarDay.from(Calendar.getInstance()))
+        userViewModel.getSelectedDateMatches(currentUserEmail, selectedSport, selectedYear, selectedMonth, selectedDate)
+        userViewModel.selectedDayMatches.observe(viewLifecycleOwner) { data ->
+            myMatchesAdapter.submitList(data)
+            if (data.size == 0) binding.tvNoticeNoMatches.visibility = View.VISIBLE
+            else binding.tvNoticeNoMatches.visibility = View.GONE
+            todayMatches = data
+        }
         binding.calendarMonthlyMatches.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
             if (selected) {
                 selectedYear = date.year.toString()
@@ -195,16 +203,21 @@ class MyMatchesFragment : Fragment() {
 
         val matchReportFragment = requireActivity().supportFragmentManager.findFragmentByTag("MatchReportFragment")
         binding.btnMatchReport.setOnClickListener{
-            requireActivity().supportFragmentManager.beginTransaction().apply {
-                hide(this@MyMatchesFragment)
-                if (matchReportFragment == null) {
-                    add(R.id.main_frame, MatchReportFragment(), "MatchReportFragment")
-                } else {
-                    show(matchReportFragment)
+            if (currentUser.matches.size < 10) {
+                Toast.makeText(requireContext(), "10경기 이상 직관해야 통계를 보실 수 있어요!",Toast.LENGTH_SHORT).show()
+            } else {
+                requireActivity().supportFragmentManager.beginTransaction().apply {
+                    hide(this@MyMatchesFragment)
+                    if (matchReportFragment == null) {
+                        add(R.id.main_frame, MatchReportFragment(), "MatchReportFragment")
+                    } else {
+                        show(matchReportFragment)
+                    }
+                    addToBackStack(null)
+                    commit()
                 }
-                addToBackStack(null)
-                commit()
             }
+
         }
 
         binding.btnAddMatchRecord.setOnClickListener{

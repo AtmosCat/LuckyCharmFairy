@@ -427,8 +427,8 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     fun getHomeAwayMatchStat() {
         viewModelScope.launch {
             runCatching {
-                val homeMatches = currentUser.value!!.matches.filter { it.myteam == "홈 팀" }
-                val awayMatches = currentUser.value!!.matches.filter { it.myteam == "어웨이 팀" }
+                val homeMatches = currentUser.value!!.matches.filter { it.myteam == it.home }
+                val awayMatches = currentUser.value!!.matches.filter { it.myteam == it.away }
                 var homeWin = 0
                 var homeLose = 0
                 var homeTie = 0
@@ -606,9 +606,9 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                 val oppositeTeams = mutableSetOf<Team>()
 
                 matches.forEach {
-                    if (it.myteam == "홈 팀") {
+                    if (it.myteam == it.home) {
                         oppositeTeams.add(it.away)
-                    } else if (it.myteam == "어웨이 팀") {
+                    } else if (it.myteam == it.away) {
                         oppositeTeams.add(it.home)
                     }
                 }

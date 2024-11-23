@@ -610,8 +610,13 @@ class MatchReportFragment : Fragment() {
         userViewModel.getWinningRatesByOpposites()
         userViewModel.winningRatesByOpposites.observe(viewLifecycleOwner) { data ->
             winningRatesByOpposites = data.sortedByDescending { it[2].toFloat() }
-
-            for (i in 0..tvWinningRatesByOppositesList.size-1) {
+            var iterateSize = 0
+            if (winningRatesByOpposites.size >= 5) {
+                iterateSize = 5
+            } else {
+                iterateSize = winningRatesByOpposites.size
+            }
+            for (i in 0..iterateSize-1) {
                 tvWinningRatesByOppositesList[i].text =
                     "vs. ${winningRatesByOpposites[i][1]} - 승률 ${winningRatesByOpposites[i][2].toFloat()*100}% (${winningRatesByOpposites[i][3]}전 ${winningRatesByOpposites[i][4]}승 ${winningRatesByOpposites[i][5]}무 ${winningRatesByOpposites[i][6]}패)"
             }

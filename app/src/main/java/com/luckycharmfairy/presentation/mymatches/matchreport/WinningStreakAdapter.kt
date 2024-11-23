@@ -54,10 +54,10 @@ class WinningStreakAdapter : ListAdapter<Match, WinningStreakAdapter.ViewHolder>
             // home.shortname 부분을 볼드로 스타일 적용
             var start = 0
             var end = 0
-            if (item.myteam == "홈 팀") {
+            if (item.myteam == item.home) {
                 start = fullText.indexOf(item.home.shortname)
                 end = start + item.home.shortname.length
-            } else if (item.myteam == "어웨이 팀") {
+            } else if (item.myteam == item.away) {
                 start = fullText.indexOf(item.away.shortname)
                 end = start + item.away.shortname.length
             }

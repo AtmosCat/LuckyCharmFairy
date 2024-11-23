@@ -17,7 +17,7 @@ data class Match (
     var homescore: Int = 0,
     var awayscore: Int = 0,
     var result: String = "", // WIN, LOSE, TIE, CANCEL, NONE
-    var myteam: String = "",
+    var myteam: Team = Team(),
     var mvp: String = "",
     var photos: MutableList<String> = mutableListOf(),
     var content: String = ""

@@ -58,7 +58,8 @@ class EditMyMatchOneFragment : Fragment() {
     private var selectedLocation = ""
     private var selectedWeather = ""
     private var selectedFeeling = ""
-    private var selectedMyteam = ""
+    private var selectedHomeOrAway = ""
+    private var selectedMyteam = Team()
     private var selectedHomeTeamName = ""
     private var selectedAwayTeamName = ""
     private var selectedHomeTeam = Team()
@@ -330,19 +331,25 @@ class EditMyMatchOneFragment : Fragment() {
         feelingButtonBackgroundList[feelingIndex].setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.main_medium_gray))
         feelingButtonList.forEach{ feelingClicker(it, feelingButtonList, feelingButtonBackgroundList) }
 
+        if (selectedMyteam == selectedHomeTeam) {
+            selectedHomeOrAway == "홈 팀"
+        } else if (selectedMyteam == selectedAwayTeam) {
+            selectedHomeOrAway == "어웨이 팀"
+        }
+
         val spinnerHomeAway = listOf("홈 팀", "어웨이 팀", "없음")
         val spinnerMyteamAdapter =
             ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerHomeAway)
         spinnerMyteamAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
-        val spinnerMyteamIndex = spinnerHomeAway.indexOf(selectedMyteam)
+        val spinnerMyteamIndex = spinnerHomeAway.indexOf(selectedHomeOrAway)
         binding.spinnerMyteam.adapter = spinnerMyteamAdapter
         binding.spinnerMyteam.setSelection(spinnerMyteamIndex)
         binding.spinnerMyteam.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                selectedMyteam = spinnerHomeAway[position]
+                selectedHomeOrAway = spinnerHomeAway[position]
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                selectedMyteam = "없음"
+                selectedHomeOrAway = "없음"
             }
         }
 
@@ -460,6 +467,12 @@ class EditMyMatchOneFragment : Fragment() {
                     teamcolor = "#999999" )
             } else {
                 selectedAwayTeam = selectedSportTeams.find { it.name == selectedAwayTeamName }!!
+            }
+
+            if (selectedHomeOrAway == "홈 팀") {
+                selectedMyteam = selectedHomeTeam
+            } else if (selectedHomeOrAway == "어웨이 팀") {
+                selectedMyteam = selectedAwayTeam
             }
 
             if (binding.etMvp.text.isNullOrEmpty()) {

@@ -70,7 +70,8 @@ class AddMyMatchOneFragment : Fragment() {
     private var selectedLocation = ""
     private var selectedWeather = ""
     private var selectedFeeling = ""
-    private var selectedMyteam = ""
+    private var selectedHomeOrAway = ""
+    private var selectedMyteam = Team()
     private var selectedHomeTeamName = ""
     private var selectedAwayTeamName = ""
     private var selectedHomeTeam = Team()
@@ -167,7 +168,7 @@ class AddMyMatchOneFragment : Fragment() {
             }
         }
 
-        val spinnerSports = currentUser.mysports
+        val spinnerSports = currentUser.mysports.drop(0)
         binding.btnAddSports.setOnClickListener{
             requireActivity().supportFragmentManager.beginTransaction().apply {
                 hide(this@AddMyMatchOneFragment)
@@ -292,10 +293,10 @@ class AddMyMatchOneFragment : Fragment() {
         binding.spinnerMyteam.adapter = spinnerMyteamAdapter
         binding.spinnerMyteam.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                selectedMyteam = spinnerHomeAway[position]
+                selectedHomeOrAway = spinnerHomeAway[position]
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                selectedMyteam = spinnerHomeAway[0]
+                selectedHomeOrAway = spinnerHomeAway[0]
             }
         }
 
@@ -389,6 +390,12 @@ class AddMyMatchOneFragment : Fragment() {
                     teamcolor = "#999999" )
             } else {
                 selectedAwayTeam = selectedSportTeams.find { it.name == selectedAwayTeamName }!!
+            }
+
+            if (selectedHomeOrAway == "홈 팀") {
+                selectedMyteam = selectedHomeTeam
+            } else if (selectedHomeOrAway == "어웨이 팀") {
+                selectedMyteam = selectedAwayTeam
             }
 
             if (binding.etMvp.text.isNullOrEmpty()) {

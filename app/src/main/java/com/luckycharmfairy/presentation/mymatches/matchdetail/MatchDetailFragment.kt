@@ -104,10 +104,10 @@ class MatchDetailFragment : Fragment() {
         setTeamColor(binding.viewHometeam, clickedMatch.home.teamcolor)
         binding.viewAwayteam.text = clickedMatch.away.shortname
         setTeamColor(binding.viewAwayteam, clickedMatch.away.teamcolor)
-        if (clickedMatch.myteam == "홈 팀") {
+        if (clickedMatch.myteam == clickedMatch.home) {
             binding.ivHomeStar.visibility = View.VISIBLE
             binding.ivAwayStar.visibility = View.GONE
-        } else if (clickedMatch.myteam == "어웨이 팀") {
+        } else if (clickedMatch.myteam == clickedMatch.away) {
             binding.ivAwayStar.visibility = View.VISIBLE
             binding.ivHomeStar.visibility = View.GONE
         } else {

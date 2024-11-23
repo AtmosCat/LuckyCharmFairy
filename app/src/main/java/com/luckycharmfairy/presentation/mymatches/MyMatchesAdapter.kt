@@ -73,10 +73,10 @@ class MyMatchesAdapter(private val userViewModel: UserViewModel) :
             homescore.text = item.homescore.toString()
             awayscore.text = item.awayscore.toString()
             result.text = item.result
-            if (item.myteam == "홈 팀") {
+            if (item.myteam == item.home) {
                 homestar.visibility = View.VISIBLE
                 awaystar.visibility = View.GONE
-            } else if (item.myteam == "어웨이 팀") {
+            } else if (item.myteam == item.away) {
                 awaystar.visibility = View.VISIBLE
                 homestar.visibility = View.GONE
             } else {
