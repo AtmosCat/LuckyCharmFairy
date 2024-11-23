@@ -168,7 +168,7 @@ class AddMyMatchOneFragment : Fragment() {
             }
         }
 
-        val spinnerSports = currentUser.mysports.drop(0)
+        val spinnerSports = currentUser.mysports.drop(1)
         binding.btnAddSports.setOnClickListener{
             requireActivity().supportFragmentManager.beginTransaction().apply {
                 hide(this@AddMyMatchOneFragment)

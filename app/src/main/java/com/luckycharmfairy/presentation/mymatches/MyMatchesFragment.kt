@@ -135,13 +135,13 @@ class MyMatchesFragment : Fragment() {
         addCalendarDot()
 
         binding.calendarMonthlyMatches.setSelectedDate(CalendarDay.from(Calendar.getInstance()))
-        userViewModel.getSelectedDateMatches(currentUserEmail, selectedSport, selectedYear, selectedMonth, selectedDate)
-        userViewModel.selectedDayMatches.observe(viewLifecycleOwner) { data ->
-            myMatchesAdapter.submitList(data)
-            if (data.size == 0) binding.tvNoticeNoMatches.visibility = View.VISIBLE
-            else binding.tvNoticeNoMatches.visibility = View.GONE
-            todayMatches = data
-        }
+//        userViewModel.getSelectedDateMatches(currentUserEmail, selectedSport, selectedYear, selectedMonth, selectedDate)
+//        userViewModel.selectedDayMatches.observe(viewLifecycleOwner) { data ->
+//            myMatchesAdapter.submitList(data)
+//            if (data.size == 0) binding.tvNoticeNoMatches.visibility = View.VISIBLE
+//            else binding.tvNoticeNoMatches.visibility = View.GONE
+//            todayMatches = data
+//        }
         binding.calendarMonthlyMatches.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
             if (selected) {
                 selectedYear = date.year.toString()
@@ -217,8 +217,8 @@ class MyMatchesFragment : Fragment() {
                     commit()
                 }
             }
-
         }
+
 
         binding.btnAddMatchRecord.setOnClickListener{
             val addMyMatchOneFragment = requireActivity().supportFragmentManager.findFragmentByTag("AddMyMatchOneFragment")

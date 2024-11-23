@@ -144,7 +144,7 @@ class MatchDetailFragment : Fragment() {
             else -> binding.ivFeeling.setImageResource(R.drawable.bg_weather)
         }
 
-        binding.tvDate.text = "${clickedMatch.year}년 ${clickedMatch.month}월 ${clickedMatch.date}}일(${clickedMatch.day})"
+        binding.tvDate.text = "${clickedMatch.year}년 ${clickedMatch.month}월 ${clickedMatch.date}일(${clickedMatch.day})"
         binding.tvTime.text = clickedMatch.time
         if (clickedMatch.location.isNotBlank()) {
             binding.tvLocation.text = clickedMatch.location

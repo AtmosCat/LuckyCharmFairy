@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.ui.platform.LocalDensity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewmodel.initializer
@@ -33,6 +34,7 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.luckycharmfairy.data.model.Match
+import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
 import com.luckycharmfairy.presentation.mymatches.matchreport.WinningStreakAdapter
 import java.text.DecimalFormat
 import java.time.LocalDate
@@ -82,6 +84,20 @@ class MatchReportFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val myMatchesFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyMatchesFragment")
+        binding.btnMatchRecord.setOnClickListener{
+            requireActivity().supportFragmentManager.beginTransaction().apply {
+                hide(this@MatchReportFragment)
+                if (myMatchesFragment == null) {
+                    add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")
+                } else {
+                    show(myMatchesFragment)
+                }
+                addToBackStack(null)
+                commit()
+            }
+        }
 
         // Barchart 부분
         val matchesBarchart = binding.barchartMatches
@@ -414,7 +430,7 @@ class MatchReportFragment : Fragment() {
                 )
             val days = mutableListOf("월","화","수","목","금","토","일")
             val max = winningRatesByDay.maxOrNull()
-            val indexes = mutableListOf<Int>()
+            val indexes = mutableSetOf<Int>()
             winningRatesByDay.forEach {
                 if (it == max) {
                     indexes.add(winningRatesByDay.indexOf(it))
