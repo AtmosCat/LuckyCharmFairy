@@ -455,7 +455,7 @@ class AddMyMatchOneFragment : Fragment() {
             val selectedPickerTime = String.format("%02d:%02d", selectedHour, selectedMinute)
             binding.btnTime.setText(selectedPickerTime)
             selectedTime = selectedPickerTime
-        }, hour, minute, true) // true는 24시간 형식
+        }, hour, minute, false) // true는 24시간 형식, false는 12시간 형식
         timePickerDialog.show()
     }
 

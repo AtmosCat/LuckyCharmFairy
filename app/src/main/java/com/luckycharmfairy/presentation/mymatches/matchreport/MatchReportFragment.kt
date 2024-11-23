@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.compose.ui.platform.LocalDensity
 import androidx.fragment.app.activityViewModels
@@ -34,6 +36,7 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.luckycharmfairy.data.model.Match
+import com.luckycharmfairy.data.model.Team
 import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
 import com.luckycharmfairy.presentation.mymatches.matchreport.WinningStreakAdapter
 import java.text.DecimalFormat
@@ -44,6 +47,10 @@ class MatchReportFragment : Fragment() {
     private var _binding: FragmentMatchReportBinding? = null
     private val binding get() = _binding!!
     private var currentUser = User()
+
+    private var selectedSport = ""
+    private var selectedMyteam = Team()
+    private var selectedYear = ""
 
     private var winCount = 0
     private var loseCount = 0
@@ -98,6 +105,43 @@ class MatchReportFragment : Fragment() {
                 commit()
             }
         }
+
+        userViewModel.getSpinnerStatsInAllMatches()
+
+        val spinnerSports = mutableListOf("전체 종목")
+        userViewModel.sportsInAllMatches.observe(viewLifecycleOwner) { data ->
+            spinnerSports += data
+            val spinnerAdapter =
+                ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerSports)
+            spinnerAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
+            binding.spinnerSport.adapter = spinnerAdapter
+
+            binding.spinnerSport.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedSport = spinnerSports[position]
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    selectedSport = spinnerSports[0]
+                }
+            }
+        }
+
+        var spinnerMyteams = mutableListOf<String>()
+        userViewModel.myteamsInAllMatches.observe(viewLifecycleOwner) { data ->
+            spinnerMyteams = data
+        }
+
+        var spinnerYears = mutableListOf<String>()
+        userViewModel.yearsInAllMatches.observe(viewLifecycleOwner) { data ->
+            spinnerYears = data
+        }
+
+
 
         // Barchart 부분
         val matchesBarchart = binding.barchartMatches

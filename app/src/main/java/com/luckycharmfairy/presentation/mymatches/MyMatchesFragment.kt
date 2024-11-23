@@ -88,6 +88,8 @@ class MyMatchesFragment : Fragment() {
 //            }
 //        }
 
+
+
         binding.recyclerviewMatchRecords.adapter = myMatchesAdapter
         binding.recyclerviewMatchRecords.layoutManager = LinearLayoutManager(requireContext())
 
@@ -218,7 +220,6 @@ class MyMatchesFragment : Fragment() {
                 }
             }
         }
-
 
         binding.btnAddMatchRecord.setOnClickListener{
             val addMyMatchOneFragment = requireActivity().supportFragmentManager.findFragmentByTag("AddMyMatchOneFragment")

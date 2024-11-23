@@ -56,6 +56,15 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val _temporaryMatchData = MutableLiveData<Match?>()
     val temporaryMatchData : LiveData<Match?> get() = _temporaryMatchData
 
+    private var _sportsInAllMatches = MutableLiveData<MutableList<String>>()
+    val sportsInAllMatches : LiveData<MutableList<String>> get() = _sportsInAllMatches
+
+    private var _myteamsInAllMatches = MutableLiveData<MutableList<String>>()
+    val myteamsInAllMatches : LiveData<MutableList<String>> get() = _myteamsInAllMatches
+
+    private var _yearsInAllMatches = MutableLiveData<MutableList<String>>()
+    val yearsInAllMatches : LiveData<MutableList<String>> get() = _yearsInAllMatches
+
     private val _winCount = MutableLiveData<Int?>()
     val winCount : LiveData<Int?> get() = _winCount
 
@@ -393,6 +402,28 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                     .set(currentUser.value!!)
             }.onFailure {
                 Log.e(TAG, "deleteMatch() failed! : ${it.message}")
+                handleException(it)
+            }
+        }
+    }
+
+    fun getSpinnerStatsInAllMatches() {
+        viewModelScope.launch {
+            runCatching {
+                val matches = currentUser.value!!.matches
+                val sports = mutableSetOf<String>()
+                val myteams = mutableSetOf<String>()
+                val years = mutableSetOf<String>()
+                matches.forEach {
+                    sports.add(it.sport)
+                    myteams.add(it.myteam.name)
+                    years.add(it.year)
+                }
+                _sportsInAllMatches.postValue(sports.toMutableList())
+                _myteamsInAllMatches.postValue(myteams.toMutableList())
+                _yearsInAllMatches.postValue(years.toMutableList())
+            }.onFailure {
+                Log.e(TAG, "getSpinnerStatsInAllMatches() failed! : ${it.message}")
                 handleException(it)
             }
         }

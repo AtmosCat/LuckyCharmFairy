@@ -209,7 +209,7 @@ class EditMyMatchOneFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
         }
 
-        val spinnerSports = mutableListOf("야구","남자축구","남자농구","남자배구","여자배구", "여자농구")
+        val spinnerSports = currentUser.mysports
         binding.btnAddSports.setOnClickListener{
             // MY종목 관리 프래그먼트 이동
         }
