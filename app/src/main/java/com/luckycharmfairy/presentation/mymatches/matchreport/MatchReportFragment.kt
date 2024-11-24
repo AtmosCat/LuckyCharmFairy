@@ -135,7 +135,7 @@ class MatchReportFragment : Fragment() {
                         position: Int,
                         id: Long
                     ) {
-                        var selectedSportMyTeamNames = mutableListOf<String>()
+                        var selectedSportMyTeamNames = mutableListOf<String>("응원 팀 전체")
                         selectedSport = spinnerSports[position]
                         userViewModel.getFilteredMatches(
                             selectedSport,
