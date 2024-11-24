@@ -49,6 +49,7 @@ class MatchReportFragment : Fragment() {
     private var currentUser = User()
 
     private var selectedSport = ""
+    private var selectedMyteamName = ""
     private var selectedMyteam = Team()
     private var selectedYear = ""
 
@@ -108,7 +109,7 @@ class MatchReportFragment : Fragment() {
 
         userViewModel.getSpinnerStatsInAllMatches()
 
-        val spinnerSports = mutableListOf("전체 종목")
+        val spinnerSports = mutableListOf("종목 전체")
         userViewModel.sportsInAllMatches.observe(viewLifecycleOwner) { data ->
             spinnerSports += data
             val spinnerAdapter =
@@ -131,14 +132,50 @@ class MatchReportFragment : Fragment() {
             }
         }
 
-        var spinnerMyteams = mutableListOf<String>()
+        val spinnerMyteams = mutableListOf("응원 팀 전체")
         userViewModel.myteamsInAllMatches.observe(viewLifecycleOwner) { data ->
-            spinnerMyteams = data
+            spinnerMyteams += data
+            val spinnerAdapter =
+                ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerMyteams)
+            spinnerAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
+            binding.spinnerMyTeam.adapter = spinnerAdapter
+
+            binding.spinnerMyTeam.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedMyteamName = spinnerMyteams[position]
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    selectedMyteamName = spinnerMyteams[0]
+                }
+            }
         }
 
-        var spinnerYears = mutableListOf<String>()
+        val spinnerYears = mutableListOf("기간 전체")
         userViewModel.yearsInAllMatches.observe(viewLifecycleOwner) { data ->
-            spinnerYears = data
+            spinnerYears += data
+            val spinnerAdapter =
+                ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerYears)
+            spinnerAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
+            binding.spinnerPeriod.adapter = spinnerAdapter
+
+            binding.spinnerPeriod.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedYear = spinnerYears[position]
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    selectedYear = spinnerYears[0]
+                }
+            }
         }
 
 

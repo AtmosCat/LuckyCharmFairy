@@ -81,8 +81,9 @@
 
             <Spinner
                 android:id="@+id/spinner_sport"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.25"
                 app:layout_constraintTop_toTopOf="@+id/spinner_my_team"
                 app:layout_constraintBottom_toBottomOf="@+id/spinner_my_team"
                 app:layout_constraintEnd_toStartOf="@+id/spinner_my_team"
@@ -91,8 +92,9 @@
 
             <Spinner
                 android:id="@+id/spinner_my_team"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.4"
                 app:layout_constraintTop_toTopOf="@+id/spinner_period"
                 app:layout_constraintBottom_toBottomOf="@+id/spinner_period"
                 app:layout_constraintEnd_toStartOf="@+id/spinner_period"
@@ -101,8 +103,9 @@
 
             <Spinner
                 android:id="@+id/spinner_period"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.2"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="10dp"
