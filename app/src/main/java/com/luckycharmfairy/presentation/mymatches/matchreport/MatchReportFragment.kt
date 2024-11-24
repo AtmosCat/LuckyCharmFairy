@@ -155,7 +155,7 @@ class MatchReportFragment : Fragment() {
 
         userViewModel.myteamsInAllMatches.observe(viewLifecycleOwner) { data ->
             spinnerMyteams = data
-            spinnerMyteamNames = mutableListOf()
+            spinnerMyteamNames = mutableListOf("응원 팀 전체")
             data.forEach { spinnerMyteamNames.add(it.name) }
             spinnerMyTeamAdapter =
                 ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerMyteamNames)
@@ -169,11 +169,14 @@ class MatchReportFragment : Fragment() {
                     id: Long
                 ) {
                     selectedMyteamName = spinnerMyteamNames[position]
-                    selectedMyteam = spinnerMyteams.find { it.name == selectedMyteamName }!!
+                    if (position != 0) {
+                        selectedMyteam = spinnerMyteams.find { it.name == selectedMyteamName }!!
+                    } else {
+                        selectedMyteam = Team()
+                    }
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                     selectedMyteamName = spinnerMyteamNames[0]
-                    selectedMyteam = spinnerMyteams.find { it.name == selectedMyteamName }!!
                 }
             }
         }
