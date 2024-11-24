@@ -23,6 +23,7 @@ import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.data.model.sampleBitmap
 import com.luckycharmfairy.presentation.UiState
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.selects.select
 import retrofit2.HttpException
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -64,6 +65,9 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     private var _yearsInAllMatches = MutableLiveData<MutableList<String>>()
     val yearsInAllMatches : LiveData<MutableList<String>> get() = _yearsInAllMatches
+
+    private val _filteredMatches = MutableLiveData<MutableList<Match>>()
+    val filteredMatches : LiveData<MutableList<Match>> get() = _filteredMatches
 
     private val _winCount = MutableLiveData<Int?>()
     val winCount : LiveData<Int?> get() = _winCount
@@ -410,11 +414,11 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     fun getSpinnerStatsInAllMatches() {
         viewModelScope.launch {
             runCatching {
-                val matches = currentUser.value!!.matches
+                val matches = currentUser.value?.matches
                 val sports = mutableSetOf<String>()
                 val myteams = mutableSetOf<Team>()
                 val years = mutableSetOf<String>()
-                matches.forEach {
+                matches?.forEach {
                     sports.add(it.sport)
                     myteams.add(it.myteam)
                     years.add(it.year)
@@ -429,16 +433,48 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun getMatchResultStat() {
+    fun getFilteredMatches(selectedSport: String, selectedMyteamName: String, selectedYear: String) {
         viewModelScope.launch {
             runCatching {
                 val matches = currentUser.value!!.matches
+                var filteredMatches = matches
+
+                if (selectedSport != "종목 전체") {
+                    filteredMatches = matches.filter {
+                        it.sport == selectedSport
+                    }.toMutableList()
+                }
+
+                if (selectedMyteamName != "응원 팀 전체") {
+                    filteredMatches = filteredMatches.filter {
+                        it.myteam.name == selectedMyteamName
+                    }.toMutableList()
+                }
+
+                if (selectedYear != "기간 전체") {
+                    filteredMatches = filteredMatches.filter {
+                        it.year == selectedYear
+                    }.toMutableList()
+                }
+
+                _filteredMatches.postValue(filteredMatches)
+            }.onFailure {
+                Log.e(TAG, "getFilteredMatches() failed! : ${it.message}")
+                handleException(it)
+            }
+        }
+    }
+
+    fun getMatchResultStat() {
+        viewModelScope.launch {
+            runCatching {
+                val matches = filteredMatches.value
                 var win = 0
                 var lose = 0
                 var tie = 0
                 var cancel = 0
                 var noResult = 0
-                matches.forEach {
+                matches?.forEach {
                     when (it.result) {
                         "승리" -> win += 1
                         "패배" -> lose += 1
@@ -458,22 +494,22 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     fun getHomeAwayMatchStat() {
         viewModelScope.launch {
             runCatching {
-                val homeMatches = currentUser.value!!.matches.filter { it.myteam == it.home }
-                val awayMatches = currentUser.value!!.matches.filter { it.myteam == it.away }
+                val homeMatches = filteredMatches.value?.filter { it.myteam == it.home }
+                val awayMatches = filteredMatches.value?.filter { it.myteam == it.away }
                 var homeWin = 0
                 var homeLose = 0
                 var homeTie = 0
                 var awayWin = 0
                 var awayLose = 0
                 var awayTie = 0
-                homeMatches.forEach {
+                homeMatches?.forEach {
                     when (it.result) {
                         "승리" -> homeWin += 1
                         "패배" -> homeLose += 1
                         "무승부" -> homeTie += 1
                     }
                 }
-                awayMatches.forEach {
+                awayMatches?.forEach {
                     when (it.result) {
                         "승리" -> awayWin += 1
                         "패배" -> awayLose += 1
@@ -492,12 +528,12 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     fun getWinningStreakData() {
         viewModelScope.launch {
             runCatching {
-                val matches = currentUser.value!!.matches.sortedBy {
+                val matches = filteredMatches.value?.sortedBy {
                     LocalDate.of(it.year.toInt(), it.month.toInt(), it.date.toInt())
                 }
                 var finalWinningStreakMatches = mutableSetOf<Match>()
                 var winningStreakMatches = mutableSetOf<Match>()
-                for (i in 0..matches.size-2) {
+                for (i in 0..matches!!.size-2) {
                     if (matches[i].result == "승리" && matches[i+1].result == "승리") {
                         winningStreakMatches.add(matches[i])
                         winningStreakMatches.add(matches[i+1])
@@ -519,9 +555,9 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     fun getWinningMatchesByDay() {
         viewModelScope.launch {
             runCatching {
-                val matches = currentUser.value!!.matches.filter { it.result == "승리" }
+                val matches = filteredMatches.value?.filter { it.result == "승리" }
                 val winningRates = mutableListOf(0,0,0,0,0,0,0) // 월 화 수 목 금 토 일
-                matches.forEach {
+                matches?.forEach {
                     when (it.day) {
                         "월" -> winningRates[0] += 1
                         "화" -> winningRates[1] += 1
@@ -545,19 +581,19 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
             runCatching {
                 val thisYear = LocalDate.now().year
 
-                val lastYearMatches = currentUser.value!!.matches.filter { it.year == "${thisYear-1}" }
-                val lastYearJanMatches = lastYearMatches.filter { it.month == "1" }.toMutableList()
-                val lastYearFebMatches = lastYearMatches.filter { it.month == "2" }.toMutableList()
-                val lastYearMarMatches = lastYearMatches.filter { it.month == "3" }.toMutableList()
-                val lastYearAprMatches = lastYearMatches.filter { it.month == "4" }.toMutableList()
-                val lastYearMayMatches = lastYearMatches.filter { it.month == "5" }.toMutableList()
-                val lastYearJunMatches = lastYearMatches.filter { it.month == "6" }.toMutableList()
-                val lastYearJulMatches = lastYearMatches.filter { it.month == "7" }.toMutableList()
-                val lastYearAugMatches = lastYearMatches.filter { it.month == "8" }.toMutableList()
-                val lastYearSepMatches = lastYearMatches.filter { it.month == "9" }.toMutableList()
-                val lastYearOctMatches = lastYearMatches.filter { it.month == "10" }.toMutableList()
-                val lastYearNovMatches = lastYearMatches.filter { it.month == "11" }.toMutableList()
-                val lastYearDecMatches = lastYearMatches.filter { it.month == "12" }.toMutableList()
+                val lastYearMatches = filteredMatches.value?.filter { it.year == "${thisYear-1}" }
+                val lastYearJanMatches = lastYearMatches?.filter { it.month == "1" }?.toMutableList()
+                val lastYearFebMatches = lastYearMatches?.filter { it.month == "2" }?.toMutableList()
+                val lastYearMarMatches = lastYearMatches?.filter { it.month == "3" }?.toMutableList()
+                val lastYearAprMatches = lastYearMatches?.filter { it.month == "4" }?.toMutableList()
+                val lastYearMayMatches = lastYearMatches?.filter { it.month == "5" }?.toMutableList()
+                val lastYearJunMatches = lastYearMatches?.filter { it.month == "6" }?.toMutableList()
+                val lastYearJulMatches = lastYearMatches?.filter { it.month == "7" }?.toMutableList()
+                val lastYearAugMatches = lastYearMatches?.filter { it.month == "8" }?.toMutableList()
+                val lastYearSepMatches = lastYearMatches?.filter { it.month == "9" }?.toMutableList()
+                val lastYearOctMatches = lastYearMatches?.filter { it.month == "10" }?.toMutableList()
+                val lastYearNovMatches = lastYearMatches?.filter { it.month == "11" }?.toMutableList()
+                val lastYearDecMatches = lastYearMatches?.filter { it.month == "12" }?.toMutableList()
 
                 val lastYearMatchesByMonth = mutableListOf(
                     lastYearJanMatches,  // 1월 경기
@@ -574,19 +610,19 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                     lastYearDecMatches   // 12월 경기
                 )
 
-                val thisYearMatches = currentUser.value!!.matches.filter { it.year == "${thisYear}" }
-                val thisYearJanMatches = thisYearMatches.filter { it.month == "1" }.toMutableList()
-                val thisYearFebMatches = thisYearMatches.filter { it.month == "2" }.toMutableList()
-                val thisYearMarMatches = thisYearMatches.filter { it.month == "3" }.toMutableList()
-                val thisYearAprMatches = thisYearMatches.filter { it.month == "4" }.toMutableList()
-                val thisYearMayMatches = thisYearMatches.filter { it.month == "5" }.toMutableList()
-                val thisYearJunMatches = thisYearMatches.filter { it.month == "6" }.toMutableList()
-                val thisYearJulMatches = thisYearMatches.filter { it.month == "7" }.toMutableList()
-                val thisYearAugMatches = thisYearMatches.filter { it.month == "8" }.toMutableList()
-                val thisYearSepMatches = thisYearMatches.filter { it.month == "9" }.toMutableList()
-                val thisYearOctMatches = thisYearMatches.filter { it.month == "10" }.toMutableList()
-                val thisYearNovMatches = thisYearMatches.filter { it.month == "11" }.toMutableList()
-                val thisYearDecMatches = thisYearMatches.filter { it.month == "12" }.toMutableList()
+                val thisYearMatches = filteredMatches.value?.filter { it.year == "${thisYear}" }
+                val thisYearJanMatches = thisYearMatches?.filter { it.month == "1" }?.toMutableList()
+                val thisYearFebMatches = thisYearMatches?.filter { it.month == "2" }?.toMutableList()
+                val thisYearMarMatches = thisYearMatches?.filter { it.month == "3" }?.toMutableList()
+                val thisYearAprMatches = thisYearMatches?.filter { it.month == "4" }?.toMutableList()
+                val thisYearMayMatches = thisYearMatches?.filter { it.month == "5" }?.toMutableList()
+                val thisYearJunMatches = thisYearMatches?.filter { it.month == "6" }?.toMutableList()
+                val thisYearJulMatches = thisYearMatches?.filter { it.month == "7" }?.toMutableList()
+                val thisYearAugMatches = thisYearMatches?.filter { it.month == "8" }?.toMutableList()
+                val thisYearSepMatches = thisYearMatches?.filter { it.month == "9" }?.toMutableList()
+                val thisYearOctMatches = thisYearMatches?.filter { it.month == "10" }?.toMutableList()
+                val thisYearNovMatches = thisYearMatches?.filter { it.month == "11" }?.toMutableList()
+                val thisYearDecMatches = thisYearMatches?.filter { it.month == "12" }?.toMutableList()
 
                 val thisYearMatchesByMonth = mutableListOf(
                     thisYearJanMatches, // 1월
@@ -607,7 +643,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
                 lastYearMatchesByMonth.forEach { data ->
                     var size = -1
-                    if (data.size > 0) size = data.size
+                    if (data?.size!! > 0) size = data.size
                     else size = 1
                     val winningRate = (data.filter{ it.result == "승리" }.size).toFloat() / size
                     lastAndThisYearMonthlyWinningRates.add(winningRate)
@@ -615,7 +651,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
                 thisYearMatchesByMonth.forEach { data ->
                     var size = -1
-                    if (data.size > 0) size = data.size
+                    if (data?.size!! > 0) size = data.size
                     else size = 1
                     val winningRate = (data.filter{ it.result == "승리" }.size).toFloat() / size
                     lastAndThisYearMonthlyWinningRates.add(winningRate)
@@ -633,10 +669,10 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     fun getWinningRatesByOpposites() {
         viewModelScope.launch {
             runCatching {
-                val matches = currentUser.value!!.matches
+                val matches = filteredMatches.value
                 val oppositeTeams = mutableSetOf<Team>()
 
-                matches.forEach {
+                matches?.forEach {
                     if (it.myteam == it.home) {
                         oppositeTeams.add(it.away)
                     } else if (it.myteam == it.away) {
@@ -648,9 +684,9 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
                 oppositeTeams.forEach{ data ->
                     var matchesVsOppositeTeam = listOf<Match>()
-                    matchesVsOppositeTeam = matches.filter {
+                    matchesVsOppositeTeam = matches?.filter {
                         it.home == data || it.away == data
-                    }
+                    }!!
                     val winCount = matchesVsOppositeTeam.filter { it.result == "승리" }.size
                     val tieCount = matchesVsOppositeTeam.filter { it.result == "무승부" }.size
                     val loseCount = matchesVsOppositeTeam.filter { it.result == "패배" }.size
