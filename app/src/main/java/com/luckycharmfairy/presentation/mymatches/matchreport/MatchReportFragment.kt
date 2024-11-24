@@ -53,6 +53,11 @@ class MatchReportFragment : Fragment() {
     private var selectedMyteam = Team()
     private var selectedYear = ""
 
+    private var spinnerMyteams = mutableListOf<Team>()
+    private var spinnerMyteamNames = mutableListOf("응원 팀 전체")
+
+    private lateinit var spinnerMyTeamAdapter: ArrayAdapter<String>
+
     private var winCount = 0
     private var loseCount = 0
     private var tieCount = 0
@@ -107,16 +112,21 @@ class MatchReportFragment : Fragment() {
             }
         }
 
+        val spinnerSports = mutableListOf("종목 전체")
+
+        spinnerMyTeamAdapter =
+            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerMyteamNames)
+        spinnerMyTeamAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
+        binding.spinnerMyTeam.adapter = spinnerMyTeamAdapter
+
         userViewModel.getSpinnerStatsInAllMatches()
 
-        val spinnerSports = mutableListOf("종목 전체")
         userViewModel.sportsInAllMatches.observe(viewLifecycleOwner) { data ->
             spinnerSports += data
-            val spinnerAdapter =
+            val spinnerSportsAdapter =
                 ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerSports)
-            spinnerAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
-            binding.spinnerSport.adapter = spinnerAdapter
-
+            spinnerSportsAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
+            binding.spinnerSport.adapter = spinnerSportsAdapter
             binding.spinnerSport.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
@@ -124,7 +134,18 @@ class MatchReportFragment : Fragment() {
                     position: Int,
                     id: Long
                 ) {
+                    var selectedSportMyTeamNames = mutableListOf<String>()
                     selectedSport = spinnerSports[position]
+                    if (position != 0) {
+                        val selectedSportMyTeams = spinnerMyteams.filter { it.sport == selectedSport }.toMutableList()
+                        selectedSportMyTeams.forEach { selectedSportMyTeamNames.add(it.name) }
+                    } else {
+                        selectedSportMyTeamNames = spinnerMyteamNames
+                    }
+                    spinnerMyTeamAdapter =
+                        ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, selectedSportMyTeamNames)
+                    spinnerMyTeamAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
+                    binding.spinnerMyTeam.adapter = spinnerMyTeamAdapter
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                     selectedSport = spinnerSports[0]
@@ -132,14 +153,14 @@ class MatchReportFragment : Fragment() {
             }
         }
 
-        val spinnerMyteams = mutableListOf("응원 팀 전체")
         userViewModel.myteamsInAllMatches.observe(viewLifecycleOwner) { data ->
-            spinnerMyteams += data
-            val spinnerAdapter =
-                ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerMyteams)
-            spinnerAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
-            binding.spinnerMyTeam.adapter = spinnerAdapter
-
+            spinnerMyteams = data
+            spinnerMyteamNames = mutableListOf()
+            data.forEach { spinnerMyteamNames.add(it.name) }
+            spinnerMyTeamAdapter =
+                ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerMyteamNames)
+            spinnerMyTeamAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
+            binding.spinnerMyTeam.adapter = spinnerMyTeamAdapter
             binding.spinnerMyTeam.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
@@ -147,21 +168,24 @@ class MatchReportFragment : Fragment() {
                     position: Int,
                     id: Long
                 ) {
-                    selectedMyteamName = spinnerMyteams[position]
+                    selectedMyteamName = spinnerMyteamNames[position]
+                    selectedMyteam = spinnerMyteams.find { it.name == selectedMyteamName }!!
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    selectedMyteamName = spinnerMyteams[0]
+                    selectedMyteamName = spinnerMyteamNames[0]
+                    selectedMyteam = spinnerMyteams.find { it.name == selectedMyteamName }!!
                 }
             }
         }
 
+
         val spinnerYears = mutableListOf("기간 전체")
         userViewModel.yearsInAllMatches.observe(viewLifecycleOwner) { data ->
             spinnerYears += data
-            val spinnerAdapter =
+            val spinnerYearsAdapter =
                 ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerYears)
-            spinnerAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
-            binding.spinnerPeriod.adapter = spinnerAdapter
+            spinnerYearsAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
+            binding.spinnerPeriod.adapter = spinnerYearsAdapter
 
             binding.spinnerPeriod.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(

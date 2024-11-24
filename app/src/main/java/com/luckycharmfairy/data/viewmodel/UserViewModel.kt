@@ -59,8 +59,8 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private var _sportsInAllMatches = MutableLiveData<MutableList<String>>()
     val sportsInAllMatches : LiveData<MutableList<String>> get() = _sportsInAllMatches
 
-    private var _myteamsInAllMatches = MutableLiveData<MutableList<String>>()
-    val myteamsInAllMatches : LiveData<MutableList<String>> get() = _myteamsInAllMatches
+    private var _myteamsInAllMatches = MutableLiveData<MutableList<Team>>()
+    val myteamsInAllMatches : LiveData<MutableList<Team>> get() = _myteamsInAllMatches
 
     private var _yearsInAllMatches = MutableLiveData<MutableList<String>>()
     val yearsInAllMatches : LiveData<MutableList<String>> get() = _yearsInAllMatches
@@ -412,11 +412,11 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
             runCatching {
                 val matches = currentUser.value!!.matches
                 val sports = mutableSetOf<String>()
-                val myteams = mutableSetOf<String>()
+                val myteams = mutableSetOf<Team>()
                 val years = mutableSetOf<String>()
                 matches.forEach {
                     sports.add(it.sport)
-                    myteams.add(it.myteam.name)
+                    myteams.add(it.myteam)
                     years.add(it.year)
                 }
                 _sportsInAllMatches.postValue(sports.toMutableList())
