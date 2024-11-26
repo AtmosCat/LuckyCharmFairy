@@ -74,7 +74,7 @@ class MatchReportFragment : Fragment() {
     private var awayTieCount = 0
 
     private var winningStreakMatches = mutableListOf<Match>()
-    private var winningMatchesByDay = mutableListOf<Int>()
+    private var winningRatesByDay = mutableListOf<Double>()
     private var winningRatesByOpposites = listOf(listOf<String>())
 
     private val userViewModel: UserViewModel by activityViewModels {
@@ -593,24 +593,17 @@ class MatchReportFragment : Fragment() {
             }
 
             // 요일별 승률 파트
-            userViewModel.getWinningMatchesByDay()
-            userViewModel.winningMatchesByDay.observe(viewLifecycleOwner) { data ->
-                winningMatchesByDay = data
+            userViewModel.getWinningRatesByDay()
+            userViewModel.winningRatesByDay.observe(viewLifecycleOwner) { data ->
+                winningRatesByDay = data
                 val decimalFormat = DecimalFormat("00%")
-                val mondayWinningRate =
-                    decimalFormat.format(winningMatchesByDay[0].toDouble() / winningMatchesByDay.sum())
-                val tuesdayWinningRate =
-                    decimalFormat.format(winningMatchesByDay[1].toDouble() / winningMatchesByDay.sum())
-                val wednesdayWinningRate =
-                    decimalFormat.format(winningMatchesByDay[2].toDouble() / winningMatchesByDay.sum())
-                val thursdayWinningRate =
-                    decimalFormat.format(winningMatchesByDay[3].toDouble() / winningMatchesByDay.sum())
-                val fridayWinningRate =
-                    decimalFormat.format(winningMatchesByDay[4].toDouble() / winningMatchesByDay.sum())
-                val saturdayWinningRate =
-                    decimalFormat.format(winningMatchesByDay[5].toDouble() / winningMatchesByDay.sum())
-                val sundayWinningRate =
-                    decimalFormat.format(winningMatchesByDay[6].toDouble() / winningMatchesByDay.sum())
+                val mondayWinningRate = decimalFormat.format(winningRatesByDay[0])
+                val tuesdayWinningRate = decimalFormat.format(winningRatesByDay[1])
+                val wednesdayWinningRate = decimalFormat.format(winningRatesByDay[2])
+                val thursdayWinningRate = decimalFormat.format(winningRatesByDay[3])
+                val fridayWinningRate = decimalFormat.format(winningRatesByDay[4])
+                val saturdayWinningRate = decimalFormat.format(winningRatesByDay[5])
+                val sundayWinningRate = decimalFormat.format(winningRatesByDay[6])
 
                 val winningRatesByDay = listOf(
                     mondayWinningRate,
@@ -623,10 +616,13 @@ class MatchReportFragment : Fragment() {
                 )
                 val days = mutableListOf("월", "화", "수", "목", "금", "토", "일")
                 val max = winningRatesByDay.maxOrNull()
-                val indexes = mutableSetOf<Int>()
-                winningRatesByDay.forEach {
+                val indexes = mutableListOf<Int>()
+                val winningRatesByDayCopy = winningRatesByDay.toMutableList()
+                winningRatesByDayCopy.forEach {
                     if (it == max) {
-                        indexes.add(winningRatesByDay.indexOf(it))
+                        val index = winningRatesByDay.indexOf(it)
+                        indexes.add(index)
+                        winningRatesByDayCopy[index] = "00%"
                     }
                 }
                 val highestWinningRateDays = mutableListOf<String>()
@@ -672,6 +668,23 @@ class MatchReportFragment : Fragment() {
                     saturday,
                     sunday
                 )
+
+                val allIndexes = mutableListOf(0,1,2,3,4,5,6)
+                allIndexes.forEach {
+                    val colorStateList = ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.main_gray
+                        )
+                    )
+                    tvDayList[it].backgroundTintList = colorStateList
+                    tvWinningRateList[it].setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.main_gray
+                        )
+                    )
+                }
 
                 indexes.forEach {
                     val colorStateList = ColorStateList.valueOf(

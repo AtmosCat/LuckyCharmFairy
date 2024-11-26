@@ -311,7 +311,7 @@
                     android:id="@+id/tv_win_by_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="O요일에 직관을 갔을 때\n가장 많이 승리했어요!"
+                    android:text="O요일에 직관을 갔을 때\n승률이 가장 높았어요!"
                     style="@style/textStyle_subtitle"
                     android:gravity="center"
                     android:lineSpacingExtra="5dp"

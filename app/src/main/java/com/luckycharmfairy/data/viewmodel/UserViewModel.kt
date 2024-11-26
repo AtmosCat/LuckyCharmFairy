@@ -99,8 +99,8 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val _winningStreakMatches = MutableLiveData<MutableList<Match>>()
     val winningStreakMatches : LiveData<MutableList<Match>> get() = _winningStreakMatches
 
-    private val _winningMatchesByDay = MutableLiveData<MutableList<Int>>()
-    val winningMatchesByDay : LiveData<MutableList<Int>> get() = _winningMatchesByDay
+    private val _winningRatesByDay = MutableLiveData<MutableList<Double>>()
+    val winningRatesByDay : LiveData<MutableList<Double>> get() = _winningRatesByDay
 
     private val _lastAndThisYearWinningRatesByMonth = MutableLiveData<MutableList<Float>>()
     val lastAndThisYearWinningRatesByMonth : LiveData<MutableList<Float>> get() = _lastAndThisYearWinningRatesByMonth
@@ -566,23 +566,19 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun getWinningMatchesByDay() {
+    fun getWinningRatesByDay() {
         viewModelScope.launch {
             runCatching {
-                val matches = filteredMatches.value?.filter { it.result == "승리" }
-                val winningRates = mutableListOf(0,0,0,0,0,0,0) // 월 화 수 목 금 토 일
-                matches?.forEach {
-                    when (it.day) {
-                        "월" -> winningRates[0] += 1
-                        "화" -> winningRates[1] += 1
-                        "수" -> winningRates[2] += 1
-                        "목" -> winningRates[3] += 1
-                        "금" -> winningRates[4] += 1
-                        "토" -> winningRates[5] += 1
-                        "일" -> winningRates[6] += 1
-                    }
+                val days = mutableListOf("월", "화", "수", "목", "금", "토", "일")
+                val matches = filteredMatches.value
+                val winningRates = mutableListOf<Double>() // 월 화 수 목 금 토 일
+                for (i in 0..6) {
+                    var totalMatchesSize = matches?.filter { it.day == days[i] }?.size
+                    if (totalMatchesSize == 0) totalMatchesSize = 1
+                    val totalWonMatchesSize = matches?.filter { it.day == days[i] && it.result == "승리" }?.size?.toDouble()
+                    winningRates.add(totalWonMatchesSize!! / totalMatchesSize!!)
                 }
-                _winningMatchesByDay.postValue(winningRates)
+                _winningRatesByDay.postValue(winningRates)
             }.onFailure {
                 Log.e(TAG, "getWinningMatchesByDay() failed! : ${it.message}")
                 handleException(it)
