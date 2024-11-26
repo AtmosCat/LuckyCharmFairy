@@ -436,10 +436,10 @@ class MatchReportFragment : Fragment() {
             // Piechart - 홈 / 어웨이 승률 부분
             userViewModel.getHomeAwayMatchStat()
 
-            userViewModel.homeMatchResultCount.observe(viewLifecycleOwner) { data ->
-                homeWinCount = data[0]
-                homeLoseCount = data[1]
-                homeTieCount = data[2]
+            userViewModel.homeMatchResultCount.observe(viewLifecycleOwner) { _data ->
+                homeWinCount = _data[0]
+                homeLoseCount = _data[1]
+                homeTieCount = _data[2]
 
                 val homeMatchesPiechart = binding.piechartHomeMatches
 
@@ -491,7 +491,11 @@ class MatchReportFragment : Fragment() {
                     (homeWinCount.toDouble()) / (homeWinCount + homeLoseCount + homeTieCount) * 100
                 val decimalFormat = DecimalFormat("00%")
                 val formattedCenterText = decimalFormat.format(pieCenterText / 100)
-                homeMatchesPiechart.setCenterText("${formattedCenterText}")
+                if (homeWinCount + homeLoseCount + homeTieCount == 0) {
+                    homeMatchesPiechart.setCenterText("경기 없음")
+                } else {
+                    homeMatchesPiechart.setCenterText("${formattedCenterText}")
+                }
                 homeMatchesPiechart.setCenterTextSize(16f)  // 중심 텍스트 크기
 
                 homeMatchesPiechart.animateY(1000) // Y축 애니메이션
@@ -559,7 +563,11 @@ class MatchReportFragment : Fragment() {
                     (awayWinCount.toDouble()) / (awayWinCount + awayLoseCount + awayTieCount) * 100
                 val decimalFormat = DecimalFormat("00%")
                 val formattedCenterText = decimalFormat.format(pieCenterText / 100)
-                awayMatchesPiechart.setCenterText("${formattedCenterText}")
+                if (homeWinCount + homeLoseCount + homeTieCount == 0) {
+                    awayMatchesPiechart.setCenterText("경기 없음")
+                } else {
+                    awayMatchesPiechart.setCenterText("${formattedCenterText}")
+                }
                 awayMatchesPiechart.setCenterTextSize(16f)  // 중심 텍스트 크기
 
                 awayMatchesPiechart.animateY(1000) // Y축 애니메이션
