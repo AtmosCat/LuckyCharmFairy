@@ -563,7 +563,7 @@ class MatchReportFragment : Fragment() {
                     (awayWinCount.toDouble()) / (awayWinCount + awayLoseCount + awayTieCount) * 100
                 val decimalFormat = DecimalFormat("00%")
                 val formattedCenterText = decimalFormat.format(pieCenterText / 100)
-                if (homeWinCount + homeLoseCount + homeTieCount == 0) {
+                if (awayWinCount + awayLoseCount + awayTieCount == 0) {
                     awayMatchesPiechart.setCenterText("경기 없음")
                 } else {
                     awayMatchesPiechart.setCenterText("${formattedCenterText}")
@@ -588,8 +588,13 @@ class MatchReportFragment : Fragment() {
             userViewModel.winningStreakMatches.observe(viewLifecycleOwner) { data ->
                 winningStreakMatches = data
                 winningStreakAdapter.submitList(winningStreakMatches)
-                binding.tvWinningStreak.text =
-                    "내가 직관을 간 날,\n내 응원팀은 최다 ${winningStreakMatches.size}연승을 기록했어요!"
+                if (winningStreakMatches.size > 0) {
+                    binding.tvWinningStreak.text =
+                        "내가 직관을 간 날,\n내 응원팀은 최다 ${winningStreakMatches.size}연승을 기록했어요!"
+                } else {
+                    binding.tvWinningStreak.text =
+                        "아직 내 응원팀의 승리가 없어요🥲"
+                }
             }
 
             // 요일별 승률 파트
@@ -615,12 +620,14 @@ class MatchReportFragment : Fragment() {
                     sundayWinningRate,
                 )
                 val days = mutableListOf("월", "화", "수", "목", "금", "토", "일")
-                val max = winningRatesByDay.maxOrNull()
+                val max = winningRatesByDay
+                    .map { it.replace("%", "").toInt() }  // '%' 제거하고 정수로 변환
+                    .maxOrNull().toString()+"%"
                 val indexes = mutableListOf<Int>()
                 val winningRatesByDayCopy = winningRatesByDay.toMutableList()
                 winningRatesByDayCopy.forEach {
                     if (it == max) {
-                        val index = winningRatesByDay.indexOf(it)
+                        val index = winningRatesByDayCopy.indexOf(it)
                         indexes.add(index)
                         winningRatesByDayCopy[index] = "00%"
                     }
@@ -630,8 +637,13 @@ class MatchReportFragment : Fragment() {
                     highestWinningRateDays.add(days[it])
                 }
 
-                binding.tvWinByDay.text =
-                    "${highestWinningRateDays.joinToString(", ")}요일에 직관을 갔을 때\n가장 많이 승리했어요!"
+                if (max == "0%") {
+                    binding.tvWinByDay.text =
+                        "아직 내 응원팀의 승리가 없어요🥲"
+                } else {
+                    binding.tvWinByDay.text =
+                        "${highestWinningRateDays.joinToString(", ")}요일에 직관을 갔을 때\n가장 많이 승리했어요!"
+                }
 
                 binding.tvMondayWinRate.text = mondayWinningRate
                 binding.tvTuesdayWinRate.text = tuesdayWinningRate
@@ -849,12 +861,22 @@ class MatchReportFragment : Fragment() {
             } else {
                 iterateSize = winningRatesByOpposites.size
             }
+            binding.tvFirstMostWonOpposite.text = ""
+            binding.tvSecondMostWonOpposite.text = ""
+            binding.tvThirdMostWonOpposite.text = ""
+            binding.tvFourthMostWonOpposite.text = ""
+            binding.tvFifthMostWonOpposite.text = ""
             for (i in 0..iterateSize - 1) {
                 tvWinningRatesByOppositesList[i].text =
                     "vs. ${winningRatesByOpposites[i][1]} - 승률 ${winningRatesByOpposites[i][2].toFloat() * 100}% (${winningRatesByOpposites[i][3]}전 ${winningRatesByOpposites[i][4]}승 ${winningRatesByOpposites[i][5]}무 ${winningRatesByOpposites[i][6]}패)"
             }
-            binding.tvWinningRateAgainstOpposites.text =
-                "내가 응원한 팀은,\n ${winningRatesByOpposites[0][0]} \n을 상대로 가장 강했어요!"
+            if (winningRatesByOpposites[0][2] == "0.0") {
+                binding.tvWinningRateAgainstOpposites.text =
+                    "아직 내 응원팀의 승리가 없어요🥲"
+            } else {
+                binding.tvWinningRateAgainstOpposites.text =
+                    "내가 응원한 팀은,\n ${winningRatesByOpposites[0][0]} \n을 상대로 가장 강했어요!"
+            }
 
             val spannableString = SpannableString(tvWinningRatesByOppositesList[0].text)
             spannableString.setSpan(
