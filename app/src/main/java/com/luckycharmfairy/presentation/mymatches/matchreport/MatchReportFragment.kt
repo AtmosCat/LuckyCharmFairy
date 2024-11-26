@@ -49,6 +49,7 @@ class MatchReportFragment : Fragment() {
     private var currentUser = User()
 
     private var selectedSport = ""
+    private var selectedSportMyTeamNames = mutableListOf<String>()
     private var selectedMyteamName = ""
     private var selectedMyteam = Team()
     private var selectedYear = ""
@@ -135,14 +136,14 @@ class MatchReportFragment : Fragment() {
                         position: Int,
                         id: Long
                     ) {
-                        var selectedSportMyTeamNames = mutableListOf<String>("응원 팀 전체")
                         selectedSport = spinnerSports[position]
                         userViewModel.getFilteredMatches(
                             selectedSport,
-                            selectedMyteamName,
+                            "응원 팀 전체",
                             selectedYear
                         )
                         if (position != 0) {
+                            selectedSportMyTeamNames = mutableListOf("응원 팀 전체")
                             val selectedSportMyTeams =
                                 spinnerMyteams.filter { it.sport == selectedSport }.toMutableList()
                             selectedSportMyTeams.forEach { selectedSportMyTeamNames.add(it.name) }
@@ -186,7 +187,7 @@ class MatchReportFragment : Fragment() {
                         position: Int,
                         id: Long
                     ) {
-                        selectedMyteamName = spinnerMyteamNames[position]
+                        selectedMyteamName = selectedSportMyTeamNames[position]
                         userViewModel.getFilteredMatches(
                             selectedSport,
                             selectedMyteamName,

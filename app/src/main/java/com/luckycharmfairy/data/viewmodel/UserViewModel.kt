@@ -45,6 +45,9 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val _currentUser = MutableLiveData<User?>()
     val currentUser : LiveData<User?> get() = _currentUser
 
+    private val _currentUserMain = MutableLiveData<User?>()
+    val currentUserMain : LiveData<User?> get() = _currentUserMain
+
     private val _currentUserBlockedUsers = MutableLiveData<MutableList<String>?>()
     val currentUserBlockedUsers : LiveData<MutableList<String>?> get() = _currentUserBlockedUsers
 
@@ -248,6 +251,17 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                         _currentUser.value = null
                     }
                 }
+        }
+    }
+
+    fun getCurrentUser() {
+        viewModelScope.launch {
+            runCatching {
+                _currentUserMain.postValue(currentUser.value)
+            }.onFailure {
+                Log.e(TAG, "getCurrentUser() failed! : ${it.message}")
+                handleException(it)
+            }
         }
     }
 

@@ -76,8 +76,13 @@ class MyMatchesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        currentUser = userViewModel.currentUser.value!!
-        currentUserEmail = currentUser.email
+        userViewModel.getCurrentUser()
+        userViewModel.currentUserMain.observe(viewLifecycleOwner) { data ->
+            if (data != null) {
+                currentUser = data
+            }
+            currentUserEmail = currentUser.email
+        }
 
 //        userViewModel.currentUser.observe(viewLifecycleOwner) { data ->
 //            if (data != null) {
@@ -94,6 +99,7 @@ class MyMatchesFragment : Fragment() {
         binding.recyclerviewMatchRecords.layoutManager = LinearLayoutManager(requireContext())
 
         val spinnerItems = currentUser.mysports
+        spinnerItems.add(0, "전체 종목")
         val spinnerAdapter =
             ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerItems)
         spinnerAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
