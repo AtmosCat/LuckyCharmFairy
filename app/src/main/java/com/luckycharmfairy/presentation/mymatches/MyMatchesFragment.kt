@@ -181,6 +181,16 @@ class MyMatchesFragment : Fragment() {
             }
         })
 
+        binding.calendarMonthlyMatches.setOnMonthChangedListener { widget, date ->
+            val calendar = Calendar.getInstance()
+            calendar.time = date.date
+            val month = calendar.get(Calendar.MONTH) + 1
+            val year = calendar.get(Calendar.YEAR)
+            selectedYear = year.toString()
+            selectedMonth = month.toString()
+            addCalendarDot()
+        }
+
         myMatchesAdapter.itemClick = object : MyMatchesAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
                 val clickedMatch = todayMatches[position]
@@ -249,7 +259,7 @@ class MyMatchesFragment : Fragment() {
                 eventDays += (CalendarDay.from(selectedYear.toInt(), selectedMonth.toInt()-1, it.toInt()))
             }
             val matchdaysCount = selectedMonthMatchdays?.size
-            binding.tvMonthlyMatches.text = "이번 달에 ${selectedSport} 경기를 ${matchdaysCount}일 직관했어요!"
+            binding.tvMonthlyMatches.text = "${selectedMonth}월에 ${selectedSport} 경기를 ${matchdaysCount}일 직관했어요!"
             val eventDecorator = EventDecorator(eventDays)
             if (eventDays.size != 0) {
                 binding.calendarMonthlyMatches.removeDecorators()

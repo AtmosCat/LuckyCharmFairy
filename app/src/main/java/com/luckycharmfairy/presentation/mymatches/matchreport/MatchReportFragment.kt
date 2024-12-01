@@ -114,7 +114,6 @@ class MatchReportFragment : Fragment() {
             }
         }
 
-        val spinnerSports = mutableListOf("종목 전체")
 
         spinnerMyTeamAdapter =
             ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerMyteamNames)
@@ -123,6 +122,7 @@ class MatchReportFragment : Fragment() {
 
         userViewModel.getSpinnerStatsInAllMatches()
         userViewModel.sportsInAllMatches.observe(viewLifecycleOwner) { data ->
+            val spinnerSports = mutableListOf("종목 전체")
             spinnerSports += data
             val spinnerSportsAdapter =
                 ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerSports)
@@ -211,9 +211,8 @@ class MatchReportFragment : Fragment() {
                 }
         }
 
-
-        val spinnerYears = mutableListOf("기간 전체")
         userViewModel.yearsInAllMatches.observe(viewLifecycleOwner) { data ->
+            val spinnerYears = mutableListOf("기간 전체")
             spinnerYears += data
             val spinnerYearsAdapter =
                 ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerYears)
