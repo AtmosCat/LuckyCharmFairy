@@ -48,8 +48,18 @@ class SettingsFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
         }
 
+        val editUserInfoFragment = requireActivity().supportFragmentManager.findFragmentByTag("EditUserInfoFragment")
         binding.btnEditUserInfo.setOnClickListener{
-            // 회원가입 부분 다듬고 다시 만들기
+            requireActivity().supportFragmentManager.beginTransaction().apply {
+                hide(this@SettingsFragment)
+                if (editUserInfoFragment == null) {
+                    add(R.id.main_frame, EditUserInfoFragment(), "EditUserInfoFragment")
+                } else {
+                    show(editUserInfoFragment)
+                }
+                addToBackStack(null)
+                commit()
+            }
         }
 
         binding.btnSignOut.setOnClickListener{

@@ -1,6 +1,8 @@
 package com.luckycharmfairy.presentation.signup
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -76,17 +78,31 @@ class SignUpFragment : Fragment() {
         }
 
         // 비밀번호 일치 체크
+        pwConfirm = false
         binding.btnSignupPwCheck.setOnClickListener {
-            var pwCheck = binding.etSignupPwCheck.text.toString()
-
-            var pw = binding.etSignupPw.text.toString()
+            val pwCheck = binding.etSignupPwCheck.text.toString()
+            val pw = binding.etSignupPw.text.toString()
             if (pw != pwCheck) {
-                Toast.makeText(requireContext(), "비밀번호가 일치하기 않습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(requireContext(), "비밀번호가 일치합니다.", Toast.LENGTH_SHORT).show()
                 pwConfirm = true
             }
         }
+
+        binding.etSignupPw.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
+                // charSequence: 변경된 텍스트, start: 텍스트가 변경된 위치, before: 변경되기 전 텍스트의 길이, count: 변경된 문자의 수
+                pwConfirm = false
+            }
+
+            override fun afterTextChanged(editable: Editable?) {
+                val inputText = editable.toString()
+            }
+        })
 
         binding.checkBoxSignupPrivacy.setOnCheckedChangeListener{ _, isChecked ->
             privacyConfirm = if (isChecked) {
