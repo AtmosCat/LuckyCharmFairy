@@ -39,6 +39,7 @@ import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.data.model.Team
 import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
 import com.luckycharmfairy.presentation.mymatches.matchreport.WinningStreakAdapter
+import com.luckycharmfairy.presentation.mypage.MyPageFragment
 import java.text.DecimalFormat
 import java.time.LocalDate
 
@@ -248,7 +249,7 @@ class MatchReportFragment : Fragment() {
 
         userViewModel.getFilteredMatches("종목 전체", "응원 팀 전체", "기간 전체")
 
-            userViewModel.filteredMatches.observe(viewLifecycleOwner) {
+        userViewModel.filteredMatches.observe(viewLifecycleOwner) {
             // Barchart 부분
             val matchesBarchart = binding.barchartMatches
             userViewModel.getMatchResultStat()
@@ -641,7 +642,7 @@ class MatchReportFragment : Fragment() {
                         "아직 내 응원팀의 승리가 없어요🥲"
                 } else {
                     binding.tvWinByDay.text =
-                        "${highestWinningRateDays.joinToString(", ")}요일에 직관을 갔을 때\n가장 많이 승리했어요!"
+                        "${highestWinningRateDays.joinToString(", ")}요일에 직관을 갔을 때\n승률이 가장 높았어요!"
                 }
 
                 binding.tvMondayWinRate.text = mondayWinningRate
@@ -839,62 +840,76 @@ class MatchReportFragment : Fragment() {
 
                 // 그래프 스타일 설정
                 lineChart.invalidate()  // 데이터를 변경한 후 그래프 다시 그리기
+            }
+
+            // 상대 팀별 승률
+
+            val tvWinningRatesByOppositesList = listOf(
+                binding.tvFirstMostWonOpposite,
+                binding.tvSecondMostWonOpposite,
+                binding.tvThirdMostWonOpposite,
+                binding.tvFourthMostWonOpposite,
+                binding.tvFifthMostWonOpposite
+            )
+
+            userViewModel.getWinningRatesByOpposites()
+            userViewModel.winningRatesByOpposites.observe(viewLifecycleOwner) { data ->
+                winningRatesByOpposites = data.sortedByDescending { it[2].toFloat() }
+                var iterateSize = 0
+                if (winningRatesByOpposites.size >= 5) {
+                    iterateSize = 5
+                } else {
+                    iterateSize = winningRatesByOpposites.size
+                }
+                binding.tvFirstMostWonOpposite.text = ""
+                binding.tvSecondMostWonOpposite.text = ""
+                binding.tvThirdMostWonOpposite.text = ""
+                binding.tvFourthMostWonOpposite.text = ""
+                binding.tvFifthMostWonOpposite.text = ""
+                for (i in 0..iterateSize - 1) {
+                    tvWinningRatesByOppositesList[i].text =
+                        "vs. ${winningRatesByOpposites[i][1]} - 승률 ${winningRatesByOpposites[i][2].toFloat() * 100}% (${winningRatesByOpposites[i][3]}전 ${winningRatesByOpposites[i][4]}승 ${winningRatesByOpposites[i][5]}무 ${winningRatesByOpposites[i][6]}패)"
+                }
+                if (winningRatesByOpposites[0][2] == "0.0") {
+                    binding.tvWinningRateAgainstOpposites.text =
+                        "아직 내 응원팀의 승리가 없어요🥲"
+                } else {
+                    binding.tvWinningRateAgainstOpposites.text =
+                        "내가 응원한 팀은,\n ${winningRatesByOpposites[0][0]} \n을 상대로 가장 강했어요!"
+                }
+
+                val spannableString = SpannableString(tvWinningRatesByOppositesList[0].text)
+                spannableString.setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    0,
+                    tvWinningRatesByOppositesList[0].text.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                spannableString.setSpan(
+                    ForegroundColorSpan(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.main_mint
+                        )
+                    ), 0, tvWinningRatesByOppositesList[0].text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                tvWinningRatesByOppositesList[0].text = spannableString
+            }
         }
 
-        // 상대 팀별 승률
-
-        val tvWinningRatesByOppositesList = listOf(
-            binding.tvFirstMostWonOpposite,
-            binding.tvSecondMostWonOpposite,
-            binding.tvThirdMostWonOpposite,
-            binding.tvFourthMostWonOpposite,
-            binding.tvFifthMostWonOpposite
-        )
-
-        userViewModel.getWinningRatesByOpposites()
-        userViewModel.winningRatesByOpposites.observe(viewLifecycleOwner) { data ->
-            winningRatesByOpposites = data.sortedByDescending { it[2].toFloat() }
-            var iterateSize = 0
-            if (winningRatesByOpposites.size >= 5) {
-                iterateSize = 5
-            } else {
-                iterateSize = winningRatesByOpposites.size
+        val myPageFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyPageFragment")
+        binding.btnTabMypage.setOnClickListener{
+            requireActivity().supportFragmentManager.beginTransaction().apply {
+                hide(this@MatchReportFragment)
+                if (myPageFragment == null) {
+                    add(R.id.main_frame, MyPageFragment(), "MyPageFragment")
+                } else {
+                    show(myPageFragment)
+                }
+                addToBackStack(null)
+                commit()
             }
-            binding.tvFirstMostWonOpposite.text = ""
-            binding.tvSecondMostWonOpposite.text = ""
-            binding.tvThirdMostWonOpposite.text = ""
-            binding.tvFourthMostWonOpposite.text = ""
-            binding.tvFifthMostWonOpposite.text = ""
-            for (i in 0..iterateSize - 1) {
-                tvWinningRatesByOppositesList[i].text =
-                    "vs. ${winningRatesByOpposites[i][1]} - 승률 ${winningRatesByOpposites[i][2].toFloat() * 100}% (${winningRatesByOpposites[i][3]}전 ${winningRatesByOpposites[i][4]}승 ${winningRatesByOpposites[i][5]}무 ${winningRatesByOpposites[i][6]}패)"
-            }
-            if (winningRatesByOpposites[0][2] == "0.0") {
-                binding.tvWinningRateAgainstOpposites.text =
-                    "아직 내 응원팀의 승리가 없어요🥲"
-            } else {
-                binding.tvWinningRateAgainstOpposites.text =
-                    "내가 응원한 팀은,\n ${winningRatesByOpposites[0][0]} \n을 상대로 가장 강했어요!"
-            }
-
-            val spannableString = SpannableString(tvWinningRatesByOppositesList[0].text)
-            spannableString.setSpan(
-                StyleSpan(Typeface.BOLD),
-                0,
-                tvWinningRatesByOppositesList[0].text.length,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            spannableString.setSpan(
-                ForegroundColorSpan(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.main_mint
-                    )
-                ), 0, tvWinningRatesByOppositesList[0].text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            tvWinningRatesByOppositesList[0].text = spannableString
         }
-    }
 
     }
 
