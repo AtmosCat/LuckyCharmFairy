@@ -210,14 +210,12 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             runCatching {
                 db.collection("user")
-                    .whereEqualTo("email", _email)
+                    .document(_email)
                     .get()
                     .addOnSuccessListener { result ->
                         if (result != null) {
-                            for (document in result) {
-                                val user = document.toObject(User::class.java)
-                                _signingInUser.value = user
-                            }
+                            val user = result.toObject(User::class.java)
+                            _signingInUser.value = user
                         } else {
                             _signingInUser.value = null
                         }

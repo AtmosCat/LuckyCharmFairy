@@ -176,13 +176,7 @@ class SignInFragment : Fragment() {
                 if(task.isSuccessful) {
                     val googleLoginUser = auth!!.currentUser
                     saveGoogleLoginToFireStore(googleLoginUser!!)
-//                    requireActivity().supportFragmentManager.beginTransaction().apply {
-//                        hide(this@SignInFragment)
-//                        add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")
-//                        addToBackStack(null)
-//                        commit()
-//                    }
-                    Toast.makeText(requireContext(),"구글 계정으로 로그인합니다.",Toast.LENGTH_SHORT).show()
+
                 }else{
                     // 틀렸을 때
                     Toast.makeText(requireContext(),task.exception?.message,Toast.LENGTH_SHORT).show()
@@ -197,8 +191,22 @@ class SignInFragment : Fragment() {
             if (data == null) {
                 userviewModel.addUser(User(email = email.toString()))
                 userviewModel.setCurrentUser(email.toString())
+                requireActivity().supportFragmentManager.beginTransaction().apply {
+                    hide(this@SignInFragment)
+                    add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")
+                    addToBackStack(null)
+                    commit()
+                }
+                Toast.makeText(requireContext(),"구글 계정으로 로그인합니다.",Toast.LENGTH_SHORT).show()
             } else {
                 userviewModel.setCurrentUser(email.toString())
+                requireActivity().supportFragmentManager.beginTransaction().apply {
+                    hide(this@SignInFragment)
+                    add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")
+                    addToBackStack(null)
+                    commit()
+                }
+                Toast.makeText(requireContext(),"구글 계정으로 로그인합니다.",Toast.LENGTH_SHORT).show()
             }
         }
     }

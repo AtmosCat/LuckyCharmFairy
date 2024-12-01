@@ -58,28 +58,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    private fun setAd() {
-//        val adView = AdView(this)
-//        adView.adUnitId = "ca-app-pub-3940256099942544/9214589741"
-//        adView.setAdSize(adSize)
-//
-//        binding.adView.removeAllViews()
-//        binding.adView.addView(adView)
-//
-//        val adRequest = AdRequest.Builder().build()
-//        adView.loadAd(adRequest)
-//
-//    }
+    private fun setAd() {
+        val adView = AdView(this)
+        adView.adUnitId = "ca-app-pub-3940256099942544/9214589741"
+        adView.setAdSize(adSize)
+
+        binding.adView.removeAllViews()
+        binding.adView.addView(adView)
+
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
+
+    }
     override fun onPause() {
         super.onPause()
-//        binding.adView.pause() // 액티비티가 일시 정지되면 광고도 일시 정지
+        binding.adView.pause() // 액티비티가 일시 정지되면 광고도 일시 정지
     }
     override fun onResume() {
         super.onResume()
-//        binding.adView.resume() // 액티비티가 다시 시작되면 광고도 다시 시작
+        binding.adView.resume() // 액티비티가 다시 시작되면 광고도 다시 시작
     }
     override fun onDestroy() {
         super.onDestroy()
-//        binding.adView.destroy() // 액티비티가 파괴되면 광고 리소스 해제
+        binding.adView.destroy() // 액티비티가 파괴되면 광고 리소스 해제
     }
 }
