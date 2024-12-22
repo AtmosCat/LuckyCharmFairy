@@ -213,7 +213,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
                     .document(_email)
                     .get()
                     .addOnSuccessListener { result ->
-                        if (result != null) {
+                        if (result != null) { 
                             val user = result.toObject(User::class.java)
                             _signingInUser.value = user
                         } else {

@@ -79,7 +79,6 @@ class SignInFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentSignInBinding.inflate(inflater, container, false)
         return binding.root
     }
