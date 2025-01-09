@@ -21,7 +21,7 @@ class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
 
     private val binding get() = _binding!!
-    private var currentUser = User()
+    private var currentUser = User();
 
     private val userViewModel: UserViewModel by activityViewModels {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
