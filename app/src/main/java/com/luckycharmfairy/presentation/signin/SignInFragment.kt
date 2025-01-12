@@ -57,7 +57,6 @@ class SignInFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    // 이렇게 뷰모델 호출하는 거 맞나?
     private val userviewModel: UserViewModel by activityViewModels() {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
     }
@@ -87,8 +86,8 @@ class SignInFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnSignin.setOnClickListener {
-            var email = binding.etSigninEmail.text.toString()
-            var pw = binding.etSigninPw.text.toString()
+            val email = binding.etSigninEmail.text.toString()
+            val pw = binding.etSigninPw.text.toString()
 
             userviewModel.findUser(email)
             userviewModel.signingInUser.observe(viewLifecycleOwner) { data ->

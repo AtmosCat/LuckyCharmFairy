@@ -231,35 +231,30 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun setCurrentUser(_email: String) {
-        viewModelScope.launch {
-            db.collection("user")
-                .document(_email)
-                .addSnapshotListener { snapshot, exception ->
-                    if (exception != null) {
-                        Log.e(TAG, "setCurrentUser() failed! : ${exception.message}")
-                        _currentUser.value = null
-                        handleException(exception)
-                        return@addSnapshotListener
-                    }
-
-                    if (snapshot != null && snapshot.exists()) {
-                        val user = snapshot.toObject(User::class.java)
-                        _currentUser.value = user
-                    } else {
-                        _currentUser.value = null
-                    }
+        db.collection("user")
+            .document(_email)
+            .addSnapshotListener { snapshot, exception ->
+                if (exception != null) {
+                    Log.e(TAG, "setCurrentUser() failed! : ${exception.message}")
+                    _currentUser.value = null
+                    handleException(exception)
+                    return@addSnapshotListener
                 }
-        }
+                if (snapshot != null && snapshot.exists()) {
+                    val user = snapshot.toObject(User::class.java)
+                    _currentUser.value = user
+                } else {
+                    _currentUser.value = null
+                }
+            }
     }
 
     fun getCurrentUser() {
-        viewModelScope.launch {
-            runCatching {
-                _currentUserMain.postValue(currentUser.value)
-            }.onFailure {
-                Log.e(TAG, "getCurrentUser() failed! : ${it.message}")
-                handleException(it)
-            }
+        runCatching {
+            _currentUserMain.postValue(currentUser.value)
+        }.onFailure {
+            Log.e(TAG, "getCurrentUser() failed! : ${it.message}")
+            handleException(it)
         }
     }
 

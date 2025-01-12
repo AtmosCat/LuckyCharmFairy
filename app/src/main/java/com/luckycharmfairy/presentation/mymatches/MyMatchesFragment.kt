@@ -30,8 +30,7 @@ import java.util.Calendar
 
 class MyMatchesFragment : Fragment() {
 
-    private var _binding: FragmentMyMatchesBinding? = null
-    private val binding get() = _binding!!
+    private val binding by lazy { FragmentMyMatchesBinding.inflate(layoutInflater) }
 
     private var currentUser = User()
     private var currentUserEmail: String = ""
@@ -69,20 +68,23 @@ class MyMatchesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMyMatchesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userViewModel.getCurrentUser()
-        userViewModel.currentUserMain.observe(viewLifecycleOwner) { data ->
-            if (data != null) {
-                currentUser = data
-            }
-            currentUserEmail = currentUser.email
-        }
+
+        userViewModel.setCurrentUser("dd@gmail.com")
+        currentUser = userViewModel.currentUser.value!!
+        currentUserEmail = currentUser.email
+
+//        userViewModel.currentUserMain.observe(viewLifecycleOwner) { data ->
+//            if (data != null) {
+//                currentUser = data
+//            }
+//            currentUserEmail = currentUser.email
+//        }
 
 //        userViewModel.currentUser.observe(viewLifecycleOwner) { data ->
 //            if (data != null) {
@@ -92,7 +94,6 @@ class MyMatchesFragment : Fragment() {
 //                currentUserEmail = data.email
 //            }
 //        }
-
 
 
         binding.recyclerviewMatchRecords.adapter = myMatchesAdapter
