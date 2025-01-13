@@ -12,7 +12,7 @@ import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.AdSize
 import com.google.firebase.FirebaseApp
-import com.luckycharmfairy.data.viewmodel.UserViewModel
+import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.ActivityMainBinding
 import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment

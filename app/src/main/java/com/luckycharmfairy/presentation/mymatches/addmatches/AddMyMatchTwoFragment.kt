@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.luckycharmfairy.data.model.Match
 import com.google.firebase.storage.FirebaseStorage
-import com.luckycharmfairy.data.viewmodel.UserViewModel
+import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentAddMyMatchTwoBinding
 import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment

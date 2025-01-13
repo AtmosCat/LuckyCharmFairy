@@ -12,7 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.luckycharmfairy.data.model.User
-import com.luckycharmfairy.data.viewmodel.UserViewModel
+import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentEditUserInfoBinding
 
 class EditUserInfoFragment : Fragment() {

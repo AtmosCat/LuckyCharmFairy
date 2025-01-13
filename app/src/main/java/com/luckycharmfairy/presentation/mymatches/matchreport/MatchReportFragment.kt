@@ -22,7 +22,7 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.luckycharmfairy.data.model.User
-import com.luckycharmfairy.data.viewmodel.UserViewModel
+import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMatchReportBinding
 import androidx.core.content.ContextCompat

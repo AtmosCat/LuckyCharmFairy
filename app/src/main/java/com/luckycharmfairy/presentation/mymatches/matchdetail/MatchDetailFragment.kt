@@ -16,7 +16,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.viewpager2.widget.ViewPager2
 import com.luckycharmfairy.data.model.Match
-import com.luckycharmfairy.data.viewmodel.UserViewModel
+import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMatchDetailBinding
 import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment

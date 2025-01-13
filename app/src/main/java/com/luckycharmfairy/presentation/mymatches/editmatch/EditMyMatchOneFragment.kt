@@ -29,7 +29,7 @@ import com.luckycharmfairy.data.model.womenBasketballTeamNames
 import com.luckycharmfairy.data.model.womenBasketballTeams
 import com.luckycharmfairy.data.model.womenVolleyballTeamNames
 import com.luckycharmfairy.data.model.womenVolleyballTeams
-import com.luckycharmfairy.data.viewmodel.UserViewModel
+import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentEditMyMatchOneBinding
 import com.luckycharmfairy.presentation.mymatches.addmatches.AddMyMatchTwoFragment

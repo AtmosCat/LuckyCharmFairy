@@ -1,4 +1,4 @@
-package com.luckycharmfairy.data.viewmodel
+package com.luckycharmfairy.presentation.viewmodel
 
 import android.app.Application
 import android.content.ContentValues.TAG

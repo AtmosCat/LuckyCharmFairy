@@ -19,7 +19,7 @@ import com.luckycharmfairy.data.model.menFootballTeamNames
 import com.luckycharmfairy.data.model.menVolleyballTeamNames
 import com.luckycharmfairy.data.model.menVolleyball_AnsanOkbankOkman
 import com.luckycharmfairy.data.model.womenVolleyballTeamNames
-import com.luckycharmfairy.data.viewmodel.UserViewModel
+import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyTeamManagerBinding
 import com.luckycharmfairy.presentation.mymatches.MyMatchesAdapter

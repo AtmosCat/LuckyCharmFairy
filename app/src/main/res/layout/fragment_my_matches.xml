@@ -20,6 +20,20 @@
         android:visibility="invisible"
         />
 
+    <TextView
+        android:id="@+id/tv_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="정보를 불러오고 있습니다..."
+        app:layout_constraintTop_toBottomOf="@+id/progress_bar"
+        app:layout_constraintStart_toStartOf="@+id/progress_bar"
+        app:layout_constraintEnd_toEndOf="@+id/progress_bar"
+        style="@style/textStyle_subheading"
+        android:textColor="@color/main_dark_gray"
+        android:elevation="12dp"
+        android:layout_marginTop="10dp"
+        />
+
     <View
         android:id="@+id/bg_progress_bar"
         android:layout_width="match_parent"
@@ -184,7 +198,6 @@
         android:layout_marginTop="5dp"
         android:text="직관한 경기가 없습니다."
         style="@style/textStyle_subheading"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/recyclerview_match_records"
         app:layout_constraintStart_toStartOf="@+id/recyclerview_match_records"
         app:layout_constraintTop_toTopOf="@+id/recyclerview_match_records" />
