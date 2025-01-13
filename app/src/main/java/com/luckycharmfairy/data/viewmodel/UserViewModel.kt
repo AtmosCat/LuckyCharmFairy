@@ -22,8 +22,12 @@ import com.luckycharmfairy.data.model.Team
 import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.data.model.sampleBitmap
 import com.luckycharmfairy.presentation.UiState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -231,68 +235,91 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun setCurrentUser(_email: String) {
-        db.collection("user")
-            .document(_email)
-            .addSnapshotListener { snapshot, exception ->
-                if (exception != null) {
-                    Log.e(TAG, "setCurrentUser() failed! : ${exception.message}")
-                    _currentUser.value = null
-                    handleException(exception)
-                    return@addSnapshotListener
-                }
-                if (snapshot != null && snapshot.exists()) {
+        _uiState.value = UiState.Loading
+        viewModelScope.launch {
+            runCatching {
+                val snapshot = db.collection("user")
+                    .document(_email)
+                    .get()
+                    .await()
+                if (snapshot.exists()) {
                     val user = snapshot.toObject(User::class.java)
-                    _currentUser.value = user
+                    _currentUser.postValue(user)
+                    _uiState.value = UiState.Success(user!!)
                 } else {
-                    _currentUser.value = null
+                    _currentUser.postValue(null)
+                    _uiState.value = UiState.Error("일치하는 유저 정보 없음")
                 }
+            }.onFailure {
+                Log.e(TAG, "setCurrentUser() failed! : ${it.message}")
+                handleException(it)
+                _uiState.value = UiState.Error("setCurrentUser() failed!")
             }
-    }
-
-    fun getCurrentUser() {
-        runCatching {
-            _currentUserMain.postValue(currentUser.value)
-        }.onFailure {
-            Log.e(TAG, "getCurrentUser() failed! : ${it.message}")
-            handleException(it)
         }
     }
 
+    fun getCurrentUser(): User {
+        return currentUser.value!!
+    }
 
-    fun getSelectedMonthMatchdays(_email: String, selectedSport: String, selectedYear: String, selectedMonth: String) {
+    fun getSelectedMonthMatchdays(
+        _email: String,
+        selectedSport: String,
+        selectedYear: String,
+        selectedMonth: String
+    ) {
+        // 로딩 상태 반영
+        _uiState.value = UiState.Loading
+
         viewModelScope.launch {
             runCatching {
                 val userRef = db.collection("user").document(_email)
+
                 db.runTransaction { transaction ->
                     val snapshot = transaction.get(userRef)
                     val currentUser = snapshot.toObject(User::class.java)
                     val matches = currentUser?.matches ?: emptyList()
-                    var selectedMonthMatches = mutableListOf<Match>()
-                    if (selectedSport != "전체 종목") {
-                        selectedMonthMatches = matches.filter {
-                            it.sport == selectedSport && it.year == selectedYear && it.month == selectedMonth }.toMutableList()
+
+                    val selectedMonthMatches = if (selectedSport != "전체 종목") {
+                        matches.filter {
+                            it.sport == selectedSport &&
+                                    it.year == selectedYear &&
+                                    it.month == selectedMonth
+                        }.toMutableList()
                     } else {
-                        selectedMonthMatches = matches.filter {
-                            it.year == selectedYear && it.month == selectedMonth }.toMutableList()
+                        matches.filter {
+                            it.year == selectedYear &&
+                                    it.month == selectedMonth
+                        }.toMutableList()
                     }
+
                     val matchdays = mutableListOf<String>()
-                    selectedMonthMatches.forEach{
+                    selectedMonthMatches.forEach {
                         if (it.date !in matchdays) {
                             matchdays.add(it.date)
                         }
                     }
+
+                    matchdays // 트랜잭션의 결과 반환
+                }.addOnSuccessListener { matchdays ->
+                    // 성공적으로 데이터를 가져왔을 때 UI 상태 갱신
                     _selectedMonthMatchdays.postValue(matchdays)
-                }.addOnSuccessListener {
+                    _uiState.value = UiState.Success(matchdays) // matchdays를 성공 상태로 전달
                     println("Succeeded to get Selected Month's Matchdays")
                 }.addOnFailureListener { exception ->
+                    // 트랜잭션 실패 시 UI 상태 갱신
+                    _uiState.value = UiState.Error("Failed to get Selected Month's Matchdays: ${exception.message}")
                     println("Failed to get Selected Month's Matchdays: $exception")
                 }
-            }.onFailure {
-                Log.e(TAG, "getSelectedMonthMatchdays() failed! : ${it.message}")
-                handleException(it)
+            }.onFailure { throwable ->
+                // 일반적인 실패 처리
+                _uiState.value = UiState.Error("getSelectedMonthMatchdays() failed! : ${throwable.message}")
+                Log.e(TAG, "getSelectedMonthMatchdays() failed! : ${throwable.message}")
+                handleException(throwable)
             }
         }
     }
+
 
     fun getSelectedDateMatches(_email: String, selectedSport: String, selectedYear: String, selectedMonth: String, selectedDate: String) {
         viewModelScope.launch {

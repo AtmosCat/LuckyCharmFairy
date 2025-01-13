@@ -1,8 +1,10 @@
 package com.luckycharmfairy.presentation.mymatches
 
 import MatchReportFragment
+import android.content.ContentValues.TAG
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -19,19 +22,24 @@ import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.presentation.mymatches.matchdetail.MatchDetailFragment
 import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMatchReportBinding
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.presentation.EventDecorator
+import com.luckycharmfairy.presentation.UiState
 import com.luckycharmfairy.presentation.mymatches.addmatches.AddMyMatchOneFragment
 import com.luckycharmfairy.presentation.mypage.MyPageFragment
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 
 class MyMatchesFragment : Fragment() {
 
-    private val binding by lazy { FragmentMyMatchesBinding.inflate(layoutInflater) }
-
+    private var _binding: FragmentMyMatchesBinding? = null
+    private val binding get() = _binding!!
     private var currentUser = User()
     private var currentUserEmail: String = ""
 
@@ -52,49 +60,25 @@ class MyMatchesFragment : Fragment() {
     private var selectedMonthMatchdays: Int = -1
     private var todayMatches = mutableListOf<com.luckycharmfairy.data.model.Match>()
 
-
     private val userViewModel: UserViewModel by activityViewModels {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
     }
 
     private val myMatchesAdapter by lazy { MyMatchesAdapter(userViewModel) }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentMyMatchesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        userViewModel.setCurrentUser("dd@gmail.com")
-        currentUser = userViewModel.currentUser.value!!
-        currentUserEmail = currentUser.email
-
-//        userViewModel.currentUserMain.observe(viewLifecycleOwner) { data ->
-//            if (data != null) {
-//                currentUser = data
-//            }
-//            currentUserEmail = currentUser.email
-//        }
-
-//        userViewModel.currentUser.observe(viewLifecycleOwner) { data ->
-//            if (data != null) {
-//                currentUser = data
-//            }
-//            if (data != null) {
-//                currentUserEmail = data.email
-//            }
-//        }
-
+        initViewModel()
 
         binding.recyclerviewMatchRecords.adapter = myMatchesAdapter
         binding.recyclerviewMatchRecords.layoutManager = LinearLayoutManager(requireContext())
@@ -250,16 +234,35 @@ class MyMatchesFragment : Fragment() {
 
     }
 
-    private fun addCalendarDot() {
-        userViewModel.getSelectedMonthMatchdays(currentUserEmail, selectedSport, selectedYear, selectedMonth)
-        userViewModel.selectedMonthMatchdays.observe(viewLifecycleOwner) { data ->
-            val selectedMonthMatchdays = data
+//    private fun addCalendarDot() {
+//        userViewModel.getSelectedMonthMatchdays(currentUserEmail, selectedSport, selectedYear, selectedMonth)
+//        userViewModel.selectedMonthMatchdays.observe(viewLifecycleOwner) { data ->
+//            val selectedMonthMatchdays = data
+//
+//            val eventDays = mutableListOf<CalendarDay>()
+//            selectedMonthMatchdays?.forEach {
+//                eventDays += (CalendarDay.from(selectedYear.toInt(), selectedMonth.toInt()-1, it.toInt()))
+//            }
+//            val matchdaysCount = selectedMonthMatchdays?.size
+//            binding.tvMonthlyMatches.text = "${selectedMonth}월에 ${selectedSport} 경기를 ${matchdaysCount}일 직관했어요!"
+//            val eventDecorator = EventDecorator(eventDays)
+//            if (eventDays.size != 0) {
+//                binding.calendarMonthlyMatches.removeDecorators()
+//                binding.calendarMonthlyMatches.addDecorators(eventDecorator)
+//            } else {
+//                binding.calendarMonthlyMatches.removeDecorators()
+//            }
+//        }
+//    }
+
+        private fun addCalendarDot() {
+            val selectedMonthMatchDays = getSelectedMonthMatchdays(selectedSport, selectedYear, selectedMonth)
 
             val eventDays = mutableListOf<CalendarDay>()
-            selectedMonthMatchdays?.forEach {
+            selectedMonthMatchDays.forEach {
                 eventDays += (CalendarDay.from(selectedYear.toInt(), selectedMonth.toInt()-1, it.toInt()))
             }
-            val matchdaysCount = selectedMonthMatchdays?.size
+            val matchdaysCount = selectedMonthMatchDays?.size
             binding.tvMonthlyMatches.text = "${selectedMonth}월에 ${selectedSport} 경기를 ${matchdaysCount}일 직관했어요!"
             val eventDecorator = EventDecorator(eventDays)
             if (eventDays.size != 0) {
@@ -268,12 +271,55 @@ class MyMatchesFragment : Fragment() {
             } else {
                 binding.calendarMonthlyMatches.removeDecorators()
             }
-        }
     }
 
     class VerticalSpacingItemDecoration(private val spacing: Int) : RecyclerView.ItemDecoration() {
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
             outRect.bottom = spacing // 아래쪽 간격 설정
+        }
+    }
+
+    private fun getSelectedMonthMatchdays (
+        selectedSport: String, selectedYear: String, selectedMonth: String) : MutableList<String> {
+        val selectedMonthMatches = if (selectedSport != "전체 종목") {
+            currentUser.matches.filter {
+                it.sport == selectedSport &&
+                        it.year == selectedYear &&
+                        it.month == selectedMonth
+            }.toMutableList()
+        } else {
+            currentUser.matches.filter {
+                it.year == selectedYear &&
+                        it.month == selectedMonth
+            }.toMutableList()
+        }
+        val matchdays = mutableListOf<String>()
+        selectedMonthMatches.forEach {
+            if (it.date !in matchdays) {
+                matchdays.add(it.date)
+            }
+        }
+        return matchdays
+    }
+
+    private fun initViewModel() {
+        userViewModel.setCurrentUser("dd@gmail.com")
+        userViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            when (uiState) {
+                is UiState.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.bgProgressBar.visibility = View.VISIBLE
+                }
+                is UiState.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.bgProgressBar.visibility = View.GONE
+                    currentUser = uiState.data as User
+                    currentUserEmail = currentUser.email
+                }
+                is UiState.Error -> {
+                    Toast.makeText(requireContext(), uiState.message, Toast.LENGTH_LONG).show()
+                }
+            }
         }
     }
 }

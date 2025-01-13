@@ -1,5 +1,6 @@
 package com.luckycharmfairy.presentation.signin
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -26,6 +27,9 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.FirebaseApp
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentSignInBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SignInFragment : Fragment() {
 
@@ -103,7 +107,9 @@ class SignInFragment : Fragment() {
                             Toast.makeText(requireContext(), "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT)
                                 .show()
                         } else {
-                            userviewModel.setCurrentUser(user!!.email)
+                            CoroutineScope(Dispatchers.Main).launch {
+                                userviewModel.setCurrentUser("dd@gmail.com")
+                            }
                             Toast.makeText(requireContext(), "로그인 성공!", Toast.LENGTH_SHORT).show()
 
                             val franchiseHomeFragment = requireActivity().supportFragmentManager.findFragmentByTag("FranchiseHomeFragment")
@@ -188,7 +194,9 @@ class SignInFragment : Fragment() {
         userviewModel.signingInUser.observe(viewLifecycleOwner) { data ->
             if (data == null) {
                 userviewModel.addUser(User(email = email.toString()))
-                userviewModel.setCurrentUser(email.toString())
+                CoroutineScope(Dispatchers.Main).launch {
+                    userviewModel.setCurrentUser(email.toString())
+                }
                 requireActivity().supportFragmentManager.beginTransaction().apply {
                     hide(this@SignInFragment)
                     add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")
@@ -197,7 +205,9 @@ class SignInFragment : Fragment() {
                 }
                 Toast.makeText(requireContext(),"구글 계정으로 로그인합니다.",Toast.LENGTH_SHORT).show()
             } else {
-                userviewModel.setCurrentUser(email.toString())
+                CoroutineScope(Dispatchers.Main).launch {
+                    userviewModel.setCurrentUser(email.toString())
+                }
                 requireActivity().supportFragmentManager.beginTransaction().apply {
                     hide(this@SignInFragment)
                     add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")

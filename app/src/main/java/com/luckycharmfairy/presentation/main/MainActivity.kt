@@ -6,13 +6,16 @@ import android.view.WindowMetrics
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.lifecycle.ViewModel
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.AdSize
 import com.google.firebase.FirebaseApp
+import com.luckycharmfairy.data.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.ActivityMainBinding
+import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
 import com.luckycharmfairy.presentation.signin.SignInFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,6 +40,7 @@ class MainActivity : AppCompatActivity() {
             return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
         }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -49,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
 //        setAd()
 
-        setFragment(SignInFragment())
+        setFragment(MyMatchesFragment())
     }
 
     private fun setFragment(frag : Fragment) {
@@ -82,4 +86,5 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         binding.adView.destroy() // 액티비티가 파괴되면 광고 리소스 해제
     }
+
 }
