@@ -14,10 +14,12 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.presentation.mymatches.matchdetail.MatchDetailFragment
 import com.luckycharmfairy.data.viewmodel.UserViewModel
@@ -98,24 +100,14 @@ class MyMatchesFragment : Fragment() {
                 id: Long
             ) {
                 selectedSport = spinnerItems[position]
-                userViewModel.getSelectedDateMatches(currentUserEmail, selectedSport, selectedYear, selectedMonth, selectedDate)
-                userViewModel.selectedDayMatches.observe(viewLifecycleOwner) { data ->
-                    myMatchesAdapter.submitList(data)
-                    todayMatches = data
-                }
+                val selectedDateMatchesMatches = getSelectedDateMatches(selectedSport, selectedYear, selectedMonth, selectedDate)
+                myMatchesAdapter.submitList(selectedDateMatchesMatches)
+                todayMatches = selectedDateMatchesMatches
                 addCalendarDot()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 selectedSport = spinnerItems[0]
             }
-        }
-
-        binding.btnMatchRecord.setOnClickListener{
-
-        }
-
-        binding.btnMatchReport.setOnClickListener{
-
         }
 
 //        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일 (E)", Locale("ko", "KR"))
@@ -128,14 +120,8 @@ class MyMatchesFragment : Fragment() {
         addCalendarDot()
 
         binding.calendarMonthlyMatches.setSelectedDate(CalendarDay.from(Calendar.getInstance()))
-//        userViewModel.getSelectedDateMatches(currentUserEmail, selectedSport, selectedYear, selectedMonth, selectedDate)
-//        userViewModel.selectedDayMatches.observe(viewLifecycleOwner) { data ->
-//            myMatchesAdapter.submitList(data)
-//            if (data.size == 0) binding.tvNoticeNoMatches.visibility = View.VISIBLE
-//            else binding.tvNoticeNoMatches.visibility = View.GONE
-//            todayMatches = data
-//        }
-        binding.calendarMonthlyMatches.setOnDateChangedListener(OnDateSelectedListener { widget, date, selected ->
+
+        binding.calendarMonthlyMatches.setOnDateChangedListener( { widget, date, selected ->
             if (selected) {
                 selectedYear = date.year.toString()
                 selectedMonth = String.format("%02d", date.month + 1)
@@ -156,13 +142,11 @@ class MyMatchesFragment : Fragment() {
                     Calendar.SATURDAY -> "토"
                     else -> ""
                 }
-                userViewModel.getSelectedDateMatches(currentUserEmail, selectedSport, selectedYear, selectedMonth, selectedDate)
-                userViewModel.selectedDayMatches.observe(viewLifecycleOwner) { data ->
-                    myMatchesAdapter.submitList(data)
-                    if (data.size == 0) binding.tvNoticeNoMatches.visibility = View.VISIBLE
-                    else binding.tvNoticeNoMatches.visibility = View.GONE
-                    todayMatches = data
-                }
+                val selectedDateMatches = getSelectedDateMatches(selectedSport, selectedYear, selectedMonth, selectedDate)
+                myMatchesAdapter.submitList(selectedDateMatches)
+                if (selectedDateMatches.size == 0) binding.tvNoticeNoMatches.visibility = View.VISIBLE
+                else binding.tvNoticeNoMatches.visibility = View.GONE
+                todayMatches = selectedDateMatches
             }
         })
 
@@ -190,87 +174,40 @@ class MyMatchesFragment : Fragment() {
             }
         }
 
-        val myPageFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyPageFragment")
         binding.btnTabMypage.setOnClickListener{
-            requireActivity().supportFragmentManager.beginTransaction().apply {
-                hide(this@MyMatchesFragment)
-                if (myPageFragment == null) {
-                    add(R.id.main_frame, MyPageFragment(), "MyPageFragment")
-                } else {
-                    show(myPageFragment)
-                }
-                addToBackStack(null)
-                commit()
-            }
+            moveFragment(MyPageFragment(), "MyPageFragment")
         }
 
-        val matchReportFragment = requireActivity().supportFragmentManager.findFragmentByTag("MatchReportFragment")
         binding.btnMatchReport.setOnClickListener{
             if (currentUser.matches.size < 10) {
                 Toast.makeText(requireContext(), "10경기 이상 직관해야 통계를 보실 수 있어요!",Toast.LENGTH_SHORT).show()
             } else {
-                requireActivity().supportFragmentManager.beginTransaction().apply {
-                    hide(this@MyMatchesFragment)
-                    if (matchReportFragment == null) {
-                        add(R.id.main_frame, MatchReportFragment(), "MatchReportFragment")
-                    } else {
-                        show(matchReportFragment)
-                    }
-                    addToBackStack(null)
-                    commit()
-                }
+                moveFragment(MatchReportFragment(),"MatchReportFragment")
             }
         }
 
         binding.btnAddMatchRecord.setOnClickListener{
-            val addMyMatchOneFragment = requireActivity().supportFragmentManager.findFragmentByTag("AddMyMatchOneFragment")
-            requireActivity().supportFragmentManager.beginTransaction().apply {
-                hide(this@MyMatchesFragment)
-                add(R.id.main_frame, AddMyMatchOneFragment())
-                addToBackStack(null)
-                commit()
-            }
+            moveFragment(AddMyMatchOneFragment(), "AddMyMatchOneFragment")
         }
 
     }
 
-//    private fun addCalendarDot() {
-//        userViewModel.getSelectedMonthMatchdays(currentUserEmail, selectedSport, selectedYear, selectedMonth)
-//        userViewModel.selectedMonthMatchdays.observe(viewLifecycleOwner) { data ->
-//            val selectedMonthMatchdays = data
-//
-//            val eventDays = mutableListOf<CalendarDay>()
-//            selectedMonthMatchdays?.forEach {
-//                eventDays += (CalendarDay.from(selectedYear.toInt(), selectedMonth.toInt()-1, it.toInt()))
-//            }
-//            val matchdaysCount = selectedMonthMatchdays?.size
-//            binding.tvMonthlyMatches.text = "${selectedMonth}월에 ${selectedSport} 경기를 ${matchdaysCount}일 직관했어요!"
-//            val eventDecorator = EventDecorator(eventDays)
-//            if (eventDays.size != 0) {
-//                binding.calendarMonthlyMatches.removeDecorators()
-//                binding.calendarMonthlyMatches.addDecorators(eventDecorator)
-//            } else {
-//                binding.calendarMonthlyMatches.removeDecorators()
-//            }
-//        }
-//    }
+    private fun addCalendarDot() {
+        val selectedMonthMatchDays = getSelectedMonthMatchdays(selectedSport, selectedYear, selectedMonth)
 
-        private fun addCalendarDot() {
-            val selectedMonthMatchDays = getSelectedMonthMatchdays(selectedSport, selectedYear, selectedMonth)
-
-            val eventDays = mutableListOf<CalendarDay>()
-            selectedMonthMatchDays.forEach {
-                eventDays += (CalendarDay.from(selectedYear.toInt(), selectedMonth.toInt()-1, it.toInt()))
-            }
-            val matchdaysCount = selectedMonthMatchDays?.size
-            binding.tvMonthlyMatches.text = "${selectedMonth}월에 ${selectedSport} 경기를 ${matchdaysCount}일 직관했어요!"
-            val eventDecorator = EventDecorator(eventDays)
-            if (eventDays.size != 0) {
-                binding.calendarMonthlyMatches.removeDecorators()
-                binding.calendarMonthlyMatches.addDecorators(eventDecorator)
-            } else {
-                binding.calendarMonthlyMatches.removeDecorators()
-            }
+        val eventDays = mutableListOf<CalendarDay>()
+        selectedMonthMatchDays.forEach {
+            eventDays += (CalendarDay.from(selectedYear.toInt(), selectedMonth.toInt()-1, it.toInt()))
+        }
+        val matchdaysCount = selectedMonthMatchDays?.size
+        binding.tvMonthlyMatches.text = "${selectedMonth}월에 ${selectedSport} 경기를 ${matchdaysCount}일 직관했어요!"
+        val eventDecorator = EventDecorator(eventDays)
+        if (eventDays.size != 0) {
+            binding.calendarMonthlyMatches.removeDecorators()
+            binding.calendarMonthlyMatches.addDecorators(eventDecorator)
+        } else {
+            binding.calendarMonthlyMatches.removeDecorators()
+        }
     }
 
     class VerticalSpacingItemDecoration(private val spacing: Int) : RecyclerView.ItemDecoration() {
@@ -302,6 +239,20 @@ class MyMatchesFragment : Fragment() {
         return matchdays
     }
 
+    fun getSelectedDateMatches(selectedSport: String, selectedYear: String, selectedMonth: String, selectedDate: String): MutableList<Match> {
+        val selectedDateMatches = if (selectedSport != "전체 종목") {
+            currentUser.matches.filter {
+                it.sport == selectedSport && it.year == selectedYear && it.month == selectedMonth && it.date == selectedDate
+            }.toMutableList()
+        } else {
+            currentUser.matches.filter {
+                it.year == selectedYear && it.month == selectedMonth && it.date == selectedDate
+            }.toMutableList()
+        }
+        return selectedDateMatches
+    }
+
+
     private fun initViewModel() {
         userViewModel.setCurrentUser("dd@gmail.com")
         userViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
@@ -320,6 +271,20 @@ class MyMatchesFragment : Fragment() {
                     Toast.makeText(requireContext(), uiState.message, Toast.LENGTH_LONG).show()
                 }
             }
+        }
+    }
+
+    private fun moveFragment(fragment: Fragment, fragmentTag: String) {
+        val fragmentToMove = requireActivity().supportFragmentManager.findFragmentByTag(fragmentTag)
+        requireActivity().supportFragmentManager.beginTransaction().apply {
+            hide(this@MyMatchesFragment)
+            if (fragmentToMove == null) {
+                add(R.id.main_frame, fragment, fragmentTag)
+            } else {
+                show(fragmentToMove)
+            }
+            addToBackStack(null)
+            commit()
         }
     }
 }

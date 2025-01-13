@@ -115,7 +115,6 @@ class MatchReportFragment : Fragment() {
             }
         }
 
-
         spinnerMyTeamAdapter =
             ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerMyteamNames)
         spinnerMyTeamAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)

@@ -262,95 +262,95 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         return currentUser.value!!
     }
 
-    fun getSelectedMonthMatchdays(
-        _email: String,
-        selectedSport: String,
-        selectedYear: String,
-        selectedMonth: String
-    ) {
-        // 로딩 상태 반영
-        _uiState.value = UiState.Loading
-
-        viewModelScope.launch {
-            runCatching {
-                val userRef = db.collection("user").document(_email)
-
-                db.runTransaction { transaction ->
-                    val snapshot = transaction.get(userRef)
-                    val currentUser = snapshot.toObject(User::class.java)
-                    val matches = currentUser?.matches ?: emptyList()
-
-                    val selectedMonthMatches = if (selectedSport != "전체 종목") {
-                        matches.filter {
-                            it.sport == selectedSport &&
-                                    it.year == selectedYear &&
-                                    it.month == selectedMonth
-                        }.toMutableList()
-                    } else {
-                        matches.filter {
-                            it.year == selectedYear &&
-                                    it.month == selectedMonth
-                        }.toMutableList()
-                    }
-
-                    val matchdays = mutableListOf<String>()
-                    selectedMonthMatches.forEach {
-                        if (it.date !in matchdays) {
-                            matchdays.add(it.date)
-                        }
-                    }
-
-                    matchdays // 트랜잭션의 결과 반환
-                }.addOnSuccessListener { matchdays ->
-                    // 성공적으로 데이터를 가져왔을 때 UI 상태 갱신
-                    _selectedMonthMatchdays.postValue(matchdays)
-                    _uiState.value = UiState.Success(matchdays) // matchdays를 성공 상태로 전달
-                    println("Succeeded to get Selected Month's Matchdays")
-                }.addOnFailureListener { exception ->
-                    // 트랜잭션 실패 시 UI 상태 갱신
-                    _uiState.value = UiState.Error("Failed to get Selected Month's Matchdays: ${exception.message}")
-                    println("Failed to get Selected Month's Matchdays: $exception")
-                }
-            }.onFailure { throwable ->
-                // 일반적인 실패 처리
-                _uiState.value = UiState.Error("getSelectedMonthMatchdays() failed! : ${throwable.message}")
-                Log.e(TAG, "getSelectedMonthMatchdays() failed! : ${throwable.message}")
-                handleException(throwable)
-            }
-        }
-    }
-
-
-    fun getSelectedDateMatches(_email: String, selectedSport: String, selectedYear: String, selectedMonth: String, selectedDate: String) {
-        viewModelScope.launch {
-            runCatching {
-                val userRef = db.collection("user").document(_email)
-                db.runTransaction { transaction ->
-                    val snapshot = transaction.get(userRef)
-                    val currentUser = snapshot.toObject(User::class.java)
-                    val matches = currentUser?.matches ?: emptyList()
-                    var selectedDayMatches = mutableListOf<Match>()
-                    if (selectedSport != "전체 종목") {
-                        selectedDayMatches = matches.filter {
-                            it.sport == selectedSport && it.year == selectedYear && it.month == selectedMonth && it.date == selectedDate
-                        }.toMutableList()
-                    } else {
-                        selectedDayMatches = matches.filter {
-                            it.year == selectedYear && it.month == selectedMonth && it.date == selectedDate
-                        }.toMutableList()
-                    }
-                    _selectedDayMatches.postValue(selectedDayMatches)
-                }.addOnSuccessListener {
-                    println("Succeeded to get Selected Date's Matches")
-                }.addOnFailureListener { exception ->
-                    println("Failed to get Selected Date's Matches: $exception")
-                }
-            }.onFailure {
-                Log.e(TAG, "getSelectedDateMatches() failed! : ${it.message}")
-                handleException(it)
-            }
-        }
-    }
+//    fun getSelectedMonthMatchdays(
+//        _email: String,
+//        selectedSport: String,
+//        selectedYear: String,
+//        selectedMonth: String
+//    ) {
+//        // 로딩 상태 반영
+//        _uiState.value = UiState.Loading
+//
+//        viewModelScope.launch {
+//            runCatching {
+//                val userRef = db.collection("user").document(_email)
+//
+//                db.runTransaction { transaction ->
+//                    val snapshot = transaction.get(userRef)
+//                    val currentUser = snapshot.toObject(User::class.java)
+//                    val matches = currentUser?.matches ?: emptyList()
+//
+//                    val selectedMonthMatches = if (selectedSport != "전체 종목") {
+//                        matches.filter {
+//                            it.sport == selectedSport &&
+//                                    it.year == selectedYear &&
+//                                    it.month == selectedMonth
+//                        }.toMutableList()
+//                    } else {
+//                        matches.filter {
+//                            it.year == selectedYear &&
+//                                    it.month == selectedMonth
+//                        }.toMutableList()
+//                    }
+//
+//                    val matchdays = mutableListOf<String>()
+//                    selectedMonthMatches.forEach {
+//                        if (it.date !in matchdays) {
+//                            matchdays.add(it.date)
+//                        }
+//                    }
+//
+//                    matchdays // 트랜잭션의 결과 반환
+//                }.addOnSuccessListener { matchdays ->
+//                    // 성공적으로 데이터를 가져왔을 때 UI 상태 갱신
+//                    _selectedMonthMatchdays.postValue(matchdays)
+//                    _uiState.value = UiState.Success(matchdays) // matchdays를 성공 상태로 전달
+//                    println("Succeeded to get Selected Month's Matchdays")
+//                }.addOnFailureListener { exception ->
+//                    // 트랜잭션 실패 시 UI 상태 갱신
+//                    _uiState.value = UiState.Error("Failed to get Selected Month's Matchdays: ${exception.message}")
+//                    println("Failed to get Selected Month's Matchdays: $exception")
+//                }
+//            }.onFailure { throwable ->
+//                // 일반적인 실패 처리
+//                _uiState.value = UiState.Error("getSelectedMonthMatchdays() failed! : ${throwable.message}")
+//                Log.e(TAG, "getSelectedMonthMatchdays() failed! : ${throwable.message}")
+//                handleException(throwable)
+//            }
+//        }
+//    }
+//
+//
+//    fun getSelectedDateMatches(_email: String, selectedSport: String, selectedYear: String, selectedMonth: String, selectedDate: String) {
+//        viewModelScope.launch {
+//            runCatching {
+//                val userRef = db.collection("user").document(_email)
+//                db.runTransaction { transaction ->
+//                    val snapshot = transaction.get(userRef)
+//                    val currentUser = snapshot.toObject(User::class.java)
+//                    val matches = currentUser?.matches ?: emptyList()
+//                    var selectedDayMatches = mutableListOf<Match>()
+//                    if (selectedSport != "전체 종목") {
+//                        selectedDayMatches = matches.filter {
+//                            it.sport == selectedSport && it.year == selectedYear && it.month == selectedMonth && it.date == selectedDate
+//                        }.toMutableList()
+//                    } else {
+//                        selectedDayMatches = matches.filter {
+//                            it.year == selectedYear && it.month == selectedMonth && it.date == selectedDate
+//                        }.toMutableList()
+//                    }
+//                    _selectedDayMatches.postValue(selectedDayMatches)
+//                }.addOnSuccessListener {
+//                    println("Succeeded to get Selected Date's Matches")
+//                }.addOnFailureListener { exception ->
+//                    println("Failed to get Selected Date's Matches: $exception")
+//                }
+//            }.onFailure {
+//                Log.e(TAG, "getSelectedDateMatches() failed! : ${it.message}")
+//                handleException(it)
+//            }
+//        }
+//    }
 
     fun saveTemporaryMatchData(matchData: Match) {
         _temporaryMatchData.value = matchData
