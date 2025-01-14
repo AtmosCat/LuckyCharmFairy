@@ -27,22 +27,20 @@ import com.luckycharmfairy.presentation.mymatches.addmatches.ViewPagerAdapter
 import com.luckycharmfairy.presentation.mymatches.editmatch.EditMyMatchOneFragment
 
 private const val ARG_PARAM1 = "param1"
+
 class MatchDetailFragment : Fragment() {
     private var param1: String? = null
 
-    lateinit var binding : FragmentMatchDetailBinding
+    lateinit var binding: FragmentMatchDetailBinding
 
     private lateinit var currentUser: User
-
-    private var selectedDayMatches = mutableListOf<Match>()
-
     private var clickedMatch = Match()
 
     private val userViewModel: UserViewModel by activityViewModels {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
     }
 
-     override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
@@ -71,6 +69,8 @@ class MatchDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         currentUser = userViewModel.getCurrentUser()!!
+        val data = param1
+        clickedMatch = currentUser.matches.find { it.id == data }!!
 
         binding.btnBack.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction().apply {
@@ -80,10 +80,6 @@ class MatchDetailFragment : Fragment() {
                 commit()
             }
         }
-
-        val data = param1
-//        selectedDayMatches = userViewModel.selectedDayMatches.value!!
-        clickedMatch = currentUser.matches.find { it.id == data }!!
 
         val viewPager = view.findViewById<ViewPager2>(R.id.viewpager_match_detail)
 
@@ -95,7 +91,7 @@ class MatchDetailFragment : Fragment() {
             binding.ivCamera.visibility = View.VISIBLE
         }
 
-        viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 binding.tvPhotoNumber.text = "${position + 1} / ${clickedMatch.photos.size}"
@@ -146,12 +142,13 @@ class MatchDetailFragment : Fragment() {
             else -> binding.ivFeeling.setImageResource(R.drawable.bg_weather)
         }
 
-        binding.tvDate.text = "${clickedMatch.year}년 ${clickedMatch.month}월 ${clickedMatch.date}일(${clickedMatch.day})"
+        binding.tvDate.text =
+            "${clickedMatch.year}년 ${clickedMatch.month}월 ${clickedMatch.date}일(${clickedMatch.day})"
         binding.tvTime.text = clickedMatch.time
         if (clickedMatch.location.isNotBlank()) {
             binding.tvLocation.text = clickedMatch.location
         } else {
-            binding.tvLocation.text = "장소 : ?"
+            binding.tvLocation.text = "장소 : 없음"
         }
         binding.tvMvpName.text = clickedMatch.mvp
         binding.tvContent.text = clickedMatch.content
@@ -172,22 +169,18 @@ class MatchDetailFragment : Fragment() {
                         }
                         true
                     }
+
                     R.id.action_delete -> {
                         AlertDialog.Builder(requireContext())
                             .setTitle("직관 기록 삭제하기")
                             .setMessage("기록을 삭제하시겠습니까?")
                             .setPositiveButton("삭제") { dialog, _ ->
                                 userViewModel.deleteMatch(clickedMatch.id)
-//                                if (postViewModel.filteredPosts.value.isNullOrEmpty()) {
-//                                    val newItems = postViewModel.allPosts.value!!.sortedBy { it.timestamp }
-//                                    CommunityHomeAdapter().updateData(newItems)
-//                                } else {
-//                                    val newAllItems = postViewModel.allPosts.value!!.sortedBy { it.timestamp }
-//                                    CommunityHomeAdapter().updateData(newAllItems)
-//                                    val newFilteredItems = postViewModel.filteredPosts.value!!.sortedBy { it.timestamp }
-//                                    PostListAdapter().updateData(newFilteredItems)
-//                                }
-                                Toast.makeText(requireContext(), "직관 기록이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    requireContext(),
+                                    "직관 기록이 삭제되었습니다.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 dialog.dismiss()
                                 requireActivity().supportFragmentManager.popBackStack()
                             }
@@ -197,6 +190,7 @@ class MatchDetailFragment : Fragment() {
                             .show()
                         true
                     }
+
                     else -> {
                         false
                     }
@@ -204,13 +198,10 @@ class MatchDetailFragment : Fragment() {
             }
             popupMenu.show()
         }
-
-
     }
 
     private fun setTeamColor(team: Button, teamcolor: String) {
         team.setBackgroundColor(Color.parseColor(teamcolor))
     }
-
 }
 

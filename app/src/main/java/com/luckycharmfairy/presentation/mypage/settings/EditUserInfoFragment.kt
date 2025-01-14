@@ -42,7 +42,7 @@ class EditUserInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        currentUser = userViewModel.currentUser.value!!
+        currentUser = userViewModel.getCurrentUser()!!
 
         binding.btnBack.setOnClickListener{
             requireActivity().supportFragmentManager.popBackStack()

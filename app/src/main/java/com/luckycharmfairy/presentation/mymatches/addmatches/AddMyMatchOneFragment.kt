@@ -7,48 +7,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.replace
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.data.model.Team
 import com.luckycharmfairy.data.model.User
-import com.luckycharmfairy.data.model.baseballLocations
-import com.luckycharmfairy.data.model.baseballTeamNames
-import com.luckycharmfairy.data.model.baseballTeams
-import com.luckycharmfairy.data.model.menBasketballLocations
-import com.luckycharmfairy.data.model.menBasketballTeamNames
-import com.luckycharmfairy.data.model.menBasketballTeams
-import com.luckycharmfairy.data.model.menFootballLocations
-import com.luckycharmfairy.data.model.menFootballTeamNames
-import com.luckycharmfairy.data.model.menFootballTeams
-import com.luckycharmfairy.data.model.menVolleyballLocations
-import com.luckycharmfairy.data.model.menVolleyballTeamNames
-import com.luckycharmfairy.data.model.menVolleyballTeams
 import com.luckycharmfairy.data.model.sports
-import com.luckycharmfairy.data.model.womenBasketballTeamNames
-import com.luckycharmfairy.data.model.womenBasketballTeams
-import com.luckycharmfairy.data.model.womenVolleyballLocations
-import com.luckycharmfairy.data.model.womenVolleyballTeamNames
-import com.luckycharmfairy.data.model.womenVolleyballTeams
 import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentAddMyMatchOneBinding
-import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
 import com.luckycharmfairy.presentation.mymatches.mysports.MySportsFragment
 import com.luckycharmfairy.utils.DateTimeUtils
 import com.luckycharmfairy.utils.FragmentUtils
 import com.luckycharmfairy.utils.SpinnerUtils
 import com.prolificinteractive.materialcalendarview.CalendarDay
-import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import java.util.Calendar
 import kotlin.random.Random
 
@@ -169,9 +148,19 @@ class AddMyMatchOneFragment : Fragment() {
 
         clickTimePicker()
 
-        clickWeatherFeelingIcon("weather", weatherButtonList, weatherList, weatherButtonBackgroundList)
+        clickWeatherFeelingIcon(
+            "weather",
+            weatherButtonList,
+            weatherList,
+            weatherButtonBackgroundList
+        )
 
-        clickWeatherFeelingIcon("feeling", feelingButtonList, feelingList, feelingButtonBackgroundList)
+        clickWeatherFeelingIcon(
+            "feeling",
+            feelingButtonList,
+            feelingList,
+            feelingButtonBackgroundList
+        )
 
         clickMyTeamSpinner()
 
@@ -237,7 +226,7 @@ class AddMyMatchOneFragment : Fragment() {
         }
     }
 
-    private fun clickAddSportButton(){
+    private fun clickAddSportButton() {
         binding.btnAddSports.setOnClickListener {
             FragmentUtils.hideAndShowFragment(
                 requireActivity().supportFragmentManager,
@@ -248,11 +237,11 @@ class AddMyMatchOneFragment : Fragment() {
         }
     }
 
-    private fun clickDatePicker(){
+    private fun clickDatePicker() {
         binding.calendarMatchdaySelector.setSelectedDate(CalendarDay.from(Calendar.getInstance())) // 기본 오늘 설정
         binding.btnDate.setOnClickListener {
             binding.calendarMatchdaySelector.visibility = View.VISIBLE
-            binding.calendarMatchdaySelector.setOnDateChangedListener( { widget, date, selected ->
+            binding.calendarMatchdaySelector.setOnDateChangedListener({ widget, date, selected ->
                 if (selected) {
                     selectedYear = date.year.toString()
                     selectedMonth = String.format("%02d", date.month + 1)
@@ -260,7 +249,8 @@ class AddMyMatchOneFragment : Fragment() {
                     val calendar = Calendar.getInstance().apply {
                         set(date.year, date.month, date.day)
                     }
-                    selectedDayOfWeek = DateTimeUtils.dayOfWeekFormatter(calendar.get(Calendar.DAY_OF_WEEK))
+                    selectedDayOfWeek =
+                        DateTimeUtils.dayOfWeekFormatter(calendar.get(Calendar.DAY_OF_WEEK))
                     binding.btnDate.setText("${selectedYear}년 ${selectedMonth}월 ${selectedDay}일 (${selectedDayOfWeek})")
                     binding.calendarMatchdaySelector.visibility = View.GONE
                 }
@@ -316,7 +306,7 @@ class AddMyMatchOneFragment : Fragment() {
         }
     }
 
-    private fun clickMyTeamSpinner(){
+    private fun clickMyTeamSpinner() {
         val spinnerHomeAway = listOf("홈 팀", "어웨이 팀", "없음")
         binding.spinnerMyteam.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -327,6 +317,7 @@ class AddMyMatchOneFragment : Fragment() {
             ) {
                 selectedHomeOrAway = spinnerHomeAway[position]
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 selectedHomeOrAway = spinnerHomeAway[0]
             }
@@ -381,7 +372,7 @@ class AddMyMatchOneFragment : Fragment() {
         )
     }
 
-    private fun clickResultSpinner(){
+    private fun clickResultSpinner() {
         val spinnerResult = listOf("승리", "패배", "무승부", "경기 취소", "타팀 직관")
         binding.spinnerResult.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -392,6 +383,7 @@ class AddMyMatchOneFragment : Fragment() {
             ) {
                 selectedResult = spinnerResult[position]
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 selectedResult = spinnerResult[0]
             }
@@ -422,7 +414,8 @@ class AddMyMatchOneFragment : Fragment() {
                     teamcolor = "#999999"
                 )
             } else {
-                selectedHomeTeam = selectedSportTeams.find { it.name == selectedHomeTeamName } ?: Team()
+                selectedHomeTeam =
+                    selectedSportTeams.find { it.name == selectedHomeTeamName } ?: Team()
             }
 
             if (selectedAwayTeamName == "직접 입력") {
@@ -433,7 +426,8 @@ class AddMyMatchOneFragment : Fragment() {
                     teamcolor = "#999999"
                 )
             } else {
-                selectedAwayTeam = selectedSportTeams.find { it.name == selectedAwayTeamName } ?: Team()
+                selectedAwayTeam =
+                    selectedSportTeams.find { it.name == selectedAwayTeamName } ?: Team()
             }
 
             if (selectedHomeOrAway == "홈 팀") {

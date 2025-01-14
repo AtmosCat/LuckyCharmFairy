@@ -39,6 +39,7 @@ import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
 import com.luckycharmfairy.presentation.mymatches.mysports.MySportsFragment
 import com.luckycharmfairy.presentation.mypage.myteammanager.MyTeamManagerFragment
 import com.luckycharmfairy.presentation.mypage.settings.SettingsFragment
+import com.luckycharmfairy.utils.FragmentUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -58,7 +59,6 @@ class MyPageFragment : Fragment() {
     }
 
     private lateinit var pickImageLauncher : ActivityResultLauncher<Intent>
-    private var temporaryProfileBitmap = sampleBitmap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,7 +96,7 @@ class MyPageFragment : Fragment() {
                 }
             }
 
-        currentUser = userViewModel.currentUser.value!!
+        currentUser = userViewModel.getCurrentUser()!!
 
         if (currentUser.photo.isNotBlank()) {
             binding.ivProfileImage.load(currentUser.photo)
@@ -131,117 +131,32 @@ class MyPageFragment : Fragment() {
             // 내 프로필 이동
         }
 
-        val myMatchesFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyMatchesFragment")
         binding.btnTabMyMatches.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction().apply {
-                hide(this@MyPageFragment)
-                if (myMatchesFragment == null) {
-                    add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")
-                } else {
-                    show(myMatchesFragment)
-                }
-                addToBackStack(null)
-                commit()
-            }
+            FragmentUtils.hideAndShowFragment(
+                requireActivity().supportFragmentManager,
+                this@MyPageFragment,
+                MyMatchesFragment(),
+                "MyMatchesFragment"
+            )
         }
 
-        val settingsFragment = requireActivity().supportFragmentManager.findFragmentByTag("SettingsFragment")
-        binding.btnSettings.setOnClickListener{
-            requireActivity().supportFragmentManager.beginTransaction().apply {
-                hide(this@MyPageFragment)
-                if (settingsFragment == null) {
-                    add(R.id.main_frame, SettingsFragment(), "SettingsFragment")
-                } else {
-                    show(settingsFragment)
-                }
-                addToBackStack(null)
-                commit()
-            }
-        }
-
-        val mySportsFragment = requireActivity().supportFragmentManager.findFragmentByTag("MySportsFragment")
         binding.btnMysportsManager.setOnClickListener{
-            requireActivity().supportFragmentManager.beginTransaction().apply {
-                hide(this@MyPageFragment)
-                if (mySportsFragment == null) {
-                    add(R.id.main_frame, MySportsFragment(), "MySportsFragment")
-                } else {
-                    show(mySportsFragment)
-                }
-                addToBackStack(null)
-                commit()
-            }
+            FragmentUtils.hideAndShowFragment(
+                requireActivity().supportFragmentManager,
+                this@MyPageFragment,
+                MySportsFragment(),
+                "MySportsFragment"
+            )
         }
 
-//        val myTeamManagerFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyTeamManagerFragment")
-//        binding.btnMyteamManager.setOnClickListener{
-//            requireActivity().supportFragmentManager.beginTransaction().apply {
-//                hide(this@MyPageFragment)
-//                if (myTeamManagerFragment == null) {
-//                    add(R.id.main_frame, MyTeamManagerFragment(), "MyTeamManagerFragment")
-//                } else {
-//                    show(myTeamManagerFragment)
-//                }
-//                addToBackStack(null)
-//                commit()
-//            }
-//        }
-//
-//        val membershipManagerFragment = requireActivity().supportFragmentManager.findFragmentByTag("MembershipManagerFragment")
-//        binding.btnMembershipManager.setOnClickListener{
-//            requireActivity().supportFragmentManager.beginTransaction().apply {
-//                hide(this@MyPageFragment)
-//                if (membershipManagerFragment == null) {
-//                    add(R.id.main_frame, MembershipManagerFragment(), "MembershipManagerFragment")
-//                } else {
-//                    show(membershipManagerFragment)
-//                }
-//                addToBackStack(null)
-//                commit()
-//            }
-//        }
-//
-//        val customerServiceFragment = requireActivity().supportFragmentManager.findFragmentByTag("CustomerServiceFragment")
-//        binding.btnMembershipManager.setOnClickListener{
-//            requireActivity().supportFragmentManager.beginTransaction().apply {
-//                hide(this@MyPageFragment)
-//                if (customerServiceFragment == null) {
-//                    add(R.id.main_frame, CustomerServiceFragment(), "CustomerServiceFragment")
-//                } else {
-//                    show(customerServiceFragment)
-//                }
-//                addToBackStack(null)
-//                commit()
-//            }
-//        }
-//
-//        val noticeFragment = requireActivity().supportFragmentManager.findFragmentByTag("NoticeFragment")
-//        binding.btnMembershipManager.setOnClickListener{
-//            requireActivity().supportFragmentManager.beginTransaction().apply {
-//                hide(this@MyPageFragment)
-//                if (noticeFragment == null) {
-//                    add(R.id.main_frame, NoticeFragment(), "NoticeFragment")
-//                } else {
-//                    show(noticeFragment)
-//                }
-//                addToBackStack(null)
-//                commit()
-//            }
-//        }
-//
-//        val appInfoFragment = requireActivity().supportFragmentManager.findFragmentByTag("AppInfoFragment")
-//        binding.btnMembershipManager.setOnClickListener{
-//            requireActivity().supportFragmentManager.beginTransaction().apply {
-//                hide(this@MyPageFragment)
-//                if (appInfoFragment == null) {
-//                    add(R.id.main_frame, AppInfoFragment(), "AppInfoFragment")
-//                } else {
-//                    show(appInfoFragment)
-//                }
-//                addToBackStack(null)
-//                commit()
-//            }
-//        }
+        binding.btnSettings.setOnClickListener{
+            FragmentUtils.hideAndShowFragment(
+                requireActivity().supportFragmentManager,
+                this@MyPageFragment,
+                SettingsFragment(),
+                "SettingsFragment"
+            )
+        }
 
     }
 
@@ -295,6 +210,4 @@ class MyPageFragment : Fragment() {
                 callback(null)
             }
     }
-
-
 }

@@ -41,6 +41,10 @@ class MySportsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMySportsBinding.inflate(inflater, container, false)
+
+        binding.recyclerviewMySports.adapter = mySportsAdapter
+        binding.recyclerviewMySports.layoutManager = LinearLayoutManager(requireContext())
+
         return binding.root
     }
 
@@ -50,9 +54,6 @@ class MySportsFragment : Fragment() {
         binding.btnBack.setOnClickListener{
             requireActivity().supportFragmentManager.popBackStack()
         }
-
-        binding.recyclerviewMySports.adapter = mySportsAdapter
-        binding.recyclerviewMySports.layoutManager = LinearLayoutManager(requireContext())
 
         currentUserMySports = userViewModel.currentUser.value!!.mysports
         mySportsAdapter.submitList(currentUserMySports)
@@ -65,7 +66,6 @@ class MySportsFragment : Fragment() {
 
         val addSportDialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_my_sport, null)
         val etNewSport = addSportDialogView.findViewById<EditText>(R.id.et_new_sport)
-
 
         binding.btnAddMySport.setOnClickListener{
             if (addSportDialogView.parent != null) {

@@ -40,7 +40,6 @@ class SignUpFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -111,13 +110,6 @@ class SignUpFragment : Fragment() {
                 false
             }
         }
-//        binding.btnPrivacyTerms.setOnClickListener{
-//            requireActivity().supportFragmentManager.beginTransaction().apply {
-//                add(R.id.main_frame, PrivacyTermsFragment(), "PrivacyTermsFragment")
-//                addToBackStack(null)
-//                commit()
-//            }
-//        }
 
         binding.checkBoxSignupServiceTerms.setOnCheckedChangeListener{ _, isChecked ->
             serviceTermsConfirm = if (isChecked) {
@@ -126,13 +118,6 @@ class SignUpFragment : Fragment() {
                 false
             }
         }
-//        binding.btnServiceTerms.setOnClickListener{
-//            requireActivity().supportFragmentManager.beginTransaction().apply {
-//                add(R.id.main_frame, ServiceTermsFragment(), "ServiceTermsFragment")
-//                addToBackStack(null)
-//                commit()
-//            }
-//        }
 
         binding.btnSignupSignup.setOnClickListener {
             createAccount(

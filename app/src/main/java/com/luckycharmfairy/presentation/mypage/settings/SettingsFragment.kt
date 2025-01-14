@@ -16,16 +16,18 @@ import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentSettingsBinding
 import com.luckycharmfairy.presentation.signin.SignInFragment
+import com.luckycharmfairy.utils.FragmentUtils
 
 class SettingsFragment : Fragment() {
 
-    lateinit var binding : FragmentSettingsBinding
+    lateinit var binding: FragmentSettingsBinding
 
     private var currentUser = User();
 
     private val userViewModel: UserViewModel by activityViewModels {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     };
@@ -42,34 +44,30 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        currentUser = userViewModel.currentUser.value!!
+        currentUser = userViewModel.getCurrentUser()!!
 
-        binding.btnBack.setOnClickListener{
+        binding.btnBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
 
-        val editUserInfoFragment = requireActivity().supportFragmentManager.findFragmentByTag("EditUserInfoFragment")
-        binding.btnEditUserInfo.setOnClickListener{
-            requireActivity().supportFragmentManager.beginTransaction().apply {
-                hide(this@SettingsFragment)
-                if (editUserInfoFragment == null) {
-                    add(R.id.main_frame, EditUserInfoFragment(), "EditUserInfoFragment")
-                } else {
-                    show(editUserInfoFragment)
-                }
-                addToBackStack(null)
-                commit()
-            }
+        binding.btnEditUserInfo.setOnClickListener {
+            FragmentUtils.hideAndShowFragment(
+                requireActivity().supportFragmentManager,
+                this@SettingsFragment,
+                EditUserInfoFragment(),
+                "EditUserInfoFragment"
+            )
         }
 
-        binding.btnSignOut.setOnClickListener{
+        binding.btnSignOut.setOnClickListener {
             AlertDialog.Builder(requireContext())
                 .setMessage("로그아웃하시겠습니까?")
                 .setPositiveButton("확인") { dialog, _ ->
                     userViewModel.signOut()
-                    Toast.makeText(requireContext(),"로그아웃되었습니다.",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "로그아웃되었습니다.", Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
-                    val signInFragment = requireActivity().supportFragmentManager.findFragmentByTag("SignInFragment")
+                    val signInFragment =
+                        requireActivity().supportFragmentManager.findFragmentByTag("SignInFragment")
                     requireActivity().supportFragmentManager.beginTransaction().apply {
                         hide(this@SettingsFragment)
                         if (signInFragment == null) {
@@ -87,15 +85,16 @@ class SettingsFragment : Fragment() {
                 .show()
         }
 
-        binding.btnDeleteAccount.setOnClickListener{
+        binding.btnDeleteAccount.setOnClickListener {
             AlertDialog.Builder(requireContext())
                 .setTitle("회원탈퇴하시겠습니까?")
                 .setMessage("계정 정보는 복구하실 수 없으며,\n개인정보는 방침상의 보관 기간이 지난 후 완전히 삭제됩니다.")
                 .setPositiveButton("확인") { dialog, _ ->
                     userViewModel.deleteID(currentUser)
-                    Toast.makeText(requireContext(),"회원탈퇴되었습니다.",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "회원탈퇴되었습니다.", Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
-                    val signInFragment = requireActivity().supportFragmentManager.findFragmentByTag("SignInFragment")
+                    val signInFragment =
+                        requireActivity().supportFragmentManager.findFragmentByTag("SignInFragment")
                     requireActivity().supportFragmentManager.beginTransaction().apply {
                         hide(this@SettingsFragment)
                         if (signInFragment == null) {
@@ -112,7 +111,5 @@ class SettingsFragment : Fragment() {
                 }
                 .show()
         }
-
     }
-
 }

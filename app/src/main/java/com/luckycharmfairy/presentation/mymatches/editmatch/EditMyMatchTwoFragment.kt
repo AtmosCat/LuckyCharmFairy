@@ -39,9 +39,6 @@ class EditMyMatchTwoFragment : Fragment() {
 
     lateinit var binding : FragmentEditMyMatchTwoBinding
 
-
-    private var currentUserEmail: String = ""
-
     private var matchContent: String = ""
 
     private var matchId: String = ""
@@ -77,6 +74,11 @@ class EditMyMatchTwoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentEditMyMatchTwoBinding.inflate(inflater, container, false)
+
+        binding.recyclerviewPhoto.adapter = photoAdapter
+        binding.recyclerviewPhoto.layoutManager = LinearLayoutManager(requireContext(),
+            LinearLayoutManager.HORIZONTAL, false)
+
         return binding.root
     }
 
@@ -97,12 +99,6 @@ class EditMyMatchTwoFragment : Fragment() {
         }
 
         val matchDetail = MatchDetailFragment.newInstance(matchId)
-
-        binding.recyclerviewPhoto.adapter = photoAdapter
-        binding.recyclerviewPhoto.layoutManager = LinearLayoutManager(requireContext(),
-            LinearLayoutManager.HORIZONTAL, false)
-
-        val matchDetailFragment = requireActivity().supportFragmentManager.findFragmentByTag("MatchDetailAFragment")
         val editMyMatchOneFragment = requireActivity().supportFragmentManager.findFragmentByTag("EditMyMatchOneFragment")
         binding.btnClose.setOnClickListener{
             userViewModel.initializeTemporaryImageUrls()

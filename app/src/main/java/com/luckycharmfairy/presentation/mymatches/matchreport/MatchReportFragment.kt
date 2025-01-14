@@ -11,8 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
-import androidx.compose.ui.platform.LocalDensity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -34,19 +32,19 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.utils.ColorTemplate
 import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.data.model.Team
-import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
 import com.luckycharmfairy.presentation.mymatches.matchreport.WinningStreakAdapter
 import com.luckycharmfairy.presentation.mypage.MyPageFragment
+import com.luckycharmfairy.utils.FragmentUtils
+import com.luckycharmfairy.utils.SpinnerUtils
 import java.text.DecimalFormat
 import java.time.LocalDate
 
 class MatchReportFragment : Fragment() {
 
-    lateinit var binding : FragmentMatchReportBinding
+    lateinit var binding: FragmentMatchReportBinding
 
     private var currentUser = User()
 
@@ -101,34 +99,22 @@ class MatchReportFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val myMatchesFragment =
-            requireActivity().supportFragmentManager.findFragmentByTag("MyMatchesFragment")
-        binding.btnMatchRecord.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction().apply {
-                hide(this@MatchReportFragment)
-                if (myMatchesFragment == null) {
-                    add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")
-                } else {
-                    show(myMatchesFragment)
-                }
-                addToBackStack(null)
-                commit()
-            }
+        binding.btnTabMyMatches.setOnClickListener {
+            FragmentUtils.hideAndShowFragment(
+                requireActivity().supportFragmentManager,
+                this@MatchReportFragment,
+                MyMatchesFragment(),
+                "MyMatchesFragment"
+            )
         }
 
-        spinnerMyTeamAdapter =
-            ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerMyteamNames)
-        spinnerMyTeamAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
-        binding.spinnerMyTeam.adapter = spinnerMyTeamAdapter
+        SpinnerUtils.setSpinnerAdapter(binding.spinnerMyTeam, requireContext(), spinnerMyteamNames)
 
         userViewModel.getSpinnerStatsInAllMatches()
         userViewModel.sportsInAllMatches.observe(viewLifecycleOwner) { data ->
             val spinnerSports = mutableListOf("종목 전체")
             spinnerSports += data
-            val spinnerSportsAdapter =
-                ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerSports)
-            spinnerSportsAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
-            binding.spinnerSport.adapter = spinnerSportsAdapter
+            SpinnerUtils.setSpinnerAdapter(binding.spinnerSport, requireContext(), spinnerSports)
             binding.spinnerSport.onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(
@@ -151,14 +137,11 @@ class MatchReportFragment : Fragment() {
                         } else {
                             selectedSportMyTeamNames = spinnerMyteamNames
                         }
-                        spinnerMyTeamAdapter =
-                            ArrayAdapter(
-                                requireContext(),
-                                R.layout.spinner_layout_custom,
-                                selectedSportMyTeamNames
-                            )
-                        spinnerMyTeamAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
-                        binding.spinnerMyTeam.adapter = spinnerMyTeamAdapter
+                        SpinnerUtils.setSpinnerAdapter(
+                            binding.spinnerMyTeam,
+                            requireContext(),
+                            selectedSportMyTeamNames
+                        )
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -176,10 +159,7 @@ class MatchReportFragment : Fragment() {
             spinnerMyteams = data
             spinnerMyteamNames = mutableListOf("응원 팀 전체")
             data.forEach { spinnerMyteamNames.add(it.name) }
-            spinnerMyTeamAdapter =
-                ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerMyteamNames)
-            spinnerMyTeamAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
-            binding.spinnerMyTeam.adapter = spinnerMyTeamAdapter
+            SpinnerUtils.setSpinnerAdapter(binding.spinnerMyTeam, requireContext(), spinnerMyteamNames)
             binding.spinnerMyTeam.onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(
@@ -194,11 +174,6 @@ class MatchReportFragment : Fragment() {
                             selectedMyteamName,
                             selectedYear
                         )
-//                    if (position != 0) {
-//                        selectedMyteam = spinnerMyteams.find { it.name == selectedMyteamName }!!
-//                    } else {
-//                        selectedMyteam = Team()
-//                    }
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -215,10 +190,7 @@ class MatchReportFragment : Fragment() {
         userViewModel.yearsInAllMatches.observe(viewLifecycleOwner) { data ->
             val spinnerYears = mutableListOf("기간 전체")
             spinnerYears += data
-            val spinnerYearsAdapter =
-                ArrayAdapter(requireContext(), R.layout.spinner_layout_custom, spinnerYears)
-            spinnerYearsAdapter.setDropDownViewResource(R.layout.spinner_list_layout_custom)
-            binding.spinnerPeriod.adapter = spinnerYearsAdapter
+            SpinnerUtils.setSpinnerAdapter(binding.spinnerPeriod, requireContext(), spinnerYears)
 
             binding.spinnerPeriod.onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {
@@ -268,11 +240,12 @@ class MatchReportFragment : Fragment() {
                 entries.add(BarEntry(0f, noResultCount.toFloat()))
 
                 // y축 반전
-    //            entries.sortBy { it.x }
+                //            entries.sortBy { it.x }
 
                 // BarDataSet 생성
                 val barDataSet = BarDataSet(entries, "직관 횟수") // 레이블
-                barDataSet.color = ContextCompat.getColor(requireContext(), R.color.main_mint) // 색상 지정
+                barDataSet.color =
+                    ContextCompat.getColor(requireContext(), R.color.main_mint) // 색상 지정
 
                 // Y값 데이터 레이블 형식 지정
                 barDataSet.setValueFormatter(object : ValueFormatter() {
@@ -343,7 +316,7 @@ class MatchReportFragment : Fragment() {
                 leftAxis.isEnabled = false // Y축 라벨 비활성화
                 leftAxis.setDrawGridLines(false) // Y축 그리드 라인 숨기기
                 leftAxis.setDrawAxisLine(false) // Y축 선 숨기기
-    //            leftAxis.isInverted = true
+                //            leftAxis.isInverted = true
 
                 val rightAxis = matchesBarchart.axisRight
                 rightAxis.isEnabled = false // 오른쪽 Y축 비활성화
@@ -385,7 +358,7 @@ class MatchReportFragment : Fragment() {
                 // PieChart의 일부 스타일 설정
                 allMatchesPiechart.setUsePercentValues(true)  // 퍼센트 값 표시
                 allMatchesPiechart.setDrawEntryLabels(false)  // 내부 텍스트 레이블 비활성화
-    //            allMatchesPiechart.setEntryLabelTextSize(16f)
+                //            allMatchesPiechart.setEntryLabelTextSize(16f)
 
                 // 퍼센트 값을 00% 형식으로 포맷하기 위해 ValueFormatter 사용
                 pieDataSet.valueFormatter = object : ValueFormatter() {
@@ -430,7 +403,7 @@ class MatchReportFragment : Fragment() {
                     ContextCompat.getColor(requireContext(), R.color.main_dark_gray)  // 텍스트 색상 설정
 
                 // 차트의 오른쪽에만 여백을 추가하여 Legend를 배치 -> 차트의 이동 방지
-    //            allMatchesPiechart.setExtraOffsets(0f, 0f, 150f, 0f)
+                //            allMatchesPiechart.setExtraOffsets(0f, 0f, 150f, 0f)
             }
 
             // Piechart - 홈 / 어웨이 승률 부분
@@ -468,7 +441,7 @@ class MatchReportFragment : Fragment() {
                 // PieChart의 일부 스타일 설정
                 homeMatchesPiechart.setUsePercentValues(true)  // 퍼센트 값 표시
                 homeMatchesPiechart.setDrawEntryLabels(false)  // 내부 텍스트 레이블 비활성화
-    //            homeMatchesPiechart.setEntryLabelTextSize(14f)
+                //            homeMatchesPiechart.setEntryLabelTextSize(14f)
 
                 // 퍼센트 값을 00% 형식으로 포맷하기 위해 ValueFormatter 사용
                 pieDataSet.valueFormatter = object : ValueFormatter() {
@@ -540,7 +513,7 @@ class MatchReportFragment : Fragment() {
                 // PieChart의 일부 스타일 설정
                 awayMatchesPiechart.setUsePercentValues(true)  // 퍼센트 값 표시
                 awayMatchesPiechart.setDrawEntryLabels(false)  // 내부 텍스트 레이블 비활성화
-    //            awayMatchesPiechart.setEntryLabelTextSize(14f)
+                //            awayMatchesPiechart.setEntryLabelTextSize(14f)
 
                 // 퍼센트 값을 00% 형식으로 포맷하기 위해 ValueFormatter 사용
                 pieDataSet.valueFormatter = object : ValueFormatter() {
@@ -622,7 +595,7 @@ class MatchReportFragment : Fragment() {
                 val days = mutableListOf("월", "화", "수", "목", "금", "토", "일")
                 val max = winningRatesByDay
                     .map { it.replace("%", "").toInt() }  // '%' 제거하고 정수로 변환
-                    .maxOrNull().toString()+"%"
+                    .maxOrNull().toString() + "%"
                 val indexes = mutableListOf<Int>()
                 val winningRatesByDayCopy = winningRatesByDay.toMutableList()
                 winningRatesByDayCopy.forEach {
@@ -681,7 +654,7 @@ class MatchReportFragment : Fragment() {
                     sunday
                 )
 
-                val allIndexes = mutableListOf(0,1,2,3,4,5,6)
+                val allIndexes = mutableListOf(0, 1, 2, 3, 4, 5, 6)
                 allIndexes.forEach {
                     val colorStateList = ColorStateList.valueOf(
                         ContextCompat.getColor(
@@ -891,24 +864,22 @@ class MatchReportFragment : Fragment() {
                             requireContext(),
                             R.color.main_mint
                         )
-                    ), 0, tvWinningRatesByOppositesList[0].text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    ),
+                    0,
+                    tvWinningRatesByOppositesList[0].text.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
                 tvWinningRatesByOppositesList[0].text = spannableString
             }
         }
 
-        val myPageFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyPageFragment")
-        binding.btnTabMypage.setOnClickListener{
-            requireActivity().supportFragmentManager.beginTransaction().apply {
-                hide(this@MatchReportFragment)
-                if (myPageFragment == null) {
-                    add(R.id.main_frame, MyPageFragment(), "MyPageFragment")
-                } else {
-                    show(myPageFragment)
-                }
-                addToBackStack(null)
-                commit()
-            }
+        binding.btnTabMypage.setOnClickListener {
+            FragmentUtils.hideAndShowFragment(
+                requireActivity().supportFragmentManager,
+                this@MatchReportFragment,
+                MyPageFragment(),
+                "MyPageFragment"
+            )
         }
 
     }

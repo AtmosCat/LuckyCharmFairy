@@ -7,11 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Spinner
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewmodel.initializer
@@ -20,19 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.data.model.Team
 import com.luckycharmfairy.data.model.User
-import com.luckycharmfairy.data.model.baseballTeamNames
-import com.luckycharmfairy.data.model.baseballTeams
-import com.luckycharmfairy.data.model.menBasketballTeamNames
-import com.luckycharmfairy.data.model.menBasketballTeams
-import com.luckycharmfairy.data.model.menFootballTeamNames
-import com.luckycharmfairy.data.model.menFootballTeams
-import com.luckycharmfairy.data.model.menVolleyballTeamNames
-import com.luckycharmfairy.data.model.menVolleyballTeams
 import com.luckycharmfairy.data.model.sports
-import com.luckycharmfairy.data.model.womenBasketballTeamNames
-import com.luckycharmfairy.data.model.womenBasketballTeams
-import com.luckycharmfairy.data.model.womenVolleyballTeamNames
-import com.luckycharmfairy.data.model.womenVolleyballTeams
 import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentEditMyMatchOneBinding
@@ -44,7 +30,6 @@ import com.luckycharmfairy.utils.SpinnerUtils
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import java.util.Calendar
-import kotlin.random.Random
 
 private const val ARG_PARAM1 = "param1"
 
