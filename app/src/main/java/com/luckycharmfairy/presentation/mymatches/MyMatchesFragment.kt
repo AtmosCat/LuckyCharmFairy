@@ -245,20 +245,6 @@ class MyMatchesFragment : Fragment() {
         }
     }
 
-//    private fun moveFragment(fragment: Fragment, fragmentTag: String) {
-//        val fragmentToMove = requireActivity().supportFragmentManager.findFragmentByTag(fragmentTag)
-//        requireActivity().supportFragmentManager.beginTransaction().apply {
-//            hide(this@MyMatchesFragment)
-//            if (fragmentToMove == null) {
-//                add(R.id.main_frame, fragment, fragmentTag)
-//            } else {
-//                show(fragmentToMove)
-//            }
-//            addToBackStack(null)
-//            commit()
-//        }
-//    }
-
     private fun initViewModel() {
         userViewModel.setCurrentUser("dd@gmail.com")
         userViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
