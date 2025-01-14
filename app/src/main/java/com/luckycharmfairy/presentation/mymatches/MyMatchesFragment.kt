@@ -32,9 +32,7 @@ import java.util.Calendar
 
 
 class MyMatchesFragment : Fragment() {
-
-    private var _binding: FragmentMyMatchesBinding? = null
-    private val binding get() = _binding!!
+    lateinit var binding : FragmentMyMatchesBinding
 
     private var currentUser = User()
 
@@ -56,7 +54,7 @@ class MyMatchesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMyMatchesBinding.inflate(inflater, container, false)
+        binding = FragmentMyMatchesBinding.inflate(inflater, container,false)
         return binding.root
     }
 
@@ -75,6 +73,7 @@ class MyMatchesFragment : Fragment() {
         setMySportsSelectedListener()
         setMyMatchesClickListener()
         setFragmentMovers()
+
     }
 
     private fun setCalendar() {
@@ -267,6 +266,10 @@ class MyMatchesFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 
 }
