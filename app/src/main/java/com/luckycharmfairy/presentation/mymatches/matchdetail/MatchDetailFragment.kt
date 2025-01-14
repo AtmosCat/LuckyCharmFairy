@@ -19,6 +19,7 @@ import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMatchDetailBinding
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
 import com.luckycharmfairy.presentation.mymatches.addmatches.AddMyMatchOneFragment
 import com.luckycharmfairy.presentation.mymatches.addmatches.ViewPagerAdapter
@@ -28,13 +29,11 @@ private const val ARG_PARAM1 = "param1"
 class MatchDetailFragment : Fragment() {
     private var param1: String? = null
 
-    private var _binding: FragmentMatchDetailBinding? = null
+    lateinit var binding : FragmentMatchDetailBinding
 
     private var selectedDayMatches = mutableListOf<Match>()
 
     private val imageResources = mutableListOf<String>()
-
-    private val binding get() = _binding!!
 
     private var clickedMatch = Match()
 
@@ -54,7 +53,7 @@ class MatchDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMatchDetailBinding.inflate(inflater, container, false)
+        binding = FragmentMatchDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
 

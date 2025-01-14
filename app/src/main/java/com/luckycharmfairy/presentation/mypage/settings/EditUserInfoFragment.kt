@@ -14,12 +14,12 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentEditUserInfoBinding
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 
 class EditUserInfoFragment : Fragment() {
 
-    private var _binding: FragmentEditUserInfoBinding? = null
+    lateinit var binding : FragmentEditUserInfoBinding
 
-    private val binding get() = _binding!!
     private var currentUser = User()
 
     private var pwConfirm = false
@@ -35,7 +35,7 @@ class EditUserInfoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentEditUserInfoBinding.inflate(inflater, container, false)
+        binding = FragmentEditUserInfoBinding.inflate(inflater, container, false)
         return binding.root
     }
 

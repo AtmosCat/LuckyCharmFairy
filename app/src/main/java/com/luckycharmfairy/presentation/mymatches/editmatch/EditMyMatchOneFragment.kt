@@ -32,6 +32,7 @@ import com.luckycharmfairy.data.model.womenVolleyballTeams
 import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentEditMyMatchOneBinding
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.presentation.mymatches.addmatches.AddMyMatchTwoFragment
 import com.luckycharmfairy.presentation.mymatches.addmatches.TeamSelectionAdapter
 import com.prolificinteractive.materialcalendarview.CalendarDay
@@ -43,8 +44,8 @@ private const val ARG_PARAM1 = "param1"
 class EditMyMatchOneFragment : Fragment() {
     private var param1: String? = null
 
-    private var _binding: FragmentEditMyMatchOneBinding? = null
-    private val binding get() = _binding!!
+    lateinit var binding : FragmentEditMyMatchOneBinding
+
 
     private var clickedMatch = Match()
 
@@ -144,7 +145,7 @@ class EditMyMatchOneFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentEditMyMatchOneBinding.inflate(inflater, container, false)
+        binding = FragmentEditMyMatchOneBinding.inflate(inflater, container, false)
         return binding.root
     }
 

@@ -15,13 +15,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentSignInBinding
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentSignUpBinding
 import com.luckycharmfairy.presentation.signin.SignInFragment
 
 
 class SignUpFragment : Fragment() {
 
-    private var _binding: FragmentSignUpBinding? = null
+    lateinit var binding : FragmentSignUpBinding
 
     private var doesEmailExist: User? = null
 
@@ -32,7 +33,6 @@ class SignUpFragment : Fragment() {
 
     private var auth: FirebaseAuth? = null
 
-    private val binding get() = _binding!!
 
     private val viewModel: UserViewModel by activityViewModels {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
@@ -48,7 +48,7 @@ class SignUpFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSignUpBinding.inflate(inflater, container, false)
+        binding = FragmentSignUpBinding.inflate(inflater, container, false)
         return binding.root
     }
 

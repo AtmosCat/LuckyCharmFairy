@@ -23,6 +23,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentEditMyMatchTwoBinding
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
 import com.luckycharmfairy.presentation.mymatches.addmatches.AddMyMatchOneFragment
 import com.luckycharmfairy.presentation.mymatches.addmatches.PhotoAdapter
@@ -36,8 +37,8 @@ private const val ARG_PARAM1 = "param1"
 class EditMyMatchTwoFragment : Fragment() {
     private var param1: String? = null
 
-    private var _binding: FragmentEditMyMatchTwoBinding? = null
-    private val binding get() = _binding!!
+    lateinit var binding : FragmentEditMyMatchTwoBinding
+
 
     private var currentUserEmail: String = ""
 
@@ -75,7 +76,7 @@ class EditMyMatchTwoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentEditMyMatchTwoBinding.inflate(inflater, container, false)
+        binding = FragmentEditMyMatchTwoBinding.inflate(inflater, container, false)
         return binding.root
     }
 

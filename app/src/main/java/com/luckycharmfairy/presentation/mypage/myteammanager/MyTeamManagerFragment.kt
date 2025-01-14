@@ -21,15 +21,15 @@ import com.luckycharmfairy.data.model.menVolleyball_AnsanOkbankOkman
 import com.luckycharmfairy.data.model.womenVolleyballTeamNames
 import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyTeamManagerBinding
 import com.luckycharmfairy.presentation.mymatches.MyMatchesAdapter
 import com.luckycharmfairy.presentation.mymatches.matchdetail.MatchDetailFragment
 
 class MyTeamManagerFragment : Fragment() {
 
-    private var _binding: FragmentMyTeamManagerBinding? = null
+    lateinit var binding : FragmentMyTeamManagerBinding
 
-    private val binding get() = _binding!!
     private var currentUser = User()
 
     private val userViewModel: UserViewModel by activityViewModels {
@@ -51,7 +51,7 @@ class MyTeamManagerFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMyTeamManagerBinding.inflate(inflater, container, false)
+        binding = FragmentMyTeamManagerBinding.inflate(inflater, container, false)
         return binding.root
     }
 

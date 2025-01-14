@@ -33,6 +33,7 @@ import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.data.model.sampleBitmap
 import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyPageBinding
 import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
 import com.luckycharmfairy.presentation.mymatches.mysports.MySportsFragment
@@ -46,9 +47,8 @@ import java.io.ByteArrayOutputStream
 
 class MyPageFragment : Fragment() {
 
-    private var _binding: FragmentMyPageBinding? = null
+    lateinit var binding : FragmentMyPageBinding
 
-    private val binding get() = _binding!!
     private var currentUser = User()
 
     private var isProfileEditting = false
@@ -69,7 +69,7 @@ class MyPageFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMyPageBinding.inflate(inflater, container, false)
+        binding = FragmentMyPageBinding.inflate(inflater, container, false)
         return binding.root
     }
 

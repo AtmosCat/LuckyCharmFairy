@@ -25,6 +25,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentAddMyMatchTwoBinding
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,8 +34,8 @@ import java.io.ByteArrayOutputStream
 
 class AddMyMatchTwoFragment : Fragment() {
 
-    private var _binding: FragmentAddMyMatchTwoBinding? = null
-    private val binding get() = _binding!!
+    lateinit var binding : FragmentAddMyMatchTwoBinding
+
 
     private var currentUserEmail: String = ""
 
@@ -59,7 +60,7 @@ class AddMyMatchTwoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAddMyMatchTwoBinding.inflate(inflater, container, false)
+        binding = FragmentAddMyMatchTwoBinding.inflate(inflater, container, false)
         return binding.root
     }
 

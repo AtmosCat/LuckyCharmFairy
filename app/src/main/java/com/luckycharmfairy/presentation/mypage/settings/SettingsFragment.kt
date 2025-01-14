@@ -13,14 +13,14 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentSettingsBinding
 import com.luckycharmfairy.presentation.signin.SignInFragment
 
 class SettingsFragment : Fragment() {
 
-    private var _binding: FragmentSettingsBinding? = null
+    lateinit var binding : FragmentSettingsBinding
 
-    private val binding get() = _binding!!
     private var currentUser = User();
 
     private val userViewModel: UserViewModel by activityViewModels {
@@ -35,7 +35,7 @@ class SettingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
 

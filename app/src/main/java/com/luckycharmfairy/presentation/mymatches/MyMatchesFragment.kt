@@ -1,20 +1,17 @@
 package com.luckycharmfairy.presentation.mymatches
 
 import MatchReportFragment
-import android.graphics.Rect
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.presentation.mymatches.matchdetail.MatchDetailFragment
@@ -26,6 +23,7 @@ import com.luckycharmfairy.presentation.UiState
 import com.luckycharmfairy.presentation.mymatches.addmatches.AddMyMatchOneFragment
 import com.luckycharmfairy.presentation.mypage.MyPageFragment
 import com.luckycharmfairy.utils.DateTimeUtils
+import com.luckycharmfairy.utils.FragmentUtils
 import com.luckycharmfairy.utils.SpinnerUtils
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import java.util.Calendar
@@ -217,34 +215,49 @@ class MyMatchesFragment : Fragment() {
             if (currentUser.matches.size < 10) {
                 Toast.makeText(requireContext(), "10경기 이상 직관해야 통계를 보실 수 있어요!",Toast.LENGTH_SHORT).show()
             } else {
-                moveFragment(MatchReportFragment(),"MatchReportFragment")
+                FragmentUtils.hideAndShowFragment(
+                    requireActivity().supportFragmentManager,
+                    this@MyMatchesFragment,
+                    MatchReportFragment(),
+                    "MatchReportFragment"
+                )
             }
         }
 
         // 직관 기록 추가
         binding.btnAddMatchRecord.setOnClickListener{
-            moveFragment(AddMyMatchOneFragment(), "AddMyMatchOneFragment")
+            FragmentUtils.hideAndShowFragment(
+                requireActivity().supportFragmentManager,
+                this@MyMatchesFragment,
+                AddMyMatchOneFragment(),
+                "AddMyMatchOneFragment"
+            )
         }
 
         // 마이페이지
         binding.btnTabMypage.setOnClickListener{
-            moveFragment(MyPageFragment(), "MyPageFragment")
+            FragmentUtils.hideAndShowFragment(
+                requireActivity().supportFragmentManager,
+                this@MyMatchesFragment,
+                MyPageFragment(),
+                "MyPageFragment"
+            )
         }
     }
 
-    private fun moveFragment(fragment: Fragment, fragmentTag: String) {
-        val fragmentToMove = requireActivity().supportFragmentManager.findFragmentByTag(fragmentTag)
-        requireActivity().supportFragmentManager.beginTransaction().apply {
-            hide(this@MyMatchesFragment)
-            if (fragmentToMove == null) {
-                add(R.id.main_frame, fragment, fragmentTag)
-            } else {
-                show(fragmentToMove)
-            }
-            addToBackStack(null)
-            commit()
-        }
-    }
+//    private fun moveFragment(fragment: Fragment, fragmentTag: String) {
+//        val fragmentToMove = requireActivity().supportFragmentManager.findFragmentByTag(fragmentTag)
+//        requireActivity().supportFragmentManager.beginTransaction().apply {
+//            hide(this@MyMatchesFragment)
+//            if (fragmentToMove == null) {
+//                add(R.id.main_frame, fragment, fragmentTag)
+//            } else {
+//                show(fragmentToMove)
+//            }
+//            addToBackStack(null)
+//            commit()
+//        }
+//    }
 
     private fun initViewModel() {
         userViewModel.setCurrentUser("dd@gmail.com")

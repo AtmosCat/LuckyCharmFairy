@@ -15,12 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMySportsBinding
 
 class MySportsFragment : Fragment() {
 
-    private var _binding: FragmentMySportsBinding? = null
-    private val binding get() = _binding!!
+    lateinit var binding : FragmentMySportsBinding
 
     private var currentUser = User()
     private var currentUserMySports = mutableListOf<String>()
@@ -40,7 +40,7 @@ class MySportsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMySportsBinding.inflate(inflater, container, false)
+        binding = FragmentMySportsBinding.inflate(inflater, container, false)
         return binding.root
     }
 

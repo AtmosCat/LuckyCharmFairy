@@ -37,6 +37,7 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.luckycharmfairy.data.model.Match
 import com.luckycharmfairy.data.model.Team
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
 import com.luckycharmfairy.presentation.mymatches.matchreport.WinningStreakAdapter
 import com.luckycharmfairy.presentation.mypage.MyPageFragment
@@ -45,8 +46,8 @@ import java.time.LocalDate
 
 class MatchReportFragment : Fragment() {
 
-    private var _binding: FragmentMatchReportBinding? = null
-    private val binding get() = _binding!!
+    lateinit var binding : FragmentMatchReportBinding
+
     private var currentUser = User()
 
     private var selectedSport = ""
@@ -93,7 +94,7 @@ class MatchReportFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMatchReportBinding.inflate(inflater, container, false)
+        binding = FragmentMatchReportBinding.inflate(inflater, container, false)
         return binding.root
     }
 

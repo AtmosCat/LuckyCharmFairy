@@ -26,6 +26,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.FirebaseApp
 import com.luckycharmfairy.luckycharmfairy.R
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentSignInBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +34,7 @@ import kotlinx.coroutines.launch
 
 class SignInFragment : Fragment() {
 
-    private var _binding: FragmentSignInBinding? = null
+    lateinit var binding : FragmentSignInBinding
 
     private var user: User? = null
     private var _users: MutableList<User>? = null
@@ -59,8 +60,6 @@ class SignInFragment : Fragment() {
 
     }
 
-    private val binding get() = _binding!!
-
     private val userviewModel: UserViewModel by activityViewModels() {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
     }
@@ -82,7 +81,7 @@ class SignInFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSignInBinding.inflate(inflater, container, false)
+        binding = FragmentSignInBinding.inflate(inflater, container, false)
         return binding.root
     }
 

@@ -258,8 +258,8 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun getCurrentUser(): User {
-        return currentUser.value!!
+    fun getCurrentUser(): User? {
+        return currentUser.value
     }
 
 //    fun getSelectedMonthMatchdays(
