@@ -422,7 +422,7 @@ class AddMyMatchOneFragment : Fragment() {
                     teamcolor = "#999999"
                 )
             } else {
-                selectedHomeTeam = selectedSportTeams.find { it.name == selectedHomeTeamName }!!
+                selectedHomeTeam = selectedSportTeams.find { it.name == selectedHomeTeamName } ?: Team()
             }
 
             if (selectedAwayTeamName == "직접 입력") {
@@ -433,7 +433,7 @@ class AddMyMatchOneFragment : Fragment() {
                     teamcolor = "#999999"
                 )
             } else {
-                selectedAwayTeam = selectedSportTeams.find { it.name == selectedAwayTeamName }!!
+                selectedAwayTeam = selectedSportTeams.find { it.name == selectedAwayTeamName } ?: Team()
             }
 
             if (selectedHomeOrAway == "홈 팀") {

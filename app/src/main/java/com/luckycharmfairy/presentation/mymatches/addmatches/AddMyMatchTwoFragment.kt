@@ -36,9 +36,6 @@ class AddMyMatchTwoFragment : Fragment() {
 
     lateinit var binding : FragmentAddMyMatchTwoBinding
 
-
-    private var currentUserEmail: String = ""
-
     private var matchContent: String = ""
 
     private val photoAdapter by lazy { PhotoAdapter() }
@@ -61,15 +58,17 @@ class AddMyMatchTwoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAddMyMatchTwoBinding.inflate(inflater, container, false)
+
+        binding.recyclerviewPhoto.adapter = photoAdapter
+        binding.recyclerviewPhoto.layoutManager = LinearLayoutManager(requireContext(),
+            LinearLayoutManager.HORIZONTAL, false)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.recyclerviewPhoto.adapter = photoAdapter
-        binding.recyclerviewPhoto.layoutManager = LinearLayoutManager(requireContext(),
-            LinearLayoutManager.HORIZONTAL, false)
 
         val myMatchesFragment = requireActivity().supportFragmentManager.findFragmentByTag("MyMatchesFragment")
         val addMyMatchOneFragment = requireActivity().supportFragmentManager.findFragmentByTag("AddMyMatchOneFragment")
@@ -124,13 +123,6 @@ class AddMyMatchTwoFragment : Fragment() {
                 photoAdapter.updateData(imageResources)
             }
         }
-
-//        binding.viewPagerContentPhoto.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
-//            override fun onPageSelected(position: Int) {
-//                super.onPageSelected(position)
-//                binding.tvPhotoCount.text = "${position + 1} / ${imageResources.size}"
-//            }
-//        })
 
         binding.btnSave.setOnClickListener {
             matchContent = binding.etContent.text.toString()

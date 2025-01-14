@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.viewpager2.widget.ViewPager2
 import com.luckycharmfairy.data.model.Match
+import com.luckycharmfairy.data.model.User
 import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMatchDetailBinding
@@ -31,9 +32,9 @@ class MatchDetailFragment : Fragment() {
 
     lateinit var binding : FragmentMatchDetailBinding
 
-    private var selectedDayMatches = mutableListOf<Match>()
+    private lateinit var currentUser: User
 
-    private val imageResources = mutableListOf<String>()
+    private var selectedDayMatches = mutableListOf<Match>()
 
     private var clickedMatch = Match()
 
@@ -69,6 +70,8 @@ class MatchDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        currentUser = userViewModel.getCurrentUser()!!
+
         binding.btnBack.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction().apply {
                 hide(this@MatchDetailFragment)
@@ -79,8 +82,8 @@ class MatchDetailFragment : Fragment() {
         }
 
         val data = param1
-        selectedDayMatches = userViewModel.selectedDayMatches.value!!
-        clickedMatch = selectedDayMatches.find { it.id == data }!!
+//        selectedDayMatches = userViewModel.selectedDayMatches.value!!
+        clickedMatch = currentUser.matches.find { it.id == data }!!
 
         val viewPager = view.findViewById<ViewPager2>(R.id.viewpager_match_detail)
 
