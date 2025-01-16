@@ -525,10 +525,10 @@ class EditMyMatchOneFragment : Fragment() {
             val editMyMatchTwoFragment = EditMyMatchTwoFragment.newInstance(clickedMatch.id)
             requireActivity().supportFragmentManager.beginTransaction().apply {
                 setCustomAnimations(
-                    R.anim.slide_in_left,
+//                    R.anim.slide_in_left,
                     R.anim.slide_in_right,
                     R.anim.slide_out_left,
-                    R.anim.slide_out_right
+//                    R.anim.slide_out_right
                 )
                 hide(this@EditMyMatchOneFragment)
                 add(R.id.main_frame, editMyMatchTwoFragment)

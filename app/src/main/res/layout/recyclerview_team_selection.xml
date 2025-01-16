@@ -7,6 +7,7 @@
         android:id="@+id/tv_team_name"
         android:text="한화 이글스"
         android:gravity="center"
+        android:textColor="@color/white"
         style="@style/textStyle_subtitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

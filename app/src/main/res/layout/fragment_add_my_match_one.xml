@@ -609,13 +609,13 @@
             android:id="@+id/recyclerview_teams"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
+            android:maxHeight="500dp"
+            android:layout_marginHorizontal="20dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:background="@drawable/bg_round_border_medium"
-            android:backgroundTint="@color/main_light_gray"
+            android:backgroundTint="@color/main_dark_gray"
             android:elevation="3dp"
-            android:visibility="gone"
             />
 
         <TextView

@@ -47,21 +47,21 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.66" />
 
-    <Button
-        android:id="@+id/view_hometeam"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:text="홈 팀"
-        android:gravity="center"
-        style="@style/textStyle_subtitle"
-        android:textColor="@color/white"
-        android:background="@drawable/bg_round_border_small"
-        app:layout_constraintWidth_percent="0.26"
-        app:layout_constraintDimensionRatio="5:2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_0.33"
-        android:layout_marginBottom="30dp"
-        />
+        <Button
+            android:id="@+id/view_hometeam"
+            style="@style/textStyle_subtitle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_round_border_small"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="홈 팀"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="5:2"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_0.33"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.26" />
 
     <ImageView
         android:id="@+id/iv_home_star"
@@ -152,21 +152,21 @@
         app:layout_constraintStart_toStartOf="@+id/tv_homescore"
         />
 
-    <Button
-        android:id="@+id/view_awayteam"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:text="어웨이 팀"
-        android:gravity="center"
-        style="@style/textStyle_subtitle"
-        android:textColor="@color/white"
-        android:background="@drawable/bg_round_border_small"
-        app:layout_constraintWidth_percent="0.26"
-        app:layout_constraintDimensionRatio="5:2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/guideline_0.66"
-        android:layout_marginBottom="30dp"
-        />
+        <Button
+            android:id="@+id/view_awayteam"
+            style="@style/textStyle_subtitle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_round_border_small"
+            android:gravity="center"
+            android:text="어웨이 팀"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="5:2"
+            app:layout_constraintStart_toEndOf="@+id/guideline_0.66"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.26" />
 
     <ImageView
         android:id="@+id/iv_away_star"
