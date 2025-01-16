@@ -99,7 +99,7 @@ class MatchReportFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnTabMyMatches.setOnClickListener {
+        binding.btnMatchRecord.setOnClickListener {
             FragmentUtils.hideAndShowFragment(
                 requireActivity().supportFragmentManager,
                 this@MatchReportFragment,

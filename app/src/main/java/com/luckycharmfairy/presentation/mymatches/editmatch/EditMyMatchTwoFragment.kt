@@ -119,19 +119,24 @@ class EditMyMatchTwoFragment : Fragment() {
                 if (result.resultCode == Activity.RESULT_OK) {
                     val data = result.data
                     val uris= mutableListOf<Uri>()
+                    val maxSelection = 3
 
-                    data?.let {
-                        if (it.clipData != null) {
-                            val clipData = it.clipData
-                            for (i in 0 until clipData!!.itemCount) {
-                                uris.add(clipData.getItemAt(i).uri)
+                    if (data!!.clipData!!.itemCount + imageResources.size <= maxSelection) {
+                        data?.let {
+                            if (it.clipData != null) {
+                                val clipData = it.clipData
+                                for (i in 0 until clipData!!.itemCount) {
+                                    uris.add(clipData.getItemAt(i).uri)
+                                }
+                            } else {
+                                it.data?.let { uri -> uris.add(uri) }
                             }
-                        } else {
-                            it.data?.let { uri -> uris.add(uri) }
+                            lifecycleScope.launch {
+                                handleImages(uris)
+                            }
                         }
-                        lifecycleScope.launch {
-                            handleImages(uris)
-                        }
+                    } else {
+                        Toast.makeText(requireContext(), "사진은 최대 3개까지 선택 가능합니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

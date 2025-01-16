@@ -218,6 +218,7 @@
             android:layout_marginTop="5dp"
             android:text="직관한 경기가 없습니다."
             style="@style/textStyle_subheading"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/recyclerview_match_records"
             app:layout_constraintStart_toStartOf="@+id/recyclerview_match_records"
             app:layout_constraintTop_toTopOf="@+id/recyclerview_match_records" />

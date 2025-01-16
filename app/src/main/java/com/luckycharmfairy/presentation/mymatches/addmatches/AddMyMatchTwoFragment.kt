@@ -31,6 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
+import kotlin.math.max
 
 class AddMyMatchTwoFragment : Fragment() {
 
@@ -95,19 +96,24 @@ class AddMyMatchTwoFragment : Fragment() {
                 if (result.resultCode == Activity.RESULT_OK) {
                     val data = result.data
                     val uris= mutableListOf<Uri>()
+                    val maxSelection = 3
 
-                    data?.let {
-                        if (it.clipData != null) {
-                            val clipData = it.clipData
-                            for (i in 0 until clipData!!.itemCount) {
-                                uris.add(clipData.getItemAt(i).uri)
+                    if (data!!.clipData!!.itemCount + imageResources.size <= maxSelection) {
+                        data?.let {
+                            if (it.clipData != null) {
+                                val clipData = it.clipData
+                                for (i in 0 until clipData!!.itemCount) {
+                                    uris.add(clipData.getItemAt(i).uri)
+                                }
+                            } else {
+                                it.data?.let { uri -> uris.add(uri) }
                             }
-                        } else {
-                            it.data?.let { uri -> uris.add(uri) }
+                            lifecycleScope.launch {
+                                handleImages(uris)
+                            }
                         }
-                        lifecycleScope.launch {
-                            handleImages(uris)
-                        }
+                    } else {
+                        Toast.makeText(requireContext(), "사진은 최대 3개까지 선택 가능합니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
         }
@@ -119,6 +125,10 @@ class AddMyMatchTwoFragment : Fragment() {
 
         photoAdapter.itemClick = object : PhotoAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
+                deleteImageFromFirebaseStorage(imageResources[position]) { success ->
+                    if (success) println("이미지가 Firebase Storage에서 삭제됨.")
+                    else println("이미지가 Firebase Storage에서 삭제되지 않음.")
+                }
                 imageResources.removeAt(position)
                 photoAdapter.updateData(imageResources)
             }
@@ -215,6 +225,17 @@ class AddMyMatchTwoFragment : Fragment() {
             }
             .addOnFailureListener {
                 callback(null)
+            }
+    }
+
+    private fun deleteImageFromFirebaseStorage(imageUrl: String, callback: (Boolean) -> Unit) {
+        val storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl)
+        storageRef.delete()
+            .addOnSuccessListener {
+                callback(true)
+            }
+            .addOnFailureListener {
+                callback(false)
             }
     }
 
