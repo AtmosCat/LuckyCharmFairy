@@ -9,6 +9,8 @@ import java.util.UUID
 
 data class User(val email: String = "",
                 var pw: String = "",
+                val name: String = "",
+                val contact: String = "",
                 var nickname: String = "익명의 팬"+UUID.randomUUID().toString(),
                 var photo: String = "", // 프로필사진
                 var membership: String = "", // 멤버십

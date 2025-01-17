@@ -23,57 +23,62 @@ import com.luckycharmfairy.presentation.viewmodel.UserViewModel
 import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
 import com.luckycharmfairy.presentation.signup.SignUpFragment
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentMyMatchesBinding
 import com.luckycharmfairy.luckycharmfairy.databinding.FragmentSignInBinding
+import com.luckycharmfairy.utils.FragmentUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SignInFragment : Fragment() {
 
-    lateinit var binding : FragmentSignInBinding
+    lateinit var binding: FragmentSignInBinding
 
     private var user: User? = null
     private var _users: MutableList<User>? = null
 
-    private var auth : FirebaseAuth? = null
+    private var auth: FirebaseAuth? = null
     private lateinit var googleSignInClient: GoogleSignInClient
     private val db = FirebaseFirestore.getInstance()
 
-    // ActivityResultLauncher를 사용하여 구글 로그인 인텐트를 시작하고 결과를 처리
-    // 결과가 성공적이면 handleSignInResult(data)를 호출하여 로그인 결과를 처리
-    private val googleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            result ->
-        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-        Log.d("LOGIN--", task.toString())
-        try {
-            val account = task.getResult(ApiException::class.java)!!
-            Log.d("LOGIN--22", account.idToken!!)
-            firebaseAuthWithGoogle(account.idToken!!)
-        } catch (e: ApiException) {
-            // Google 로그인 실패
-            Toast.makeText(requireContext(), "Google 로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
-        }
-
-    }
+//    // ActivityResultLauncher를 사용하여 구글 로그인 인텐트를 시작하고 결과를 처리
+//    // 결과가 성공적이면 handleSignInResult(data)를 호출하여 로그인 결과를 처리
+//    private val googleSignInLauncher =
+//        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+//            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+//            Log.d("LOGIN--", task.toString())
+//            try {
+//                val account = task.getResult(ApiException::class.java)!!
+//                Log.d("LOGIN--22", account.idToken!!)
+//                firebaseAuthWithGoogle(account.idToken!!)
+//            } catch (e: ApiException) {
+//                // Google 로그인 실패
+//                Toast.makeText(requireContext(), "Google 로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
+//            }
+//
+//        }
 
     private val userviewModel: UserViewModel by activityViewModels() {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
 
-        // 사용자의 아이디 정보와 기본 프로필을 요청
-        var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-//            .requestServerAuthCode(getString(R.string.google_login_client_id))
-            .requestEmail()
-            .build()
-        googleSignInClient = GoogleSignIn.getClient(requireActivity(),gso)
+//        // 사용자의 아이디 정보와 기본 프로필을 요청
+//        var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//            .requestIdToken(getString(R.string.default_web_client_id))
+////            .requestServerAuthCode(getString(R.string.google_login_client_id))
+//            .requestEmail()
+//            .build()
+//        googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
     }
 
     override fun onCreateView(
@@ -92,43 +97,45 @@ class SignInFragment : Fragment() {
             val email = binding.etSigninEmail.text.toString()
             val pw = binding.etSigninPw.text.toString()
 
-            userviewModel.findUser(email)
-            userviewModel.signingInUser.observe(viewLifecycleOwner) { data ->
-                user = data
-                if (binding.etSigninEmail.text.isEmpty() || binding.etSigninPw.text.isEmpty()) {
-                    Toast.makeText(requireContext(), "입력되지 않은 항목이 있습니다.", Toast.LENGTH_SHORT).show()
-                } else {
-                    if (user == null) {
-                        Toast.makeText(requireContext(), "존재하지 않는 이메일입니다.", Toast.LENGTH_SHORT)
-                            .show()
-                    } else {
-                        if (pw != user!!.pw) {
-                            Toast.makeText(requireContext(), "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT)
-                                .show()
-                        } else {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                userviewModel.setCurrentUser("dd@gmail.com")
-                            }
-                            Toast.makeText(requireContext(), "로그인 성공!", Toast.LENGTH_SHORT).show()
+            loginUser(email, pw)
 
-                            val franchiseHomeFragment = requireActivity().supportFragmentManager.findFragmentByTag("FranchiseHomeFragment")
-                            requireActivity().supportFragmentManager.beginTransaction().apply {
-                                hide(this@SignInFragment)
-                                if (franchiseHomeFragment == null) {
-                                    add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")
-                                } else {
-                                    show(franchiseHomeFragment)
-                                }
-                                addToBackStack(null)
-                                commit()
-                            }
-                        }
-                    }
-                }
-            }
+
+//            userviewModel.signingInUser.observe(viewLifecycleOwner) { data ->
+//                user = data
+//                if (binding.etSigninEmail.text.isEmpty() || binding.etSigninPw.text.isEmpty()) {
+//                    Toast.makeText(requireContext(), "입력되지 않은 항목이 있습니다.", Toast.LENGTH_SHORT).show()
+//                } else {
+//                    if (user == null) {
+//                        Toast.makeText(requireContext(), "존재하지 않는 이메일입니다.", Toast.LENGTH_SHORT)
+//                            .show()
+//                    } else {
+//                        if (pw != user!!.pw) {
+//                            Toast.makeText(requireContext(), "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT)
+//                                .show()
+//                        } else {
+//                            CoroutineScope(Dispatchers.Main).launch {
+//                                userviewModel.setCurrentUser("dd@gmail.com")
+//                            }
+//                            Toast.makeText(requireContext(), "로그인 성공!", Toast.LENGTH_SHORT).show()
+//
+//                            val franchiseHomeFragment = requireActivity().supportFragmentManager.findFragmentByTag("FranchiseHomeFragment")
+//                            requireActivity().supportFragmentManager.beginTransaction().apply {
+//                                hide(this@SignInFragment)
+//                                if (franchiseHomeFragment == null) {
+//                                    add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")
+//                                } else {
+//                                    show(franchiseHomeFragment)
+//                                }
+//                                addToBackStack(null)
+//                                commit()
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }
 
-        binding.btnSignup.setOnClickListener{
+        binding.btnSignup.setOnClickListener {
             Toast.makeText(requireContext(), "회원가입 페이지로 이동합니다.", Toast.LENGTH_SHORT).show()
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frame, SignUpFragment())
@@ -157,64 +164,109 @@ class SignInFragment : Fragment() {
 //                .show()
 //        }
 
-        binding.btnGoogleSignin.setOnClickListener{
-            googleLogin()
-        }
+//        binding.btnGoogleSignin.setOnClickListener{
+//            googleLogin()
+//        }
     }
 
-    // 구글 로그인 인텐트를 생성하고 googleSignInLauncher를 사용하여 인텐트를 실행
-    private fun googleLogin() {
-        val signInIntent = googleSignInClient.signInIntent
-        signInIntent.let {
-            googleSignInLauncher.launch(it)
-        } ?: Toast.makeText(requireContext(), "구글 로그인 인텐트 생성 실패", Toast.LENGTH_SHORT).show()
-    }
+    private fun loginUser(email: String, password: String) {
+        val auth = FirebaseAuth.getInstance()
 
-    // 설명: 구글 로그인 계정으로부터 받은 토큰을 사용하여 Firebase 인증을 시도
-    fun firebaseAuthWithGoogle(idToken: String){
-        var credential = GoogleAuthProvider.getCredential(idToken,null)
-        auth?.signInWithCredential(credential)
-            ?.addOnCompleteListener{
-                    task ->
-                if(task.isSuccessful) {
-                    val googleLoginUser = auth!!.currentUser
-                    saveGoogleLoginToFireStore(googleLoginUser!!)
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    lifecycleScope.launch {
+                        val user = userviewModel.findUser(email)
+                        Toast.makeText(context, "로그인 성공: ${user.name}", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    when (val exception = task.exception) {
+                        is FirebaseAuthInvalidUserException -> {
+                            Toast.makeText(
+                                context,
+                                "등록되지 않았거나 비활성화된 계정입니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
 
-                }else{
-                    // 틀렸을 때
-                    Toast.makeText(requireContext(),task.exception?.message,Toast.LENGTH_SHORT).show()
+                        is FirebaseAuthInvalidCredentialsException -> {
+                            Toast.makeText(context, "잘못된 비밀번호입니다.", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+
+                        else -> {
+                            Toast.makeText(
+                                context,
+                                "로그인 실패: ${exception?.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
             }
-    }
-
-    fun saveGoogleLoginToFireStore(user: FirebaseUser) {
-        val email = user.email
-        userviewModel.findUser(email!!)
-        userviewModel.signingInUser.observe(viewLifecycleOwner) { data ->
-            if (data == null) {
-                userviewModel.addUser(User(email = email.toString()))
-                CoroutineScope(Dispatchers.Main).launch {
-                    userviewModel.setCurrentUser(email.toString())
-                }
-                requireActivity().supportFragmentManager.beginTransaction().apply {
-                    hide(this@SignInFragment)
-                    add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")
-                    addToBackStack(null)
-                    commit()
-                }
-                Toast.makeText(requireContext(),"구글 계정으로 로그인합니다.",Toast.LENGTH_SHORT).show()
-            } else {
-                CoroutineScope(Dispatchers.Main).launch {
-                    userviewModel.setCurrentUser(email.toString())
-                }
-                requireActivity().supportFragmentManager.beginTransaction().apply {
-                    hide(this@SignInFragment)
-                    add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")
-                    addToBackStack(null)
-                    commit()
-                }
-                Toast.makeText(requireContext(),"구글 계정으로 로그인합니다.",Toast.LENGTH_SHORT).show()
-            }
+            FragmentUtils.hideAndShowFragment(
+                requireActivity().supportFragmentManager,
+                this@SignInFragment,
+                MyMatchesFragment(),
+                "MyMatchesFragment"
+            )
         }
-    }
 }
+
+
+//    // 구글 로그인 인텐트를 생성하고 googleSignInLauncher를 사용하여 인텐트를 실행
+//    private fun googleLogin() {
+//        val signInIntent = googleSignInClient.signInIntent
+//        signInIntent.let {
+//            googleSignInLauncher.launch(it)
+//        } ?: Toast.makeText(requireContext(), "구글 로그인 인텐트 생성 실패", Toast.LENGTH_SHORT).show()
+//    }
+//
+//    // 설명: 구글 로그인 계정으로부터 받은 토큰을 사용하여 Firebase 인증을 시도
+//    fun firebaseAuthWithGoogle(idToken: String) {
+//        var credential = GoogleAuthProvider.getCredential(idToken, null)
+//        auth?.signInWithCredential(credential)
+//            ?.addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    val googleLoginUser = auth!!.currentUser
+//                    saveGoogleLoginToFireStore(googleLoginUser!!)
+//
+//                } else {
+//                    // 틀렸을 때
+//                    Toast.makeText(requireContext(), task.exception?.message, Toast.LENGTH_SHORT)
+//                        .show()
+//                }
+//            }
+//    }
+//
+//    fun saveGoogleLoginToFireStore(user: FirebaseUser) {
+//        val email = user.email
+//        userviewModel.findUser(email!!)
+//        userviewModel.signingInUser.observe(viewLifecycleOwner) { data ->
+//            if (data == null) {
+//                userviewModel.addUser(User(email = email.toString()))
+//                CoroutineScope(Dispatchers.Main).launch {
+//                    userviewModel.setCurrentUser(email.toString())
+//                }
+//                requireActivity().supportFragmentManager.beginTransaction().apply {
+//                    hide(this@SignInFragment)
+//                    add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")
+//                    addToBackStack(null)
+//                    commit()
+//                }
+//                Toast.makeText(requireContext(), "구글 계정으로 로그인합니다.", Toast.LENGTH_SHORT).show()
+//            } else {
+//                CoroutineScope(Dispatchers.Main).launch {
+//                    userviewModel.setCurrentUser(email.toString())
+//                }
+//                requireActivity().supportFragmentManager.beginTransaction().apply {
+//                    hide(this@SignInFragment)
+//                    add(R.id.main_frame, MyMatchesFragment(), "MyMatchesFragment")
+//                    addToBackStack(null)
+//                    commit()
+//                }
+//                Toast.makeText(requireContext(), "구글 계정으로 로그인합니다.", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
+//}

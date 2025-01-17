@@ -210,29 +210,26 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 //        }
 //    }
 
-    fun findUser(_email: String) {
-        viewModelScope.launch {
-            runCatching {
-                db.collection("user")
-                    .document(_email)
-                    .get()
-                    .addOnSuccessListener { result ->
-                        if (result != null) { 
-                            val user = result.toObject(User::class.java)
-                            _signingInUser.value = user
-                        } else {
-                            _signingInUser.value = null
-                        }
-                    }
-                    .addOnFailureListener{
-                        _signingInUser.value = null
-                    }
-            }.onFailure {
-                Log.e(TAG, "findUser() failed! : ${it.message}")
-                handleException(it)
+    suspend fun findUser(_email: String): User {
+        try {
+            val result = db.collection("user")
+                .document(_email)
+                .get()
+                .await()
+            if (result.exists()) {
+                val user = result.toObject(User::class.java) ?: User(name = "unknown")
+                _currentUser.postValue(user)
+                return user
+            } else {
+                return User(name = "unknown")
             }
+        } catch (e: Exception) {
+            Log.e(TAG, "findUser() failed! : ${e.message}")
+            handleException(e)
+            return User(name = "unknown")
         }
     }
+
 
     fun setCurrentUser(_email: String) {
         _uiState.value = UiState.Loading
