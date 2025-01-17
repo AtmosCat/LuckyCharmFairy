@@ -15,6 +15,7 @@ import com.google.firebase.FirebaseApp
 import com.luckycharmfairy.luckycharmfairy.R
 import com.luckycharmfairy.luckycharmfairy.databinding.ActivityMainBinding
 import com.luckycharmfairy.presentation.mymatches.MyMatchesFragment
+import com.luckycharmfairy.presentation.signin.SignInFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
 //        setAd()
 
-        setFragment(MyMatchesFragment())
+        setFragment(SignInFragment())
     }
 
     private fun setFragment(frag : Fragment) {
