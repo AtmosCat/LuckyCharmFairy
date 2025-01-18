@@ -66,7 +66,7 @@ class SignInFragment : Fragment() {
 
     private val userviewModel: UserViewModel by activityViewModels() {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
-    }
+    };
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
