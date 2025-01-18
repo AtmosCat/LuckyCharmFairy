@@ -44,7 +44,7 @@ class SignInFragment : Fragment() {
     private var _users: MutableList<User>? = null
 
     private var auth: FirebaseAuth? = null
-    private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var googleSignInClient: GoogleSignInClient;
     private val db = FirebaseFirestore.getInstance()
 
 //    // ActivityResultLauncher를 사용하여 구글 로그인 인텐트를 시작하고 결과를 처리
