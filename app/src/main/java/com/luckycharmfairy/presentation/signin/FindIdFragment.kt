@@ -5,56 +5,81 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.luckycharmfairy.luckycharmfairy.R
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.luckycharmfairy.presentation.viewmodel.UserViewModel
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentFindIdBinding
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FindIdFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FindIdFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    lateinit var binding: FragmentFindIdBinding
+
+    private var auth: FirebaseAuth? = null
+    private val db = FirebaseFirestore.getInstance();
+
+    private val userviewModel: UserViewModel by activityViewModels() {
+        viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
+    };
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        auth = FirebaseAuth.getInstance()
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_find_id, container, false)
+        binding = FragmentFindIdBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FindIDFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FindIdFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.btnFindId.setOnClickListener {
+            val name = binding.etFindIdName.text.toString()
+            val contact = binding.etFindIdContact.text.toString()
+            lifecycleScope.launch {
+                val result = findUserEmail(name, contact)
+                binding.tvResult.visibility = View.VISIBLE
+                binding.tvResult.text = "확인 결과: $result"
             }
+        }
     }
+
+    private suspend fun findUserEmail(name: String, contact: String): String =
+        suspendCancellableCoroutine { continuation ->
+            db.collection("user")
+                .whereEqualTo("contact", contact)
+                .whereEqualTo("name", name)
+                .get()
+                .addOnSuccessListener { documents ->
+                    if (!documents.isEmpty) {
+                        val email = documents.first().getString("email").toString()
+                        continuation.resume(email) // 작업 성공 시 결과 반환
+                    } else {
+                        continuation.resume("일치하는 유저 정보가 없습니다.") // 결과가 없을 때
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    continuation.resumeWithException(exception) // 작업 실패 시 예외 처리
+                }
+        }
+
+
+
+
+
+
+
 }

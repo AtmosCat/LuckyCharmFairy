@@ -33,6 +33,9 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.time.LocalDate
 import java.util.Date
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class UserViewModel(application: Application) : AndroidViewModel(application) {
     private val db = FirebaseFirestore.getInstance()
@@ -229,6 +232,40 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
             return User(name = "unknown")
         }
     }
+//
+//    fun findUserEmail(contact: String) {
+//        _uiState.value = UiState.Loading
+//        viewModelScope.launch {
+//            runCatching {
+//                val result = fetchUserEmail(contact)
+//                if (result != null) {
+//                    _uiState.value = UiState.Success(result)
+//                } else {
+//                    _uiState.value = UiState.Error("일치하는 유저 정보 없음")
+//                }
+//            }.onFailure { exception ->
+//                Log.e(TAG, "findUserEmail() failed: ${exception.message}")
+//                _uiState.value = UiState.Error("오류 발생: ${exception.message}")
+//            }
+//        }
+//    }
+//
+//    private suspend fun fetchUserEmail(contact: String): String? = suspendCoroutine { continuation ->
+//        db.collection("user")
+//            .whereEqualTo("contact", contact)
+//            .get()
+//            .addOnSuccessListener { documents ->
+//                if (!documents.isEmpty) {
+//                    val email = documents.firstOrNull()?.getString("email")
+//                    continuation.resume(email)
+//                } else {
+//                    continuation.resume(null)
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                continuation.resumeWithException(exception)
+//            }
+//    }
 
 
     fun setCurrentUser(_email: String) {

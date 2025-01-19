@@ -22,10 +22,13 @@
 
     <TextView
         android:id="@+id/tv_find_id_explanation"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="30dp"
         android:layout_height="wrap_content"
-        android:text="가입 시 등록하신 이름과 휴대전화 번호를 입력하주세요."
-        style="@style/textStyle_subtitle"
+        android:gravity="center"
+        android:lineSpacingExtra="5dp"
+        android:text="가입 시 등록하신 이름과휴대전화 번호를 입력해주세요."
+        style="@style/textStyle_subheading"
         android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="@+id/tv_find_id_main"
         app:layout_constraintTop_toBottomOf="@+id/tv_find_id_main"
@@ -41,8 +44,9 @@
         android:inputType="text"
         android:layout_marginTop="40dp"
         android:paddingLeft="90dp"
+        android:hint="예: 홍길동"
         android:textColor="@color/main_dark_gray"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintHeight_percent="0.06"
         app:layout_constraintStart_toStartOf="@+id/tv_find_id_explanation"
         app:layout_constraintTop_toBottomOf="@+id/tv_find_id_explanation"
@@ -70,12 +74,28 @@
         android:backgroundTint="@color/white"
         android:inputType="text"
         android:paddingLeft="90dp"
+        android:hint="예: 01012345678"
         android:textColor="@color/main_dark_gray"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintHeight_percent="0.06"
         app:layout_constraintStart_toStartOf="@+id/et_find_id_name"
         app:layout_constraintTop_toBottomOf="@+id/et_find_id_name"
         app:layout_constraintWidth_percent="0.75" />
+
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="15dp"
+        android:text=" 확인 결과: "
+        style="@style/textStyle_subheading"
+        android:textColor="#FF0000"
+        app:layout_constraintStart_toStartOf="@+id/et_find_id_contact"
+        app:layout_constraintTop_toBottomOf="@+id/et_find_id_contact"
+        app:layout_constraintEnd_toEndOf="@+id/et_find_id_contact"
+        android:visibility="gone"
+        />
 
     <TextView
         android:id="@+id/tv_find_id_contact"
