@@ -22,11 +22,13 @@
 
     <TextView
         android:id="@+id/tv_find_pw_explanation"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="30dp"
         android:layout_height="wrap_content"
-        android:text="가입 시 등록하신 이름과 휴대전화 번호를 입력하주세요."
-        style="@style/textStyle_subtitle"
+        android:gravity="center"
+        android:lineSpacingExtra="5dp"
         android:layout_marginTop="15dp"
+        android:text="가입 시 등록하신 이름과 이메일 주소를 입력하주세요."
         app:layout_constraintStart_toStartOf="@+id/tv_find_pw_main"
         app:layout_constraintTop_toBottomOf="@+id/tv_find_pw_main"
         app:layout_constraintEnd_toEndOf="@+id/tv_find_pw_main"
@@ -62,7 +64,7 @@
         app:layout_constraintTop_toTopOf="@+id/et_find_pw_name" />
 
     <EditText
-        android:id="@+id/et_find_pw_contact"
+        android:id="@+id/et_find_pw_email"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
@@ -79,31 +81,32 @@
         app:layout_constraintWidth_percent="0.75" />
 
     <TextView
-        android:id="@+id/tv_find_pw_contact"
+        android:id="@+id/tv_find_pw_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="2dp"
         android:layout_marginLeft="15dp"
-        android:text="전화번호"
+        android:text="이메일"
         style="@style/textStyle_subheading"
-        app:layout_constraintBottom_toBottomOf="@+id/et_find_pw_contact"
-        app:layout_constraintStart_toStartOf="@+id/et_find_pw_contact"
-        app:layout_constraintTop_toTopOf="@+id/et_find_pw_contact" />
+        app:layout_constraintBottom_toBottomOf="@+id/et_find_pw_email"
+        app:layout_constraintStart_toStartOf="@+id/et_find_pw_email"
+        app:layout_constraintTop_toTopOf="@+id/et_find_pw_email" />
 
     <Button
-        android:id="@+id/btn_find_id"
+        android:id="@+id/btn_find_pw"
+        style="@style/textStyle_subtitle"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="68dp"
         android:background="@drawable/bg_round_border_small"
         android:backgroundTint="@color/main_mint"
-        android:text="아이디 찾기"
+        android:text="비밀번호 재설정 메일 보내기"
         android:textColor="@color/white"
-        style="@style/textStyle_subtitle"
-        android:layout_marginTop="70dp"
-        app:layout_constraintEnd_toEndOf="@+id/et_find_pw_contact"
+        app:layout_constraintEnd_toEndOf="@+id/et_find_pw_email"
         app:layout_constraintHeight_percent="0.06"
-        app:layout_constraintStart_toStartOf="@+id/et_find_pw_contact"
-        app:layout_constraintTop_toBottomOf="@+id/et_find_pw_contact"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/et_find_pw_email"
+        app:layout_constraintTop_toBottomOf="@+id/et_find_pw_email"
         app:layout_constraintWidth_percent="0.75" />
 
 

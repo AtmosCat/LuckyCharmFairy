@@ -75,11 +75,4 @@ class FindIdFragment : Fragment() {
                     continuation.resumeWithException(exception) // 작업 실패 시 예외 처리
                 }
         }
-
-
-
-
-
-
-
 }

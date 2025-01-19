@@ -215,6 +215,7 @@ class SignInFragment : Fragment() {
 }
 
 
+
 //    // 구글 로그인 인텐트를 생성하고 googleSignInLauncher를 사용하여 인텐트를 실행
 //    private fun googleLogin() {
 //        val signInIntent = googleSignInClient.signInIntent

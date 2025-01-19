@@ -5,55 +5,90 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.luckycharmfairy.luckycharmfairy.R
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.luckycharmfairy.presentation.viewmodel.UserViewModel
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentFindIdBinding
+import com.luckycharmfairy.luckycharmfairy.databinding.FragmentFindPwBinding
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FindPwFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FindPwFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    lateinit var binding: FragmentFindPwBinding
+
+    private var auth: FirebaseAuth? = null
+    private val db = FirebaseFirestore.getInstance();
+
+    private val userviewModel: UserViewModel by activityViewModels() {
+        viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
+    };
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        auth = FirebaseAuth.getInstance()
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_find_pw, container, false)
+        binding = FragmentFindPwBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FindPWFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FindPwFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.btnFindPw.setOnClickListener {
+            val name = binding.etFindPwName.text.toString()
+            val email = binding.etFindPwEmail.text.toString()
+            lifecycleScope.launch {
+                if (findUser(name, email)) {
+                    sendPasswordResetEmail(email) { _, message ->
+                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "일치하는 유저 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private suspend fun findUser(name: String, email: String): Boolean =
+        suspendCancellableCoroutine { continuation ->
+            db.collection("user")
+                .whereEqualTo("email", email)
+                .whereEqualTo("name", name)
+                .get()
+                .addOnSuccessListener { documents ->
+                    if (!documents.isEmpty) {
+                        continuation.resume(true)
+                    } else {
+                        continuation.resume(false)
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    continuation.resumeWithException(exception)
+                }
+        }
+
+    private fun sendPasswordResetEmail(email: String, onResult: (Boolean, String) -> Unit) {
+        val auth = FirebaseAuth.getInstance()
+        auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    onResult(true, "가입하신 이메일 주소로 비밀번호 재설정을 위한 링크가 전송되었습니다.")
+                } else {
+                    onResult(false, task.exception?.message ?: "이메일 전송에 실패했습니다.")
                 }
             }
     }
