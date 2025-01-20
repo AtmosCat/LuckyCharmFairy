@@ -41,8 +41,8 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) // super.onCreate() 뒤에다 하기!
         binding = ActivityMainBinding.inflate(layoutInflater)
         FirebaseApp.initializeApp(this)
         setContentView(binding.root)

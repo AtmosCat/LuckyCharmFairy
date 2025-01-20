@@ -8,6 +8,7 @@
     android:background="@color/background"
     tools:context="com.luckycharmfairy.presentation.main.MainActivity"
     tools:layout_editor_absoluteX="0dp"
+    android:forceDarkAllowed="false"
     tools:layout_editor_absoluteY="3dp">
 
     <ImageView

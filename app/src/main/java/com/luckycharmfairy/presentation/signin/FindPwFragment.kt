@@ -29,11 +29,12 @@ class FindPwFragment : Fragment() {
 
     private val userviewModel: UserViewModel by activityViewModels() {
         viewModelFactory { initializer { UserViewModel(requireActivity().application) } }
-    };
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
+        auth!!.setLanguageCode("ko")
     }
 
     override fun onCreateView(
@@ -47,6 +48,10 @@ class FindPwFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.btnBack.setOnClickListener{
+            requireActivity().supportFragmentManager.popBackStack()
+        }
 
         binding.btnFindPw.setOnClickListener {
             val name = binding.etFindPwName.text.toString()

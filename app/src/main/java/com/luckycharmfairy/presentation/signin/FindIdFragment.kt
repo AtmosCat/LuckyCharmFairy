@@ -46,6 +46,10 @@ class FindIdFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.btnBack.setOnClickListener{
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+
         binding.btnFindId.setOnClickListener {
             val name = binding.etFindIdName.text.toString()
             val contact = binding.etFindIdContact.text.toString()

@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:forceDarkAllowed="false"
     tools:context="com.luckycharmfairy.presentation.main.MainActivity">
 
     <com.google.android.gms.ads.AdView
