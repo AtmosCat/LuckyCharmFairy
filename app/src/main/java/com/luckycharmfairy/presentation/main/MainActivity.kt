@@ -53,12 +53,12 @@ class MainActivity : AppCompatActivity() {
 
 //        setAd()
 
-        setFragment(SignInFragment())
+        setFragment(MyMatchesFragment())
     }
 
     private fun setFragment(frag : Fragment) {
         supportFragmentManager.commit {
-            add(R.id.main_frame, frag)
+            add(R.id.main_frame, frag);
         }
     }
 

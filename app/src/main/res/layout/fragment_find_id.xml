@@ -38,7 +38,7 @@
         android:layout_marginTop="15dp"
         android:gravity="center"
         android:lineSpacingExtra="5dp"
-        android:text="가입 시 등록하신 이름과휴대전화 번호를 입력해주세요."
+        android:text="가입 시 등록하신 이름과 휴대전화 번호를 입력해주세요."
         app:layout_constraintEnd_toEndOf="@+id/tv_find_id_main"
         app:layout_constraintStart_toStartOf="@+id/tv_find_id_main"
         app:layout_constraintTop_toBottomOf="@+id/tv_find_id_main" />
