@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
 //        setAd()
 
-        setFragment(MyMatchesFragment())
+        setFragment(MyMatchesFragment());
     }
 
     private fun setFragment(frag : Fragment) {
