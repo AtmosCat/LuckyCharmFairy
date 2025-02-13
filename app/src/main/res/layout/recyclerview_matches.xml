@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5"  />
+            app:layout_constraintGuide_begin="206dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_0.66"
@@ -104,7 +104,7 @@
         android:id="@+id/iv_sport"
         android:layout_width="17dp"
         android:layout_height="17dp"
-        android:src="@drawable/baseball"
+        android:src="@drawable/baseball2"
         app:layout_constraintStart_toStartOf="@+id/tv_homescore"
         app:layout_constraintEnd_toEndOf="@+id/tv_awayscore"
         app:layout_constraintTop_toBottomOf="@+id/tv_homescore"

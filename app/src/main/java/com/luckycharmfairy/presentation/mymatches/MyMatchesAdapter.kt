@@ -84,11 +84,11 @@ class MyMatchesAdapter(private val userViewModel: UserViewModel) :
                 homestar.visibility = View.GONE
             }
             when (item.sport) {
-                "야구" -> sport.setImageResource(R.drawable.baseball)
-                "남자축구" -> sport.setImageResource(R.drawable.football)
-                "남자농구" -> sport.setImageResource(R.drawable.basketball)
-                "남자배구" -> sport.setImageResource(R.drawable.volleyball)
-                "여자배구" -> sport.setImageResource(R.drawable.volleyball)
+                "야구" -> sport.setImageResource(R.drawable.baseball2)
+                "남자축구" -> sport.setImageResource(R.drawable.football2)
+                "남자농구" -> sport.setImageResource(R.drawable.basketball2)
+                "남자배구" -> sport.setImageResource(R.drawable.volleyball2)
+                "여자배구" -> sport.setImageResource(R.drawable.volleyball2)
                 else -> sport.visibility = View.GONE
             }
         }
